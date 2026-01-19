@@ -11,7 +11,7 @@
  Target Server Version : 100017
  File Encoding         : 65001
 
- Date: 19/01/2026 23:10:49
+ Date: 19/01/2026 23:23:44
 */
 
 SET NAMES utf8mb4;
@@ -190,7 +190,7 @@ CREATE TABLE `nurse_productivity_ipds`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `ipd_report_date`(`report_date`) USING BTREE,
   INDEX `ipd_shift_time`(`shift_time`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2784 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Table structure for nurse_productivity_ncds
@@ -216,7 +216,7 @@ CREATE TABLE `nurse_productivity_ncds`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `ncd_report_date`(`report_date`) USING BTREE,
   INDEX `ncd_shift_time`(`shift_time`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 455 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Table structure for nurse_productivity_opds
@@ -244,7 +244,7 @@ CREATE TABLE `nurse_productivity_opds`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `opd_report_date`(`report_date`) USING BTREE,
   INDEX `opd_shift_time`(`shift_time`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1692 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Table structure for nurse_setting
@@ -301,7 +301,7 @@ CREATE TABLE `sessions`  (
 -- ----------------------------
 -- Records of sessions
 -- ----------------------------
-INSERT INTO `sessions` VALUES ('aslqsa41qVSVo1Tz64DT9gxDOS5JzUs9w8wyTOJf', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiS2xKWDVmMFM4cjlNRTVURkdJNHdQTm5pQ0FIbmxuRmFlUGlYaHI5WiI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6NDY6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9obnBsdXMvcHJvZHVjdC9pcGRfbmlnaHQiO3M6NToicm91dGUiO3M6NzoiaG5wbHVzLiI7fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjE7fQ==', 1768839018);
+INSERT INTO `sessions` VALUES ('aslqsa41qVSVo1Tz64DT9gxDOS5JzUs9w8wyTOJf', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiS2xKWDVmMFM4cjlNRTVURkdJNHdQTm5pQ0FIbmxuRmFlUGlYaHI5WiI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6NDc6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9obnBsdXMvcHJvZHVjdC9uY2RfcmVwb3J0IjtzOjU6InJvdXRlIjtzOjI1OiJobnBsdXMucHJvZHVjdC5uY2RfcmVwb3J0Ijt9czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6MTt9', 1768839775);
 INSERT INTO `sessions` VALUES ('fbLOYCHFr2qZu064gOSYSt7FA1dVXExuQfCAVnem', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiR25Qc1FlUENMdk5NdUkyQjAwQUhiOThZSHh2cnF6c09oeW94Z3pheCI7czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6MjE6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMCI7czo1OiJyb3V0ZSI7Tjt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1768813624);
 
 -- ----------------------------
