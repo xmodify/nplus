@@ -11,7 +11,7 @@
  Target Server Version : 100017
  File Encoding         : 65001
 
- Date: 19/01/2026 22:30:43
+ Date: 19/01/2026 23:10:49
 */
 
 SET NAMES utf8mb4;
@@ -139,26 +139,28 @@ DROP TABLE IF EXISTS `nurse_productivity_ers`;
 CREATE TABLE `nurse_productivity_ers`  (
   `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `report_date` date NOT NULL,
-  `shift_time` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `patient_all` int(11) NOT NULL,
-  `emergent` int(11) NOT NULL,
-  `urgent` int(11) NOT NULL,
-  `acute_illness` int(11) NOT NULL,
-  `non_acute_illness` int(11) NOT NULL,
-  `patient_hr` double(8, 2) NOT NULL,
-  `nurse_oncall` int(11) NOT NULL,
-  `nurse_partime` int(11) NOT NULL,
-  `nurse_fulltime` int(11) NOT NULL,
-  `nurse_hr` double(8, 2) NOT NULL,
-  `productivity` double(8, 2) NOT NULL,
-  `hhpuos` double(8, 2) NOT NULL,
-  `nurse_shift_time` double(8, 2) NOT NULL,
-  `recorder` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `shift_time` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `nurse_fulltime` int(11) NULL DEFAULT NULL,
+  `nurse_partime` int(11) NULL DEFAULT NULL,
+  `nurse_oncall` int(11) NULL DEFAULT NULL,
+  `recorder` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   `note` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  `patient_all` int(11) NULL DEFAULT NULL,
+  `emergent` int(11) NULL DEFAULT NULL,
+  `urgent` int(11) NULL DEFAULT NULL,
+  `acute_illness` int(11) NULL DEFAULT NULL,
+  `non_acute_illness` int(11) NULL DEFAULT NULL,
+  `patient_hr` double(8, 2) NULL DEFAULT NULL,
+  `nurse_hr` double(8, 2) NULL DEFAULT NULL,
+  `nurse_shift_time` double(8, 2) NULL DEFAULT NULL,
+  `hhpuos` double(8, 2) NULL DEFAULT NULL,
+  `productivity` double(8, 2) NULL DEFAULT NULL,
   `created_at` timestamp(0) NULL DEFAULT NULL,
   `updated_at` timestamp(0) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2489 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Compact;
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `er_report_date`(`report_date`) USING BTREE,
+  INDEX `er_shift_time`(`shift_time`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Table structure for nurse_productivity_ipds
@@ -167,25 +169,27 @@ DROP TABLE IF EXISTS `nurse_productivity_ipds`;
 CREATE TABLE `nurse_productivity_ipds`  (
   `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `report_date` date NOT NULL,
-  `shift_time` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `patient_all` int(11) NOT NULL,
-  `convalescent` int(11) NOT NULL,
-  `moderate_ill` int(11) NOT NULL,
-  `semi_critical_ill` int(11) NOT NULL,
-  `critical_ill` int(11) NOT NULL,
-  `patient_hr` double(8, 2) NOT NULL,
-  `nurse_oncall` int(11) NOT NULL,
-  `nurse_partime` int(11) NOT NULL,
-  `nurse_fulltime` int(11) NOT NULL,
-  `nurse_hr` double(8, 2) NOT NULL,
-  `productivity` double(8, 2) NOT NULL,
-  `hhpuos` double(8, 2) NOT NULL,
-  `nurse_shift_time` double(8, 2) NOT NULL,
-  `recorder` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `shift_time` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `nurse_fulltime` int(11) NULL DEFAULT NULL,
+  `nurse_partime` int(11) NULL DEFAULT NULL,
+  `nurse_oncall` int(11) NULL DEFAULT NULL,
+  `recorder` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   `note` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  `patient_all` int(11) NULL DEFAULT NULL,
+  `convalescent` int(11) NULL DEFAULT NULL,
+  `moderate_ill` int(11) NULL DEFAULT NULL,
+  `semi_critical_ill` int(11) NULL DEFAULT NULL,
+  `critical_ill` int(11) NULL DEFAULT NULL,
+  `patient_hr` double(8, 2) NULL DEFAULT NULL,
+  `nurse_hr` double(8, 2) NULL DEFAULT NULL,
+  `nurse_shift_time` double(8, 2) NULL DEFAULT NULL,
+  `hhpuos` double(8, 2) NULL DEFAULT NULL,
+  `productivity` double(8, 2) NULL DEFAULT NULL,
   `created_at` timestamp(0) NULL DEFAULT NULL,
   `updated_at` timestamp(0) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `ipd_report_date`(`report_date`) USING BTREE,
+  INDEX `ipd_shift_time`(`shift_time`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 2784 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
@@ -195,21 +199,23 @@ DROP TABLE IF EXISTS `nurse_productivity_ncds`;
 CREATE TABLE `nurse_productivity_ncds`  (
   `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `report_date` date NOT NULL,
-  `shift_time` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `patient_all` int(11) NOT NULL,
-  `patient_hr` double(8, 2) NOT NULL,
-  `nurse_oncall` int(11) NOT NULL,
-  `nurse_partime` int(11) NOT NULL,
-  `nurse_fulltime` int(11) NOT NULL,
-  `nurse_hr` double(8, 2) NOT NULL,
-  `productivity` double(8, 2) NOT NULL,
-  `hhpuos` double(8, 2) NOT NULL,
-  `nurse_shift_time` double(8, 2) NOT NULL,
-  `recorder` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `shift_time` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `nurse_fulltime` int(11) NULL DEFAULT NULL,
+  `nurse_partime` int(11) NULL DEFAULT NULL,
+  `nurse_oncall` int(11) NULL DEFAULT NULL,
+  `recorder` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   `note` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  `patient_all` int(11) NULL DEFAULT NULL,
+  `patient_hr` double(8, 2) NULL DEFAULT NULL,
+  `nurse_hr` double(8, 2) NULL DEFAULT NULL,
+  `nurse_shift_time` double(8, 2) NULL DEFAULT NULL,
+  `hhpuos` double(8, 2) NULL DEFAULT NULL,
+  `productivity` double(8, 2) NULL DEFAULT NULL,
   `created_at` timestamp(0) NULL DEFAULT NULL,
   `updated_at` timestamp(0) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `ncd_report_date`(`report_date`) USING BTREE,
+  INDEX `ncd_shift_time`(`shift_time`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 455 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
@@ -219,23 +225,25 @@ DROP TABLE IF EXISTS `nurse_productivity_opds`;
 CREATE TABLE `nurse_productivity_opds`  (
   `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `report_date` date NOT NULL,
-  `shift_time` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `patient_all` int(11) NOT NULL,
-  `opd` int(11) NOT NULL,
-  `ari` int(11) NOT NULL,
-  `patient_hr` double(8, 2) NOT NULL,
-  `nurse_oncall` int(11) NOT NULL,
-  `nurse_partime` int(11) NOT NULL,
-  `nurse_fulltime` int(11) NOT NULL,
-  `nurse_hr` double(8, 2) NOT NULL,
-  `productivity` double(8, 2) NOT NULL,
-  `hhpuos` double(8, 2) NOT NULL,
-  `nurse_shift_time` double(8, 2) NOT NULL,
-  `recorder` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `shift_time` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `nurse_fulltime` int(11) NULL DEFAULT NULL,
+  `nurse_partime` int(11) NULL DEFAULT NULL,
+  `nurse_oncall` int(11) NULL DEFAULT NULL,
+  `recorder` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   `note` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  `patient_all` int(11) NULL DEFAULT NULL,
+  `opd` int(11) NULL DEFAULT NULL,
+  `ari` int(11) NULL DEFAULT NULL,
+  `patient_hr` double(8, 2) NULL DEFAULT NULL,
+  `nurse_hr` double(8, 2) NULL DEFAULT NULL,
+  `nurse_shift_time` double(8, 2) NULL DEFAULT NULL,
+  `hhpuos` double(8, 2) NULL DEFAULT NULL,
+  `productivity` double(8, 2) NULL DEFAULT NULL,
   `created_at` timestamp(0) NULL DEFAULT NULL,
   `updated_at` timestamp(0) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `opd_report_date`(`report_date`) USING BTREE,
+  INDEX `opd_shift_time`(`shift_time`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1692 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
@@ -293,7 +301,7 @@ CREATE TABLE `sessions`  (
 -- ----------------------------
 -- Records of sessions
 -- ----------------------------
-INSERT INTO `sessions` VALUES ('5DnC3wkqLqY8ASuBbOumWiOk4IzvpeDF1NBVB8ej', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiejJoME1xOGxlSXJFM2l1bWxzNE5qeHVoM3hydzI2QzY0VXhLU05WRSI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6NDA6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9hZG1pbi9tYWluX3NldHRpbmciO3M6NToicm91dGUiO3M6MTg6ImFkbWluLm1haW5fc2V0dGluZyI7fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjE7fQ==', 1768836282);
+INSERT INTO `sessions` VALUES ('aslqsa41qVSVo1Tz64DT9gxDOS5JzUs9w8wyTOJf', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiS2xKWDVmMFM4cjlNRTVURkdJNHdQTm5pQ0FIbmxuRmFlUGlYaHI5WiI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6NDY6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9obnBsdXMvcHJvZHVjdC9pcGRfbmlnaHQiO3M6NToicm91dGUiO3M6NzoiaG5wbHVzLiI7fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjE7fQ==', 1768839018);
 INSERT INTO `sessions` VALUES ('fbLOYCHFr2qZu064gOSYSt7FA1dVXExuQfCAVnem', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiR25Qc1FlUENMdk5NdUkyQjAwQUhiOThZSHh2cnF6c09oeW94Z3pheCI7czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6MjE6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMCI7czo1OiJyb3V0ZSI7Tjt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1768813624);
 
 -- ----------------------------
