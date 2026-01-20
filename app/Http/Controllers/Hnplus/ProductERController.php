@@ -69,15 +69,18 @@ class ProductERController extends Controller
     public function er_night_notify()
     {
         $service = DB::connection('hosxp')->select("
-            SELECT DATE(NOW()) AS vstdate,
-                COALESCE(COUNT(DISTINCT vn), 0) AS visit,
-                COALESCE(SUM(CASE WHEN er_emergency_type IN ('1','2') THEN 1 ELSE 0 END), 0) AS Emergent,
-                COALESCE(SUM(CASE WHEN er_emergency_type = '3' THEN 1 ELSE 0 END), 0) AS Urgent,
-                COALESCE(SUM(CASE WHEN er_emergency_type = '4' THEN 1 ELSE 0 END), 0) AS Acute_illness,
-                COALESCE(SUM(CASE WHEN er_emergency_type = '5' THEN 1 ELSE 0 END), 0) AS Non_acute_illness
-            FROM er_regist
-            WHERE DATE(enter_er_time) = DATE(NOW())
-            AND TIME(enter_er_time) BETWEEN '00:00:00' AND '07:59:59'");         
+            SELECT 
+                DATE(NOW()) AS vstdate,
+                COALESCE(COUNT(DISTINCT e.vn), 0) AS visit,
+                COALESCE(SUM(CASE WHEN et.export_code IN ('1','2') THEN 1 ELSE 0 END), 0) AS Emergent,
+                COALESCE(SUM(CASE WHEN et.export_code = '3' THEN 1 ELSE 0 END), 0) AS Urgent,
+                COALESCE(SUM(CASE WHEN et.export_code = '4' THEN 1 ELSE 0 END), 0) AS Acute_illness,
+                COALESCE(SUM(CASE WHEN et.export_code = '5' THEN 1 ELSE 0 END), 0) AS Non_acute_illness
+            FROM er_regist e
+            LEFT JOIN er_emergency_type et 
+                ON et.er_emergency_type = e.er_emergency_type
+            WHERE DATE(e.enter_er_time) = CURDATE()
+            AND TIME(e.enter_er_time) BETWEEN '00:00:00' AND '07:59:59'");         
 
         foreach ($service as $row){
             $vstdate=$row->vstdate;
@@ -131,15 +134,18 @@ class ProductERController extends Controller
     public function er_night()
     {
         $shift = DB::connection('hosxp')->select("
-            SELECT DATE(NOW()) AS vstdate,
-                COALESCE(COUNT(DISTINCT vn), 0) AS visit,
-                COALESCE(SUM(CASE WHEN er_emergency_type IN ('1','2') THEN 1 ELSE 0 END), 0) AS Emergent,
-                COALESCE(SUM(CASE WHEN er_emergency_type = '3' THEN 1 ELSE 0 END), 0) AS Urgent,
-                COALESCE(SUM(CASE WHEN er_emergency_type = '4' THEN 1 ELSE 0 END), 0) AS Acute_illness,
-                COALESCE(SUM(CASE WHEN er_emergency_type = '5' THEN 1 ELSE 0 END), 0) AS Non_acute_illness
-            FROM er_regist
-            WHERE DATE(enter_er_time) = DATE(NOW())
-            AND TIME(enter_er_time) BETWEEN '00:00:00' AND '07:59:59'"); 
+            SELECT 
+                DATE(NOW()) AS vstdate,
+                COALESCE(COUNT(DISTINCT e.vn), 0) AS visit,
+                COALESCE(SUM(CASE WHEN et.export_code IN ('1','2') THEN 1 ELSE 0 END), 0) AS Emergent,
+                COALESCE(SUM(CASE WHEN et.export_code = '3' THEN 1 ELSE 0 END), 0) AS Urgent,
+                COALESCE(SUM(CASE WHEN et.export_code = '4' THEN 1 ELSE 0 END), 0) AS Acute_illness,
+                COALESCE(SUM(CASE WHEN et.export_code = '5' THEN 1 ELSE 0 END), 0) AS Non_acute_illness
+            FROM er_regist e
+            LEFT JOIN er_emergency_type et 
+                ON et.er_emergency_type = e.er_emergency_type
+            WHERE DATE(e.enter_er_time) = CURDATE()
+            AND TIME(e.enter_er_time) BETWEEN '00:00:00' AND '07:59:59'"); 
 
         return view('hnplus.product.er_night',compact('shift'));            
     }
@@ -236,15 +242,18 @@ class ProductERController extends Controller
     public function er_morning_notify()
     {
         $service = DB::connection('hosxp')->select("
-            SELECT DATE(NOW()) AS vstdate,
-                COALESCE(COUNT(DISTINCT vn), 0) AS visit,
-                COALESCE(SUM(CASE WHEN er_emergency_type IN ('1','2') THEN 1 ELSE 0 END), 0) AS Emergent,
-                COALESCE(SUM(CASE WHEN er_emergency_type = '3' THEN 1 ELSE 0 END), 0) AS Urgent,
-                COALESCE(SUM(CASE WHEN er_emergency_type = '4' THEN 1 ELSE 0 END), 0) AS Acute_illness,
-                COALESCE(SUM(CASE WHEN er_emergency_type = '5' THEN 1 ELSE 0 END), 0) AS Non_acute_illness
-            FROM er_regist
-            WHERE DATE(enter_er_time) = DATE(NOW())
-            AND TIME(enter_er_time) BETWEEN '08:00:00' AND '15:59:59'");         
+            SELECT 
+                DATE(NOW()) AS vstdate,
+                COALESCE(COUNT(DISTINCT e.vn), 0) AS visit,
+                COALESCE(SUM(CASE WHEN et.export_code IN ('1','2') THEN 1 ELSE 0 END), 0) AS Emergent,
+                COALESCE(SUM(CASE WHEN et.export_code = '3' THEN 1 ELSE 0 END), 0) AS Urgent,
+                COALESCE(SUM(CASE WHEN et.export_code = '4' THEN 1 ELSE 0 END), 0) AS Acute_illness,
+                COALESCE(SUM(CASE WHEN et.export_code = '5' THEN 1 ELSE 0 END), 0) AS Non_acute_illness
+            FROM er_regist e
+            LEFT JOIN er_emergency_type et 
+                ON et.er_emergency_type = e.er_emergency_type
+            WHERE DATE(e.enter_er_time) = CURDATE()
+            AND TIME(e.enter_er_time) BETWEEN '08:00:00' AND '15:59:59'");         
 
         foreach ($service as $row){
             $vstdate=$row->vstdate;
@@ -298,15 +307,18 @@ class ProductERController extends Controller
     public function er_morning()
     {
         $shift = DB::connection('hosxp')->select("
-            SELECT DATE(NOW()) AS vstdate,
-                COALESCE(COUNT(DISTINCT vn), 0) AS visit,
-                COALESCE(SUM(CASE WHEN er_emergency_type IN ('1','2') THEN 1 ELSE 0 END), 0) AS Emergent,
-                COALESCE(SUM(CASE WHEN er_emergency_type = '3' THEN 1 ELSE 0 END), 0) AS Urgent,
-                COALESCE(SUM(CASE WHEN er_emergency_type = '4' THEN 1 ELSE 0 END), 0) AS Acute_illness,
-                COALESCE(SUM(CASE WHEN er_emergency_type = '5' THEN 1 ELSE 0 END), 0) AS Non_acute_illness
-            FROM er_regist
-            WHERE DATE(enter_er_time) = DATE(NOW())
-            AND TIME(enter_er_time) BETWEEN '08:00:00' AND '15:59:59'"); 
+            SELECT 
+                DATE(NOW()) AS vstdate,
+                COALESCE(COUNT(DISTINCT e.vn), 0) AS visit,
+                COALESCE(SUM(CASE WHEN et.export_code IN ('1','2') THEN 1 ELSE 0 END), 0) AS Emergent,
+                COALESCE(SUM(CASE WHEN et.export_code = '3' THEN 1 ELSE 0 END), 0) AS Urgent,
+                COALESCE(SUM(CASE WHEN et.export_code = '4' THEN 1 ELSE 0 END), 0) AS Acute_illness,
+                COALESCE(SUM(CASE WHEN et.export_code = '5' THEN 1 ELSE 0 END), 0) AS Non_acute_illness
+            FROM er_regist e
+            LEFT JOIN er_emergency_type et 
+                ON et.er_emergency_type = e.er_emergency_type
+            WHERE DATE(e.enter_er_time) = CURDATE()
+            AND TIME(e.enter_er_time) BETWEEN '08:00:00' AND '15:59:59'"); 
 
         return view('hnplus.product.er_morning',compact('shift'));            
     }
@@ -404,14 +416,17 @@ class ProductERController extends Controller
     public function er_afternoon_notify()
     {
         $service = DB::connection('hosxp')->select("
-            SELECT date(DATE_ADD(now(), INTERVAL -1 DAY )) AS vstdate,
-                COALESCE(COUNT(DISTINCT vn), 0) AS visit,
-                COALESCE(SUM(CASE WHEN er_emergency_type IN ('1','2') THEN 1 ELSE 0 END), 0) AS Emergent,
-                COALESCE(SUM(CASE WHEN er_emergency_type = '3' THEN 1 ELSE 0 END), 0) AS Urgent,
-                COALESCE(SUM(CASE WHEN er_emergency_type = '4' THEN 1 ELSE 0 END), 0) AS Acute_illness,
-                COALESCE(SUM(CASE WHEN er_emergency_type = '5' THEN 1 ELSE 0 END), 0) AS Non_acute_illness
-            FROM er_regist
-            WHERE DATE(enter_er_time) = date(DATE_ADD(now(), INTERVAL -1 DAY ))
+            SELECT 
+                DATE(NOW()) AS vstdate,
+                COALESCE(COUNT(DISTINCT e.vn), 0) AS visit,
+                COALESCE(SUM(CASE WHEN et.export_code IN ('1','2') THEN 1 ELSE 0 END), 0) AS Emergent,
+                COALESCE(SUM(CASE WHEN et.export_code = '3' THEN 1 ELSE 0 END), 0) AS Urgent,
+                COALESCE(SUM(CASE WHEN et.export_code = '4' THEN 1 ELSE 0 END), 0) AS Acute_illness,
+                COALESCE(SUM(CASE WHEN et.export_code = '5' THEN 1 ELSE 0 END), 0) AS Non_acute_illness
+            FROM er_regist e
+            LEFT JOIN er_emergency_type et 
+                ON et.er_emergency_type = e.er_emergency_type
+            WHERE DATE(e.enter_er_time) = date(DATE_ADD(now(), INTERVAL -1 DAY ))
             AND TIME(enter_er_time) BETWEEN '16:00:00' AND '23:59:59'");         
 
         foreach ($service as $row){
@@ -466,14 +481,17 @@ class ProductERController extends Controller
     public function er_afternoon()
     {
         $shift = DB::connection('hosxp')->select("
-            SELECT date(DATE_ADD(now(), INTERVAL -1 DAY ))  AS vstdate,
-                COALESCE(COUNT(DISTINCT vn), 0) AS visit,
-                COALESCE(SUM(CASE WHEN er_emergency_type IN ('1','2') THEN 1 ELSE 0 END), 0) AS Emergent,
-                COALESCE(SUM(CASE WHEN er_emergency_type = '3' THEN 1 ELSE 0 END), 0) AS Urgent,
-                COALESCE(SUM(CASE WHEN er_emergency_type = '4' THEN 1 ELSE 0 END), 0) AS Acute_illness,
-                COALESCE(SUM(CASE WHEN er_emergency_type = '5' THEN 1 ELSE 0 END), 0) AS Non_acute_illness
-            FROM er_regist
-            WHERE DATE(enter_er_time) = date(DATE_ADD(now(), INTERVAL -1 DAY )) 
+            SELECT 
+                DATE(NOW()) AS vstdate,
+                COALESCE(COUNT(DISTINCT e.vn), 0) AS visit,
+                COALESCE(SUM(CASE WHEN et.export_code IN ('1','2') THEN 1 ELSE 0 END), 0) AS Emergent,
+                COALESCE(SUM(CASE WHEN et.export_code = '3' THEN 1 ELSE 0 END), 0) AS Urgent,
+                COALESCE(SUM(CASE WHEN et.export_code = '4' THEN 1 ELSE 0 END), 0) AS Acute_illness,
+                COALESCE(SUM(CASE WHEN et.export_code = '5' THEN 1 ELSE 0 END), 0) AS Non_acute_illness
+            FROM er_regist e
+            LEFT JOIN er_emergency_type et 
+                ON et.er_emergency_type = e.er_emergency_type
+            WHERE DATE(e.enter_er_time) = date(DATE_ADD(now(), INTERVAL -1 DAY ))
             AND TIME(enter_er_time) BETWEEN '16:00:00' AND '23:59:59'");
 
         return view('hnplus.product.er_afternoon',compact('shift'));            

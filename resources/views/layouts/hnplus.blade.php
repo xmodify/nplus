@@ -71,7 +71,7 @@
             <ul class="navbar-nav ms-auto align-items-center">
                  <li > 
                     <div class="btn text-white">
-                        V. 68-12-09 11:00
+                        V. 69-01-20 15:00
                     </div>   
                 </li> 
 
