@@ -85,17 +85,20 @@
                     ============================ -->
                     <div class="mb-3">
                         <label class="form-label">อัตรากำลัง Oncall (ไม่มีใส่ 0)</label>
-                        <input type="number" name="nurse_oncall" id="nurse_oncall" class="form-control" placeholder="ระบุจำนวน">
+                        <input type="number" name="nurse_oncall" id="nurse_oncall" class="form-control" 
+                        placeholder="ระบุจำนวน"  step="any" min="0">
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">อัตรากำลังเสริม (ไม่มีใส่ 0)</label>
-                        <input type="number" name="nurse_partime" id="nurse_partime" class="form-control" placeholder="ระบุจำนวน">
+                        <input type="number" name="nurse_partime" id="nurse_partime" class="form-control" 
+                        placeholder="ระบุจำนวน"  step="any" min="0">
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">อัตรากำลังปกติ</label>
-                        <input type="number" name="nurse_fulltime" id="nurse_fulltime" class="form-control" placeholder="ระบุจำนวน">
+                        <input type="number" name="nurse_fulltime" id="nurse_fulltime" class="form-control" 
+                        placeholder="ระบุจำนวน"  step="any" min="0">
                     </div>
 
                     <!-- ============================
