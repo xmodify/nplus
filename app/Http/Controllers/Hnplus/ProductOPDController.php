@@ -66,8 +66,8 @@ class ProductOPDController extends Controller
         $notify = DB::connection('hosxp')->select("
             SELECT COUNT(DISTINCT vn) as patient_all,
             sum(CASE WHEN main_dep = '002' THEN 1 ELSE 0 END) AS opd,
-            sum(CASE WHEN main_dep = '032' THEN 1 ELSE 0 END) AS ari
-            FROM ovst WHERE vstdate = DATE(NOW()) AND main_dep IN ('002','032')
+            sum(CASE WHEN main_dep = '036' THEN 1 ELSE 0 END) AS ari
+            FROM ovst WHERE vstdate = DATE(NOW()) AND main_dep IN ('002','036')
             AND vsttime BETWEEN '00:00:00' AND '15:59:59' ");         
 
         foreach ($notify as $row) {
@@ -118,8 +118,8 @@ class ProductOPDController extends Controller
         $shift = DB::connection('hosxp')->select("
             SELECT COUNT(DISTINCT vn) as patient_all,
             sum(CASE WHEN main_dep = '002' THEN 1 ELSE 0 END) AS opd,
-            sum(CASE WHEN main_dep = '032' THEN 1 ELSE 0 END) AS ari
-            FROM ovst WHERE vstdate = DATE(NOW()) AND main_dep IN ('002','032')
+            sum(CASE WHEN main_dep = '036' THEN 1 ELSE 0 END) AS ari
+            FROM ovst WHERE vstdate = DATE(NOW()) AND main_dep IN ('002','036')
             AND vsttime BETWEEN '00:00:00' AND '15:59:59' "); 
 
         return view('hnplus.product.opd_morning',compact('shift'));            
@@ -231,8 +231,8 @@ class ProductOPDController extends Controller
         $notify = DB::connection('hosxp')->select("
             SELECT COUNT(DISTINCT vn) as patient_all,
             sum(CASE WHEN main_dep = '002' THEN 1 ELSE 0 END) AS opd,
-            sum(CASE WHEN main_dep = '032' THEN 1 ELSE 0 END) AS ari
-            FROM ovst WHERE vstdate = DATE(NOW()) AND main_dep IN ('002','032')
+            sum(CASE WHEN main_dep = '036' THEN 1 ELSE 0 END) AS ari
+            FROM ovst WHERE vstdate = DATE(NOW()) AND main_dep IN ('002','036')
             AND vsttime BETWEEN '16:00:01' AND '19:00:00' ");         
 
         foreach ($notify as $row) {
@@ -283,8 +283,8 @@ class ProductOPDController extends Controller
         $shift = DB::connection('hosxp')->select("
             SELECT COUNT(DISTINCT vn) as patient_all,
             sum(CASE WHEN main_dep = '002' THEN 1 ELSE 0 END) AS opd,
-            sum(CASE WHEN main_dep = '032' THEN 1 ELSE 0 END) AS ari
-            FROM ovst WHERE vstdate = DATE(NOW()) AND main_dep IN ('002','032')
+            sum(CASE WHEN main_dep = '036' THEN 1 ELSE 0 END) AS ari
+            FROM ovst WHERE vstdate = DATE(NOW()) AND main_dep IN ('002','036')
             AND vsttime BETWEEN '16:00:00' AND '19:00:00' "); 
 
         return view('hnplus.product.opd_bd',compact('shift'));            

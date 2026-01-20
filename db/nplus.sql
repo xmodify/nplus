@@ -11,7 +11,7 @@
  Target Server Version : 100017
  File Encoding         : 65001
 
- Date: 19/01/2026 23:23:44
+ Date: 20/01/2026 10:30:26
 */
 
 SET NAMES utf8mb4;
@@ -256,12 +256,12 @@ CREATE TABLE `nurse_setting`  (
   `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   `value` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 21 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of nurse_setting
 -- ----------------------------
-INSERT INTO `nurse_setting` VALUES (1, 'Telegram Token', 'telegram_token', '8210676912:AAE39UTOlwCn7LP_4HINvls7ND2H4xpfEEo');
+INSERT INTO `nurse_setting` VALUES (1, 'Telegram Token', 'telegram_token', '8598874569:AAFiXMa86NFWoGEojqL5CetBCbGEJovLfQk');
 INSERT INTO `nurse_setting` VALUES (2, 'Telegram ChatID Product ER แจ้งเตือน', 'telegram_chat_id_product_er', '-4729376994');
 INSERT INTO `nurse_setting` VALUES (3, 'Telegram ChatID Product ER บันทึก', 'telegram_chat_id_product_er_save', '-4729376994');
 INSERT INTO `nurse_setting` VALUES (4, 'Telegram ChatID Product IPD แจ้งเตือน', 'telegram_chat_id_product_ipd', '-4729376994');
@@ -301,8 +301,29 @@ CREATE TABLE `sessions`  (
 -- ----------------------------
 -- Records of sessions
 -- ----------------------------
+INSERT INTO `sessions` VALUES ('0Vum5qoCxXHGPPaWVvK7yIjx2pwNRn4z2SeGPnfO', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiQlc2UmE3MGs3eDQ0UEhFVG1IbGRNVXQya1lSRTkzRjdWUWZBWmVSQiI7czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6NTI6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9obnBsdXMvcHJvZHVjdC9lcl9uaWdodF9ub3RpZnkiO3M6NToicm91dGUiO3M6NzoiaG5wbHVzLiI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1768878081);
 INSERT INTO `sessions` VALUES ('aslqsa41qVSVo1Tz64DT9gxDOS5JzUs9w8wyTOJf', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiS2xKWDVmMFM4cjlNRTVURkdJNHdQTm5pQ0FIbmxuRmFlUGlYaHI5WiI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6NDc6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9obnBsdXMvcHJvZHVjdC9uY2RfcmVwb3J0IjtzOjU6InJvdXRlIjtzOjI1OiJobnBsdXMucHJvZHVjdC5uY2RfcmVwb3J0Ijt9czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6MTt9', 1768839775);
 INSERT INTO `sessions` VALUES ('fbLOYCHFr2qZu064gOSYSt7FA1dVXExuQfCAVnem', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiR25Qc1FlUENMdk5NdUkyQjAwQUhiOThZSHh2cnF6c09oeW94Z3pheCI7czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6MjE6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMCI7czo1OiJyb3V0ZSI7Tjt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1768813624);
+
+-- ----------------------------
+-- Table structure for telegram_tokens
+-- ----------------------------
+DROP TABLE IF EXISTS `telegram_tokens`;
+CREATE TABLE `telegram_tokens`  (
+  `telegram_token_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `telegram_bot` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  `telegram_token` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `telegram_chat_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `telegram_group` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  `created_at` timestamp(0) NULL DEFAULT NULL,
+  `updated_at` timestamp(0) NULL DEFAULT NULL,
+  PRIMARY KEY (`telegram_token_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Records of telegram_tokens
+-- ----------------------------
+INSERT INTO `telegram_tokens` VALUES (1, 'N-Plus', '8598874569:AAFiXMa86NFWoGEojqL5CetBCbGEJovLfQk', '-5113190104', 'รพ.เสนาง_กลุ่มการพยาบาล', NULL, NULL);
 
 -- ----------------------------
 -- Table structure for users

@@ -30,7 +30,7 @@ class ProductNCDController extends Controller
             (SUM(patient_all)*(SUM(patient_hr)/SUM(patient_all))*(1.4/9))/COUNT(shift_time) AS nurse_shift_time
             FROM nurse_productivity_ncds
             WHERE report_date BETWEEN ? AND ?
-            GROUP BY shift_time ORDER BY shift_time DESC',[$start_date,$end_date]);
+            GROUP BY shift_time ORDER BY shift_time DESC',[$start_date,$end_date]); 
 
         // เตรียมข้อมูลสำหรับกราฟ
         $product_asc=Nurse_productivity_ncd::whereBetween('report_date',[$start_date, $end_date])
@@ -63,7 +63,7 @@ class ProductNCDController extends Controller
     {
         $notify = DB::connection('hosxp')->select("
             SELECT IFNULL(COUNT(DISTINCT o1.vn),0) AS patient_all
-            FROM opd_dep_queue o1, ovst o2 WHERE o1.depcode IN ('011')
+            FROM opd_dep_queue o1, ovst o2 WHERE o1.depcode IN ('025')
             AND o1.vn = o2.vn AND o2.vstdate = DATE(NOW()) 
             AND o2.vsttime BETWEEN '00:00:00' AND '15:59:59' ");         
 
@@ -110,7 +110,7 @@ class ProductNCDController extends Controller
     {
         $shift = DB::connection('hosxp')->select("
             SELECT IFNULL(COUNT(DISTINCT o1.vn),0) AS patient_all
-            FROM opd_dep_queue o1, ovst o2 WHERE o1.depcode IN ('011')
+            FROM opd_dep_queue o1, ovst o2 WHERE o1.depcode IN ('025')
             AND o1.vn = o2.vn AND o2.vstdate = DATE(NOW()) 
             AND o2.vsttime BETWEEN '00:00:00' AND '15:59:59' "); 
 
