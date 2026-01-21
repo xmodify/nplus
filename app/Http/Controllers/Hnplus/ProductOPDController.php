@@ -27,7 +27,7 @@ class ProductOPDController extends Controller
             SUM(opd) AS opd,SUM(ari) AS ari,SUM(patient_hr) AS patient_hr,SUM(nurse_oncall) AS nurse_oncall,
             SUM(nurse_partime) AS nurse_partime,SUM(nurse_fulltime) AS nurse_fulltime, SUM(nurse_hr) AS nurse_hr,
             ((SUM(patient_hr)*100)/SUM(nurse_hr)) AS productivity,(SUM(patient_hr)/SUM(patient_all)) AS hhpuos,
-            (SUM(patient_all)*(SUM(patient_hr)/SUM(patient_all))*(1.4/9))/COUNT(shift_time) AS nurse_shift_time
+            (SUM(patient_all)*(SUM(patient_hr)/SUM(patient_all))*(1.4/7))/COUNT(shift_time) AS nurse_shift_time
             FROM nurse_productivity_opds
             WHERE report_date BETWEEN ? AND ?
             GROUP BY shift_time ORDER BY shift_time DESC',[$start_date,$end_date]);
@@ -152,11 +152,11 @@ class ProductOPDController extends Controller
         // ==============================
         $patient_hr = ($ari * 0.5) + ($opd * 0.37);
         $nurse_total = $nurse_oncall + $nurse_partime + $nurse_fulltime;
-        $nurse_hr = $nurse_total * 9;
+        $nurse_hr = $nurse_total * 7;
 
         $productivity = ($patient_hr * 100) / max(1, $nurse_hr);
         $hhpuos = $patient_hr / max(1, $patient_all);
-        $nurse_shift_time = $patient_all * $hhpuos * (1.4 / 9);
+        $nurse_shift_time = $patient_all * $hhpuos * (1.4 / 7);
 
         // ==============================
         //   บันทึกข้อมูลลงฐานข้อมูล
@@ -317,11 +317,11 @@ class ProductOPDController extends Controller
         // ==============================
         $patient_hr = ($ari * 0.5) + ($opd * 0.37);
         $nurse_total = $nurse_oncall + $nurse_partime + $nurse_fulltime;
-        $nurse_hr = $nurse_total * 9;
+        $nurse_hr = $nurse_total * 7;
 
         $productivity = ($patient_hr * 100) / max(1, $nurse_hr);
         $hhpuos = $patient_hr / max(1, $patient_all);
-        $nurse_shift_time = $patient_all * $hhpuos * (1.4 / 9);
+        $nurse_shift_time = $patient_all * $hhpuos * (1.4 / 7);
 
         // ==============================
         //   บันทึกข้อมูลลงฐานข้อมูล
