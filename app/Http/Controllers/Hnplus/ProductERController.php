@@ -73,9 +73,9 @@ class ProductERController extends Controller
                 DATE(NOW()) AS vstdate,
                 COALESCE(COUNT(DISTINCT e.vn), 0) AS visit,
                 COALESCE(SUM(CASE WHEN et.export_code IN ('1','2') THEN 1 ELSE 0 END), 0) AS Emergent,
-                COALESCE(SUM(CASE WHEN et.export_code = '3' THEN 1 ELSE 0 END), 0) AS Urgent,
-                COALESCE(SUM(CASE WHEN et.export_code = '4' THEN 1 ELSE 0 END), 0) AS Acute_illness,
-                COALESCE(SUM(CASE WHEN et.export_code = '5' THEN 1 ELSE 0 END), 0) AS Non_acute_illness
+                COALESCE(SUM(CASE WHEN et.export_code IN ('3') THEN 1 ELSE 0 END), 0) AS Urgent,
+                COALESCE(SUM(CASE WHEN et.export_code IN ('4') THEN 1 ELSE 0 END), 0) AS Acute_illness,
+                COALESCE(SUM(CASE WHEN et.export_code IN ('5') THEN 1 ELSE 0 END), 0) AS Non_acute_illness
             FROM er_regist e
             LEFT JOIN er_emergency_type et 
                 ON et.er_emergency_type = e.er_emergency_type
@@ -138,9 +138,9 @@ class ProductERController extends Controller
                 DATE(NOW()) AS vstdate,
                 COALESCE(COUNT(DISTINCT e.vn), 0) AS visit,
                 COALESCE(SUM(CASE WHEN et.export_code IN ('1','2') THEN 1 ELSE 0 END), 0) AS Emergent,
-                COALESCE(SUM(CASE WHEN et.export_code = '3' THEN 1 ELSE 0 END), 0) AS Urgent,
-                COALESCE(SUM(CASE WHEN et.export_code = '4' THEN 1 ELSE 0 END), 0) AS Acute_illness,
-                COALESCE(SUM(CASE WHEN et.export_code = '5' THEN 1 ELSE 0 END), 0) AS Non_acute_illness
+                COALESCE(SUM(CASE WHEN et.export_code IN ('3') THEN 1 ELSE 0 END), 0) AS Urgent,
+                COALESCE(SUM(CASE WHEN et.export_code IN ('4') THEN 1 ELSE 0 END), 0) AS Acute_illness,
+                COALESCE(SUM(CASE WHEN et.export_code IN ('5') THEN 1 ELSE 0 END), 0) AS Non_acute_illness
             FROM er_regist e
             LEFT JOIN er_emergency_type et 
                 ON et.er_emergency_type = e.er_emergency_type
@@ -246,9 +246,9 @@ class ProductERController extends Controller
                 DATE(NOW()) AS vstdate,
                 COALESCE(COUNT(DISTINCT e.vn), 0) AS visit,
                 COALESCE(SUM(CASE WHEN et.export_code IN ('1','2') THEN 1 ELSE 0 END), 0) AS Emergent,
-                COALESCE(SUM(CASE WHEN et.export_code = '3' THEN 1 ELSE 0 END), 0) AS Urgent,
-                COALESCE(SUM(CASE WHEN et.export_code = '4' THEN 1 ELSE 0 END), 0) AS Acute_illness,
-                COALESCE(SUM(CASE WHEN et.export_code = '5' THEN 1 ELSE 0 END), 0) AS Non_acute_illness
+                COALESCE(SUM(CASE WHEN et.export_code IN ('3') THEN 1 ELSE 0 END), 0) AS Urgent,
+                COALESCE(SUM(CASE WHEN et.export_code IN ('4') THEN 1 ELSE 0 END), 0) AS Acute_illness,
+                COALESCE(SUM(CASE WHEN et.export_code IN ('5') THEN 1 ELSE 0 END), 0) AS Non_acute_illness
             FROM er_regist e
             LEFT JOIN er_emergency_type et 
                 ON et.er_emergency_type = e.er_emergency_type
@@ -311,9 +311,9 @@ class ProductERController extends Controller
                 DATE(NOW()) AS vstdate,
                 COALESCE(COUNT(DISTINCT e.vn), 0) AS visit,
                 COALESCE(SUM(CASE WHEN et.export_code IN ('1','2') THEN 1 ELSE 0 END), 0) AS Emergent,
-                COALESCE(SUM(CASE WHEN et.export_code = '3' THEN 1 ELSE 0 END), 0) AS Urgent,
-                COALESCE(SUM(CASE WHEN et.export_code = '4' THEN 1 ELSE 0 END), 0) AS Acute_illness,
-                COALESCE(SUM(CASE WHEN et.export_code = '5' THEN 1 ELSE 0 END), 0) AS Non_acute_illness
+                COALESCE(SUM(CASE WHEN et.export_code IN ('3') THEN 1 ELSE 0 END), 0) AS Urgent,
+                COALESCE(SUM(CASE WHEN et.export_code IN ('4') THEN 1 ELSE 0 END), 0) AS Acute_illness,
+                COALESCE(SUM(CASE WHEN et.export_code IN ('5') THEN 1 ELSE 0 END), 0) AS Non_acute_illness
             FROM er_regist e
             LEFT JOIN er_emergency_type et 
                 ON et.er_emergency_type = e.er_emergency_type
@@ -420,9 +420,9 @@ class ProductERController extends Controller
                 DATE(NOW()) AS vstdate,
                 COALESCE(COUNT(DISTINCT e.vn), 0) AS visit,
                 COALESCE(SUM(CASE WHEN et.export_code IN ('1','2') THEN 1 ELSE 0 END), 0) AS Emergent,
-                COALESCE(SUM(CASE WHEN et.export_code = '3' THEN 1 ELSE 0 END), 0) AS Urgent,
-                COALESCE(SUM(CASE WHEN et.export_code = '4' THEN 1 ELSE 0 END), 0) AS Acute_illness,
-                COALESCE(SUM(CASE WHEN et.export_code = '5' THEN 1 ELSE 0 END), 0) AS Non_acute_illness
+                COALESCE(SUM(CASE WHEN et.export_code IN ('3') THEN 1 ELSE 0 END), 0) AS Urgent,
+                COALESCE(SUM(CASE WHEN et.export_code IN ('4') THEN 1 ELSE 0 END), 0) AS Acute_illness,
+                COALESCE(SUM(CASE WHEN et.export_code IN ('5') THEN 1 ELSE 0 END), 0) AS Non_acute_illness
             FROM er_regist e
             LEFT JOIN er_emergency_type et 
                 ON et.er_emergency_type = e.er_emergency_type
@@ -485,9 +485,9 @@ class ProductERController extends Controller
                 DATE(NOW()) AS vstdate,
                 COALESCE(COUNT(DISTINCT e.vn), 0) AS visit,
                 COALESCE(SUM(CASE WHEN et.export_code IN ('1','2') THEN 1 ELSE 0 END), 0) AS Emergent,
-                COALESCE(SUM(CASE WHEN et.export_code = '3' THEN 1 ELSE 0 END), 0) AS Urgent,
-                COALESCE(SUM(CASE WHEN et.export_code = '4' THEN 1 ELSE 0 END), 0) AS Acute_illness,
-                COALESCE(SUM(CASE WHEN et.export_code = '5' THEN 1 ELSE 0 END), 0) AS Non_acute_illness
+                COALESCE(SUM(CASE WHEN et.export_code IN ('3') THEN 1 ELSE 0 END), 0) AS Urgent,
+                COALESCE(SUM(CASE WHEN et.export_code IN ('4') THEN 1 ELSE 0 END), 0) AS Acute_illness,
+                COALESCE(SUM(CASE WHEN et.export_code IN ('5') THEN 1 ELSE 0 END), 0) AS Non_acute_illness
             FROM er_regist e
             LEFT JOIN er_emergency_type et 
                 ON et.er_emergency_type = e.er_emergency_type
