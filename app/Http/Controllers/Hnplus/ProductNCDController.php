@@ -192,11 +192,11 @@ class ProductNCDController extends Controller
             "🧮 HHPUOS: " . number_format($hhpuos, 2) . "\n" .
             "ผู้บันทึก: {$request->recorder}";
 
-        // ==============================
+        // ============================== 
         //   ส่งข้อความ Telegram
         // ==============================
         $token = DB::table('nurse_setting')->where('name', 'telegram_token')->value('value');
-        $chat_ids = explode(',', DB::table('nurse_setting')->where('name', 'telegram_chat_id_product_ncd')->value('value'));
+        $chat_ids = explode(',', DB::table('nurse_setting')->where('name', 'telegram_chat_id_product_ncd_save')->value('value'));
 
         foreach ($chat_ids as $chat_id) {
             Http::asForm()->post("https://api.telegram.org/bot{$token}/sendMessage", [
