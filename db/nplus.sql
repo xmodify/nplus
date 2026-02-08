@@ -11,7 +11,7 @@
  Target Server Version : 100017
  File Encoding         : 65001
 
- Date: 20/01/2026 10:46:05
+ Date: 08/02/2026 16:18:34
 */
 
 SET NAMES utf8mb4;
@@ -115,6 +115,54 @@ CREATE TABLE `jobs`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
+-- Table structure for main_setting
+-- ----------------------------
+DROP TABLE IF EXISTS `main_setting`;
+CREATE TABLE `main_setting`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name_th` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  `value` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 33 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Records of main_setting
+-- ----------------------------
+INSERT INTO `main_setting` VALUES (1, 'Telegram Bot Token', 'telegram_token', '');
+INSERT INTO `main_setting` VALUES (2, 'ER ชม.การทำงานพยาบาล', 'er_working_hours', '7');
+INSERT INTO `main_setting` VALUES (3, 'ER ชม.ผู้ป่วยวิกฤต(Resuscitation)', 'er_patient_type1', '3.2');
+INSERT INTO `main_setting` VALUES (4, 'ER ชม.ผู้ป่วยฉุกเฉินสูง(Emergent)', 'er_patient_type2', '2.5');
+INSERT INTO `main_setting` VALUES (5, 'ER ชม.ผู้ป่วยฉุกเฉิน(Urgent) ', 'er_patient_type3', '1');
+INSERT INTO `main_setting` VALUES (6, 'ER ชม.ผู้ป่วยฉุกเฉินน้อย(Semi Urgent)', 'er_patient_type4', '0.5');
+INSERT INTO `main_setting` VALUES (7, 'ER ชม.ผู้ป่วยไม่ฉุกเฉิน(Non Urgent)', 'er_patient_type5', '0.24');
+INSERT INTO `main_setting` VALUES (8, 'ER NotifyTelegram แจ้งเตือน', 'er_notifytelegram', '-4729376994');
+INSERT INTO `main_setting` VALUES (9, 'ER NotifyTelegram บันทึก', 'er_notifytelegram_save', '-4729376994,-4776977390');
+INSERT INTO `main_setting` VALUES (10, 'IPD รหัส Ward (HOSxP)', 'ipd_ward', '01');
+INSERT INTO `main_setting` VALUES (11, 'IPD ชม.การทำงานพยาบาล', 'ipd_working_hours', '7');
+INSERT INTO `main_setting` VALUES (12, 'IPD ชม.ผู้ป่วยพักฟื้น(Convalescent)', 'ipd_patient_type1', '1.5');
+INSERT INTO `main_setting` VALUES (13, 'IPD ชม.ผู้ป่วยปานกลาง(Moderate)', 'ipd_patient_type2', '3.5');
+INSERT INTO `main_setting` VALUES (14, 'IPD ชม.ผู้ป่วยกึ่งหนัก(Semi-critical)', 'ipd_patient_type3', '5.5');
+INSERT INTO `main_setting` VALUES (15, 'IPD ชม.ผู้ป่วยหนัก(Critical)', 'ipd_patient_type4', '7.5');
+INSERT INTO `main_setting` VALUES (16, 'IPD NotifyTelegram แจ้งเตือน', 'ipd_notifytelegram', '-4729376994');
+INSERT INTO `main_setting` VALUES (17, 'IPD NotifyTelegram บันทึก', 'ipd_notifytelegram_save', '-4729376994,-4776977390');
+INSERT INTO `main_setting` VALUES (18, 'OPD รหัสห้องตรวจ (HOSxP)', 'opd_department', '002');
+INSERT INTO `main_setting` VALUES (19, 'OPD ชม.การทำงานพยาบาล', 'opd_working_hours', '7');
+INSERT INTO `main_setting` VALUES (20, 'OPD ชม.ผู้ป่วยทั่วไป', 'opd_patient_type', '0.24');
+INSERT INTO `main_setting` VALUES (21, 'OPD NotifyTelegram แจ้งเตือน', 'opd_notifytelegram', '-4729376994');
+INSERT INTO `main_setting` VALUES (22, 'OPD NotifyTelegram บันทึก', 'opd_notifytelegram_save', '-4729376994,-4776977390');
+INSERT INTO `main_setting` VALUES (23, 'NCD รหัสห้องตรวจ (HOSxP)', 'ncd_department', '025');
+INSERT INTO `main_setting` VALUES (24, 'NCD ชม.การทำงานพยาบาล', 'ncd_working_hours', '7');
+INSERT INTO `main_setting` VALUES (25, 'NCD ชม.ผู้ป่วยทั่วไป', 'ncd_patient_type', '0.24');
+INSERT INTO `main_setting` VALUES (26, 'NCD NotifyTelegram แจ้งเตือน', 'ncd_notifytelegram', '-4729376994');
+INSERT INTO `main_setting` VALUES (27, 'NCD NotifyTelegram บันทึก', 'ncd_notifytelegram_save', '-4729376994,-4776977390');
+INSERT INTO `main_setting` VALUES (28, 'ARI รหัสห้องตรวจ (HOSxP)', 'ari_department', '032');
+INSERT INTO `main_setting` VALUES (29, 'ARI ชม.การทำงานพยาบาล', 'ari_working_hours', '7');
+INSERT INTO `main_setting` VALUES (30, 'ARI ชม.ผู้ป่วยทั่วไป', 'ari_patient_type', '0.24');
+INSERT INTO `main_setting` VALUES (31, 'ARI NotifyTelegram แจ้งเตือน', 'ari_notifytelegram', '-4729376994');
+INSERT INTO `main_setting` VALUES (32, 'ARI NotifyTelegram บันทึก', 'ari_notifytelegram_save', '-4729376994,-4776977390');
+
+-- ----------------------------
 -- Table structure for migrations
 -- ----------------------------
 DROP TABLE IF EXISTS `migrations`;
@@ -133,145 +181,6 @@ INSERT INTO `migrations` VALUES (2, '0001_01_01_000001_create_cache_table', 1);
 INSERT INTO `migrations` VALUES (3, '0001_01_01_000002_create_jobs_table', 1);
 
 -- ----------------------------
--- Table structure for nurse_productivity_ers
--- ----------------------------
-DROP TABLE IF EXISTS `nurse_productivity_ers`;
-CREATE TABLE `nurse_productivity_ers`  (
-  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `report_date` date NOT NULL,
-  `shift_time` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `nurse_fulltime` int(11) NULL DEFAULT NULL,
-  `nurse_partime` int(11) NULL DEFAULT NULL,
-  `nurse_oncall` int(11) NULL DEFAULT NULL,
-  `recorder` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
-  `note` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
-  `patient_all` int(11) NULL DEFAULT NULL,
-  `emergent` int(11) NULL DEFAULT NULL,
-  `urgent` int(11) NULL DEFAULT NULL,
-  `acute_illness` int(11) NULL DEFAULT NULL,
-  `non_acute_illness` int(11) NULL DEFAULT NULL,
-  `patient_hr` double(8, 2) NULL DEFAULT NULL,
-  `nurse_hr` double(8, 2) NULL DEFAULT NULL,
-  `nurse_shift_time` double(8, 2) NULL DEFAULT NULL,
-  `hhpuos` double(8, 2) NULL DEFAULT NULL,
-  `productivity` double(8, 2) NULL DEFAULT NULL,
-  `created_at` timestamp(0) NULL DEFAULT NULL,
-  `updated_at` timestamp(0) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `er_report_date`(`report_date`) USING BTREE,
-  INDEX `er_shift_time`(`shift_time`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Compact;
-
--- ----------------------------
--- Table structure for nurse_productivity_ipds
--- ----------------------------
-DROP TABLE IF EXISTS `nurse_productivity_ipds`;
-CREATE TABLE `nurse_productivity_ipds`  (
-  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `report_date` date NOT NULL,
-  `shift_time` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `nurse_fulltime` int(11) NULL DEFAULT NULL,
-  `nurse_partime` int(11) NULL DEFAULT NULL,
-  `nurse_oncall` int(11) NULL DEFAULT NULL,
-  `recorder` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
-  `note` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
-  `patient_all` int(11) NULL DEFAULT NULL,
-  `convalescent` int(11) NULL DEFAULT NULL,
-  `moderate_ill` int(11) NULL DEFAULT NULL,
-  `semi_critical_ill` int(11) NULL DEFAULT NULL,
-  `critical_ill` int(11) NULL DEFAULT NULL,
-  `patient_hr` double(8, 2) NULL DEFAULT NULL,
-  `nurse_hr` double(8, 2) NULL DEFAULT NULL,
-  `nurse_shift_time` double(8, 2) NULL DEFAULT NULL,
-  `hhpuos` double(8, 2) NULL DEFAULT NULL,
-  `productivity` double(8, 2) NULL DEFAULT NULL,
-  `created_at` timestamp(0) NULL DEFAULT NULL,
-  `updated_at` timestamp(0) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `ipd_report_date`(`report_date`) USING BTREE,
-  INDEX `ipd_shift_time`(`shift_time`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Compact;
-
--- ----------------------------
--- Table structure for nurse_productivity_ncds
--- ----------------------------
-DROP TABLE IF EXISTS `nurse_productivity_ncds`;
-CREATE TABLE `nurse_productivity_ncds`  (
-  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `report_date` date NOT NULL,
-  `shift_time` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `nurse_fulltime` int(11) NULL DEFAULT NULL,
-  `nurse_partime` int(11) NULL DEFAULT NULL,
-  `nurse_oncall` int(11) NULL DEFAULT NULL,
-  `recorder` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
-  `note` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
-  `patient_all` int(11) NULL DEFAULT NULL,
-  `patient_hr` double(8, 2) NULL DEFAULT NULL,
-  `nurse_hr` double(8, 2) NULL DEFAULT NULL,
-  `nurse_shift_time` double(8, 2) NULL DEFAULT NULL,
-  `hhpuos` double(8, 2) NULL DEFAULT NULL,
-  `productivity` double(8, 2) NULL DEFAULT NULL,
-  `created_at` timestamp(0) NULL DEFAULT NULL,
-  `updated_at` timestamp(0) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `ncd_report_date`(`report_date`) USING BTREE,
-  INDEX `ncd_shift_time`(`shift_time`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Compact;
-
--- ----------------------------
--- Table structure for nurse_productivity_opds
--- ----------------------------
-DROP TABLE IF EXISTS `nurse_productivity_opds`;
-CREATE TABLE `nurse_productivity_opds`  (
-  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `report_date` date NOT NULL,
-  `shift_time` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `nurse_fulltime` int(11) NULL DEFAULT NULL,
-  `nurse_partime` int(11) NULL DEFAULT NULL,
-  `nurse_oncall` int(11) NULL DEFAULT NULL,
-  `recorder` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
-  `note` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
-  `patient_all` int(11) NULL DEFAULT NULL,
-  `opd` int(11) NULL DEFAULT NULL,
-  `ari` int(11) NULL DEFAULT NULL,
-  `patient_hr` double(8, 2) NULL DEFAULT NULL,
-  `nurse_hr` double(8, 2) NULL DEFAULT NULL,
-  `nurse_shift_time` double(8, 2) NULL DEFAULT NULL,
-  `hhpuos` double(8, 2) NULL DEFAULT NULL,
-  `productivity` double(8, 2) NULL DEFAULT NULL,
-  `created_at` timestamp(0) NULL DEFAULT NULL,
-  `updated_at` timestamp(0) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `opd_report_date`(`report_date`) USING BTREE,
-  INDEX `opd_shift_time`(`shift_time`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Compact;
-
--- ----------------------------
--- Table structure for nurse_setting
--- ----------------------------
-DROP TABLE IF EXISTS `nurse_setting`;
-CREATE TABLE `nurse_setting`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name_th` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
-  `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
-  `value` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Compact;
-
--- ----------------------------
--- Records of nurse_setting
--- ----------------------------
-INSERT INTO `nurse_setting` VALUES (1, 'Telegram Token', 'telegram_token', '');
-INSERT INTO `nurse_setting` VALUES (2, 'Telegram ChatID Product ER แจ้งเตือน', 'telegram_chat_id_product_er', '-4729376994');
-INSERT INTO `nurse_setting` VALUES (3, 'Telegram ChatID Product ER บันทึก', 'telegram_chat_id_product_er_save', '-4729376994');
-INSERT INTO `nurse_setting` VALUES (4, 'Telegram ChatID Product IPD แจ้งเตือน', 'telegram_chat_id_product_ipd', '-4729376994');
-INSERT INTO `nurse_setting` VALUES (5, 'Telegram ChatID Product IPD บันทึก', 'telegram_chat_id_product_ipd_save', '-4729376994');
-INSERT INTO `nurse_setting` VALUES (6, 'Telegram ChatID Product OPD แจ้งเตือน', 'telegram_chat_id_product_opd', '-4729376994');
-INSERT INTO `nurse_setting` VALUES (7, 'Telegram ChatID Product OPD บันทึก', 'telegram_chat_id_product_opd_save', '-4729376994');
-INSERT INTO `nurse_setting` VALUES (8, 'Telegram ChatID Product NCD แจ้งเตือน', 'telegram_chat_id_product_ncd', '-4729376994');
-INSERT INTO `nurse_setting` VALUES (9, 'Telegram ChatID Product NCD บันทึก', 'telegram_chat_id_product_ncd_save', '-4729376994');
-
--- ----------------------------
 -- Table structure for password_reset_tokens
 -- ----------------------------
 DROP TABLE IF EXISTS `password_reset_tokens`;
@@ -281,6 +190,145 @@ CREATE TABLE `password_reset_tokens`  (
   `created_at` timestamp(0) NULL DEFAULT NULL,
   PRIMARY KEY (`email`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Table structure for productivity_ari
+-- ----------------------------
+DROP TABLE IF EXISTS `productivity_ari`;
+CREATE TABLE `productivity_ari`  (
+  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `report_date` date NOT NULL COMMENT 'วันที่',
+  `shift_time` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'เวร',
+  `nurse_fulltime` int(11) NULL DEFAULT NULL COMMENT 'จำนวนอัตรากำลังปกติ',
+  `nurse_partime` int(11) NULL DEFAULT NULL COMMENT 'จำนวนอัตรากำลังเสริม',
+  `nurse_oncall` int(11) NULL DEFAULT NULL COMMENT 'จำนวนอัตรากำลัง OnCall',
+  `recorder` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT 'ผู้บันทึก',
+  `note` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT 'หมายเหตุ',
+  `patient_all` int(11) NULL DEFAULT NULL COMMENT 'จำนวนผู้ป่วยทั้งหมด: 0.24 ชั่วโมง',
+  `nursing_hours` double(5, 2) NULL DEFAULT NULL COMMENT 'ชั่วโมงการพยาบาล',
+  `working_hours` double(5, 2) NULL DEFAULT NULL COMMENT 'ชั่วโมงการทำงาน',
+  `nhppd` double(5, 2) NULL DEFAULT NULL COMMENT 'ชั่วโมงการพยาบาลผู้ป่วยเฉลี่ยต่อรายต่อวัน',
+  `nurse_shift_time` double(5, 2) NULL DEFAULT NULL COMMENT 'จำนวนพยาบาลที่ต้องการต่อเวร',
+  `productivity` double(5, 2) NULL DEFAULT NULL COMMENT 'Productivity',
+  `created_at` timestamp(0) NULL DEFAULT NULL,
+  `updated_at` timestamp(0) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `ipd_report_date`(`report_date`) USING BTREE,
+  INDEX `ipd_shift_time`(`shift_time`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Table structure for productivity_er
+-- ----------------------------
+DROP TABLE IF EXISTS `productivity_er`;
+CREATE TABLE `productivity_er`  (
+  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `report_date` date NOT NULL COMMENT 'วันที่',
+  `shift_time` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'เวร',
+  `nurse_fulltime` double(5, 2) NULL DEFAULT NULL COMMENT 'จำนวนอัตรากำลังปกติ',
+  `nurse_partime` double(5, 2) NULL DEFAULT NULL COMMENT 'จำนวนอัตรากำลังเสริม',
+  `nurse_oncall` double(5, 2) NULL DEFAULT NULL COMMENT 'จำนวนอัตรากำลัง OnCall',
+  `recorder` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT 'ผู้บันทึก',
+  `note` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT 'หมายเหตุ',
+  `patient_all` int(11) NULL DEFAULT NULL COMMENT 'จำนวนผู้ป่วยทั้งหมด',
+  `patient_resuscitation` int(11) NULL DEFAULT NULL COMMENT 'จำนวนผู้ป่วยวิกฤต(Resuscitation): 3.2 ชั่วโมง',
+  `patient_emergent` int(11) NULL DEFAULT NULL COMMENT 'จำนวนผู้ป่วยฉุกเฉินสูง(Emergent): 2.5 ชั่วโมง',
+  `patient_urgent` int(11) NULL DEFAULT NULL COMMENT 'จำนวนผู้ป่วยฉุกเฉิน(Urgent): 1 ชั่วโมง',
+  `patient_semi_urgent` int(11) NULL DEFAULT NULL COMMENT 'จำนวนผู้ป่วยฉุกเฉินน้อย(Less Urgent): 0.5 ชั่วโมง',
+  `patient_non_urgent` int(11) NULL DEFAULT NULL COMMENT 'จำนวนผู้ป่วยไม่ฉุกเฉิน(Non Urgent): 0.24 ชั่วโมง',
+  `nursing_hours` double(5, 2) NULL DEFAULT NULL COMMENT 'ชั่วโมงการพยาบาล',
+  `working_hours` double(5, 2) NULL DEFAULT NULL COMMENT 'ชั่วโมงการทำงาน',
+  `nhppd` double(5, 2) NULL DEFAULT NULL COMMENT 'ชั่วโมงการพยาบาลผู้ป่วยเฉลี่ยต่อรายต่อวัน',
+  `nurse_shift_time` double(5, 2) NULL DEFAULT NULL COMMENT 'จำนวนพยาบาลที่ต้องการต่อเวร',
+  `productivity` double(5, 2) NULL DEFAULT NULL COMMENT 'Productivity',
+  `created_at` timestamp(0) NULL DEFAULT NULL,
+  `updated_at` timestamp(0) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `er_report_date`(`report_date`) USING BTREE,
+  INDEX `er_shift_time`(`shift_time`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Table structure for productivity_ipd
+-- ----------------------------
+DROP TABLE IF EXISTS `productivity_ipd`;
+CREATE TABLE `productivity_ipd`  (
+  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `report_date` date NOT NULL COMMENT 'วันที่',
+  `shift_time` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'เวร',
+  `nurse_fulltime` int(11) NULL DEFAULT NULL COMMENT 'จำนวนอัตรากำลังปกติ',
+  `nurse_partime` int(11) NULL DEFAULT NULL COMMENT 'จำนวนอัตรากำลังเสริม',
+  `nurse_oncall` int(11) NULL DEFAULT NULL COMMENT 'จำนวนอัตรากำลัง OnCall',
+  `recorder` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT 'ผู้บันทึก',
+  `note` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT 'หมายเหตุ',
+  `patient_all` int(11) NULL DEFAULT NULL COMMENT 'จำนวนผู้ป่วยทั้งหมด',
+  `patient_critical` int(11) NULL DEFAULT NULL COMMENT 'จำนวนผู้ป่วยหนัก (Critical): 7.5 ชั่วโมง',
+  `patient_semi_critical` int(11) NULL DEFAULT NULL COMMENT 'จำนวนผู้ป่วยกึ่งหนัก (Semi-critical): 5.5 ชั่วโมง',
+  `patient_moderate` int(11) NULL DEFAULT NULL COMMENT 'จำนวนผู้ป่วย(Moderate): 3.5 ชั่วโมง',
+  `patient_convalescent` int(11) NULL DEFAULT NULL COMMENT 'จำนวนผู้ป่วย(Convalescent): 1.5 ชั่วโมง',
+  `nursing_hours` double(5, 2) NULL DEFAULT NULL COMMENT 'ชั่วโมงการพยาบาล',
+  `working_hours` double(5, 2) NULL DEFAULT NULL COMMENT 'ชั่วโมงการทำงาน',
+  `nhppd` double(5, 2) NULL DEFAULT NULL COMMENT 'ชั่วโมงการพยาบาลผู้ป่วยเฉลี่ยต่อรายต่อวัน',
+  `nurse_shift_time` double(5, 2) NULL DEFAULT NULL COMMENT 'จำนวนพยาบาลที่ต้องการต่อเวร',
+  `productivity` double(5, 2) NULL DEFAULT NULL COMMENT 'Productivity',
+  `created_at` timestamp(0) NULL DEFAULT NULL,
+  `updated_at` timestamp(0) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `ipd_report_date`(`report_date`) USING BTREE,
+  INDEX `ipd_shift_time`(`shift_time`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Table structure for productivity_ncd
+-- ----------------------------
+DROP TABLE IF EXISTS `productivity_ncd`;
+CREATE TABLE `productivity_ncd`  (
+  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `report_date` date NOT NULL COMMENT 'วันที่',
+  `shift_time` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'เวร',
+  `nurse_fulltime` int(11) NULL DEFAULT NULL COMMENT 'จำนวนอัตรากำลังปกติ',
+  `nurse_partime` int(11) NULL DEFAULT NULL COMMENT 'จำนวนอัตรากำลังเสริม',
+  `nurse_oncall` int(11) NULL DEFAULT NULL COMMENT 'จำนวนอัตรากำลัง OnCall',
+  `recorder` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT 'ผู้บันทึก',
+  `note` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT 'หมายเหตุ',
+  `patient_all` int(11) NULL DEFAULT NULL COMMENT 'จำนวนผู้ป่วยทั้งหมด: 0.24 ชั่วโมง',
+  `nursing_hours` double(5, 2) NULL DEFAULT NULL COMMENT 'ชั่วโมงการพยาบาล',
+  `working_hours` double(5, 2) NULL DEFAULT NULL COMMENT 'ชั่วโมงการทำงาน',
+  `nhppd` double(5, 2) NULL DEFAULT NULL COMMENT 'ชั่วโมงการพยาบาลผู้ป่วยเฉลี่ยต่อรายต่อวัน',
+  `nurse_shift_time` double(5, 2) NULL DEFAULT NULL COMMENT 'จำนวนพยาบาลที่ต้องการต่อเวร',
+  `productivity` double(5, 2) NULL DEFAULT NULL COMMENT 'Productivity',
+  `created_at` timestamp(0) NULL DEFAULT NULL,
+  `updated_at` timestamp(0) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `ipd_report_date`(`report_date`) USING BTREE,
+  INDEX `ipd_shift_time`(`shift_time`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Table structure for productivity_opd
+-- ----------------------------
+DROP TABLE IF EXISTS `productivity_opd`;
+CREATE TABLE `productivity_opd`  (
+  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `report_date` date NOT NULL COMMENT 'วันที่',
+  `shift_time` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'เวร',
+  `nurse_fulltime` int(11) NULL DEFAULT NULL COMMENT 'จำนวนอัตรากำลังปกติ',
+  `nurse_partime` int(11) NULL DEFAULT NULL COMMENT 'จำนวนอัตรากำลังเสริม',
+  `nurse_oncall` int(11) NULL DEFAULT NULL COMMENT 'จำนวนอัตรากำลัง OnCall',
+  `recorder` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT 'ผู้บันทึก',
+  `note` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT 'หมายเหตุ',
+  `patient_all` int(11) NULL DEFAULT NULL COMMENT 'จำนวนผู้ป่วยทั้งหมด: 0.24 ชั่วโมง',
+  `nursing_hours` double(5, 2) NULL DEFAULT NULL COMMENT 'ชั่วโมงการพยาบาล',
+  `working_hours` double(5, 2) NULL DEFAULT NULL COMMENT 'ชั่วโมงการทำงาน',
+  `nhppd` double(5, 2) NULL DEFAULT NULL COMMENT 'ชั่วโมงการพยาบาลผู้ป่วยเฉลี่ยต่อรายต่อวัน',
+  `nurse_shift_time` double(5, 2) NULL DEFAULT NULL COMMENT 'จำนวนพยาบาลที่ต้องการต่อเวร',
+  `productivity` double(5, 2) NULL DEFAULT NULL COMMENT 'Productivity',
+  `created_at` timestamp(0) NULL DEFAULT NULL,
+  `updated_at` timestamp(0) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `ipd_report_date`(`report_date`) USING BTREE,
+  INDEX `ipd_shift_time`(`shift_time`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Table structure for sessions
@@ -301,9 +349,8 @@ CREATE TABLE `sessions`  (
 -- ----------------------------
 -- Records of sessions
 -- ----------------------------
-INSERT INTO `sessions` VALUES ('0Vum5qoCxXHGPPaWVvK7yIjx2pwNRn4z2SeGPnfO', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiQlc2UmE3MGs3eDQ0UEhFVG1IbGRNVXQya1lSRTkzRjdWUWZBWmVSQiI7czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6NTI6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9obnBsdXMvcHJvZHVjdC9lcl9uaWdodF9ub3RpZnkiO3M6NToicm91dGUiO3M6NzoiaG5wbHVzLiI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1768880090);
-INSERT INTO `sessions` VALUES ('aslqsa41qVSVo1Tz64DT9gxDOS5JzUs9w8wyTOJf', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiS2xKWDVmMFM4cjlNRTVURkdJNHdQTm5pQ0FIbmxuRmFlUGlYaHI5WiI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6NDc6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9obnBsdXMvcHJvZHVjdC9uY2RfcmVwb3J0IjtzOjU6InJvdXRlIjtzOjI1OiJobnBsdXMucHJvZHVjdC5uY2RfcmVwb3J0Ijt9czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6MTt9', 1768839775);
-INSERT INTO `sessions` VALUES ('fbLOYCHFr2qZu064gOSYSt7FA1dVXExuQfCAVnem', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiR25Qc1FlUENMdk5NdUkyQjAwQUhiOThZSHh2cnF6c09oeW94Z3pheCI7czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6MjE6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMCI7czo1OiJyb3V0ZSI7Tjt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1768813624);
+INSERT INTO `sessions` VALUES ('2rSUrRk9o4sug2yrM2ulUqE7wJPRmJpKtcCiKRSa', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36 Edg/144.0.0.0', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoidXFFcU1ScnNWM0l1dHlCWkxXbVA0TWRBNTh6dHFjY21RdUQxVmdwVSI7czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6NDg6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9obnBsdXMvcHJvZHVjdC9uY2RfbW9ybmluZyI7czo1OiJyb3V0ZSI7czo3OiJobnBsdXMuIjt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1770537925);
+INSERT INTO `sessions` VALUES ('RFIxIdZYjbkqBXSJHcQQTOr4Doysv5sMuMYTNSaR', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoicGhaSGhyV0F5clFZa3MxZlNQR0ZUZ2pkenV1VUNKNmpJUmhJbTdRZyI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6NDA6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9hZG1pbi9tYWluX3NldHRpbmciO3M6NToicm91dGUiO3M6MTg6ImFkbWluLm1haW5fc2V0dGluZyI7fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjE7fQ==', 1770542153);
 
 -- ----------------------------
 -- Table structure for telegram_tokens
@@ -338,16 +385,17 @@ CREATE TABLE `users`  (
   `email_verified_at` timestamp(0) NULL DEFAULT NULL,
   `password` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `remember_token` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  `del_product` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT 'Y',
   `created_at` timestamp(0) NULL DEFAULT NULL,
   `updated_at` timestamp(0) NULL DEFAULT NULL,
-  `del_product` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT 'Y',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `users_email_unique`(`email`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of users
 -- ----------------------------
-INSERT INTO `users` VALUES (1, 'Admin', 'admin@gmail.com', 'admin', 'Y', NULL, '$2y$12$6bRoW.Skmu4TJg/P6gyeI.mGqoBHa4mKZmSuLaa9SXUeEZ1enPAFi', NULL, NULL, '2026-01-19 20:47:12', 'Y');
+INSERT INTO `users` VALUES (1, 'Admin', 'admin@gmail.com', 'admin', 'Y', NULL, '$2y$12$6bRoW.Skmu4TJg/P6gyeI.mGqoBHa4mKZmSuLaa9SXUeEZ1enPAFi', NULL, 'Y', NULL, '2026-01-19 20:47:12');
+INSERT INTO `users` VALUES (2, 'ศิริฤกษ์ คณาดี', 'xmodifya@gmail.com', 'user', 'Y', NULL, '$2y$12$wNMPnS6F0QfrgJKD70bkbeHTZQzwwxjskpxrAgzue.N544MvumwHe', NULL, 'Y', '2026-02-08 11:27:41', '2026-02-08 11:27:41');
 
 SET FOREIGN_KEY_CHECKS = 1;

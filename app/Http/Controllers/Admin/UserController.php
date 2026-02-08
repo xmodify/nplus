@@ -32,7 +32,7 @@ class UserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'active' => $request->active,
-            'status' => 'user',
+            'role' => 'user',
             'password' => Hash::make($request->password),
         ]);
 
@@ -47,16 +47,16 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $validated = $request->validate([
-        'name' => 'required',
-        'email' => 'required|email',
-        'password' => 'nullable|min:6'
+            'name' => 'required',
+            'email' => 'required|email',
+            'password' => 'nullable|min:6'
         ]);
 
         $data = [
             'name' => $request->name,
             'email' => $request->email,
             'active' => $request->has('active') ? 'Y' : 'N',
-            'status' => $request->status,
+            'role' => $request->role,
         ];
 
         // ถ้ามีการกรอก password ใหม่ ให้ hash แล้วอัปเดต
@@ -74,5 +74,5 @@ class UserController extends Controller
         $user->delete();
         return redirect()->route('admin.users.index')->with('success', 'ลบข้อมูลสำเร็จ');
     }
-    
+
 }

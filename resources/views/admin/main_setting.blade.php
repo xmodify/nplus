@@ -1,41 +1,635 @@
 @extends('layouts.hnplus')
 
 @section('content')
-<div class="container mt-4">
-    <button class="btn btn-danger" id="gitPullBtn" style="display: inline;">Git Pull</button> 
+    <div class="container mt-3 mb-0">
 
-    <pre id="gitOutput" style="background: #eeee; padding: 1rem; margin-top: 1rem;"></pre>    
+        <!-- ================= ACTION BUTTONS ================= -->
+        <div class="mb-3">
+            <button class="btn btn-danger" id="gitPullBtn">
+                <i class="bi bi-git"></i> Git Pull
+            </button>
 
-    <!-- แจ้ง Git Pull -->
-    <script>
-        document.getElementById('gitPullBtn').addEventListener('click', function () {
-            if (!confirm("คุณแน่ใจว่าจะ Git Pull ใช่ไหม?")) return;
+            <form id="structureForm" method="POST" action="{{ route('admin.up_structure') }}" style="display:inline;">
+                @csrf
+                <button type="button" class="btn btn-primary" onclick="confirmUpgrade()">
+                    <i class="bi bi-arrow-repeat"></i> Upgrade Structure
+                </button>
+            </form>
+        </div>
 
-            let outputBox = document.getElementById('gitOutput');
-            outputBox.textContent = 'กำลังดำเนินการ...';
+        <!-- ================= OUTPUT ================= -->
+        <pre id="gitOutput" style="background:#eeee; padding:1rem; border-radius:6px; margin-bottom: 20px;"></pre>
 
-            fetch("{{ route('admin.git.pull') }}", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                },
-            })
-            .then(response => response.json())
-            .then(data => {
-                outputBox.textContent = data.output || data.error || 'ไม่มีข้อมูล';
-                // ตรวจสอบว่า git pull สำเร็จหรือไม่
-                if (data.output && data.output.includes('Updating') || data.output.includes('Already up to date')) {
+        <!-- ================= SETTINGS TABS ================= -->
+        <div class="card">
+            <div class="card-header text-white" style="background-color:#23A7A7;">
+                <strong>ตัั้งค่าระบบ (Main Setting)</strong>
+            </div>
+            <div class="card-body">
+
+                <form action="{{ route('admin.main_setting.update') }}" method="POST">
+                    @csrf
+
+                    <ul class="nav nav-tabs" id="settingTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="general-tab" data-bs-toggle="tab" data-bs-target="#general"
+                                type="button" role="tab" aria-controls="general" aria-selected="true">General</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="er-tab" data-bs-toggle="tab" data-bs-target="#er" type="button"
+                                role="tab" aria-controls="er" aria-selected="false">ER</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="ipd-tab" data-bs-toggle="tab" data-bs-target="#ipd" type="button"
+                                role="tab" aria-controls="ipd" aria-selected="false">IPD</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="opd-tab" data-bs-toggle="tab" data-bs-target="#opd" type="button"
+                                role="tab" aria-controls="opd" aria-selected="false">OPD</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="ncd-tab" data-bs-toggle="tab" data-bs-target="#ncd" type="button"
+                                role="tab" aria-controls="ncd" aria-selected="false">NCD</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="ari-tab" data-bs-toggle="tab" data-bs-target="#ari" type="button"
+                                role="tab" aria-controls="ari" aria-selected="false">ARI</button>
+                        </li>
+
+                    </ul>
+
+                    <div class="tab-content pt-3" id="settingTabsContent">
+                        <!-- General Tab -->
+                        <div class="tab-pane fade show active" id="general" role="tabpanel" aria-labelledby="general-tab">
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th style="width: 5%">ID</th>
+                                            <th style="width: 45%">Name (TH)</th>
+                                            <th style="width: 50%">Value</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($general_settings as $setting)
+                                            <tr>
+                                                <td>{{ $setting->id }}</td>
+                                                <td>{{ $setting->name_th }}</td>
+                                                <td>
+                                                    <input type="text" class="form-control" name="{{ $setting->name }}"
+                                                        value="{{ $setting->value }}">
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- ER Tab -->
+                        <div class="tab-pane fade" id="er" role="tabpanel" aria-labelledby="er-tab">
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th style="width: 5%">ID</th>
+                                            <th style="width: 45%">Name (TH)</th>
+                                            <th style="width: 50%">Value</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($er_settings as $setting)
+                                            <tr>
+                                                <td>{{ $setting->id }}</td>
+                                                <td>{{ $setting->name_th }}</td>
+                                                <td>
+                                                    <input type="text" class="form-control" name="{{ $setting->name }}"
+                                                        value="{{ $setting->value }}">
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- IPD Tab -->
+                        <div class="tab-pane fade" id="ipd" role="tabpanel" aria-labelledby="ipd-tab">
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th style="width: 5%">ID</th>
+                                            <th style="width: 45%">Name (TH)</th>
+                                            <th style="width: 50%">Value</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($ipd_settings as $setting)
+                                            <tr>
+                                                <td>{{ $setting->id }}</td>
+                                                <td>{{ $setting->name_th }}</td>
+                                                <td>
+                                                    <input type="text" class="form-control" name="{{ $setting->name }}"
+                                                        value="{{ $setting->value }}">
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- OPD Tab -->
+                        <div class="tab-pane fade" id="opd" role="tabpanel" aria-labelledby="opd-tab">
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th style="width: 5%">ID</th>
+                                            <th style="width: 45%">Name (TH)</th>
+                                            <th style="width: 50%">Value</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($opd_settings as $setting)
+                                            <tr>
+                                                <td>{{ $setting->id }}</td>
+                                                <td>{{ $setting->name_th }}</td>
+                                                <td>
+                                                    <input type="text" class="form-control" name="{{ $setting->name }}"
+                                                        value="{{ $setting->value }}">
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- NCD Tab -->
+                        <div class="tab-pane fade" id="ncd" role="tabpanel" aria-labelledby="ncd-tab">
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th style="width: 5%">ID</th>
+                                            <th style="width: 45%">Name (TH)</th>
+                                            <th style="width: 50%">Value</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($ncd_settings as $setting)
+                                            <tr>
+                                                <td>{{ $setting->id }}</td>
+                                                <td>{{ $setting->name_th }}</td>
+                                                <td>
+                                                    <input type="text" class="form-control" name="{{ $setting->name }}"
+                                                        value="{{ $setting->value }}">
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- ARI Tab -->
+                        <div class="tab-pane fade" id="ari" role="tabpanel" aria-labelledby="ari-tab">
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th style="width: 5%">ID</th>
+                                            <th style="width: 45%">Name (TH)</th>
+                                            <th style="width: 50%">Value</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($ari_settings as $setting)
+                                            <tr>
+                                                <td>{{ $setting->id }}</td>
+                                                <td>{{ $setting->name_th }}</td>
+                                                <td>
+                                                    <input type="text" class="form-control" name="{{ $setting->name }}"
+                                                        value="{{ $setting->value }}">
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+                    <div class="mt-3 text-end">
+                        <button type="submit" class="btn btn-success"><i class="bi bi-save"></i>
+                            บันทึกการเปลี่ยนแปลง</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <script>
+            function copyToClipboard(btn) {
+                const input = btn.parentElement.querySelector('input');
+                input.select();
+                input.setSelectionRange(0, 99999);
+                navigator.clipboard.writeText(input.value).then(() => {
+                    const originalIcon = btn.innerHTML;
+                    btn.innerHTML = '<i class="bi bi-check2 text-white"></i>';
+                    btn.classList.add('btn-success');
+                    btn.classList.remove('btn-outline-secondary');
+
                     setTimeout(() => {
-                        window.location.href = "{{ route('admin.main_setting') }}"; // เปลี่ยนเป็น route ที่คุณต้องการ redirect ไป
-                    }, 5000); // รอ 5 วินาทีก่อน redirect
-                }
-            })
-            .catch(error => {
-                outputBox.textContent = "เกิดข้อผิดพลาด: " + error;
-            });
-        });
-    </script>  
-</div>
+                        btn.innerHTML = originalIcon;
+                        btn.classList.remove('btn-success');
+                        btn.classList.add('btn-outline-secondary');
+                    }, 2000);
+                });
+            }
+        </script>
 
+        <!-- ================= HOSxP REFERENCE DATA ================= -->
+        <div class="card mt-4 mb-5 shadow-sm">
+            <div class="card-header text-white" style="background-color: #2393a7ff;">
+                <strong><i class="bi bi-database-fill-gear me-2"></i>ข้อมูลอ้างอิงจาก HOSxP (Reference Data)</strong>
+            </div>
+            <div class="card-body">
+                <ul class="nav nav-tabs mb-3" id="referenceTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="reference-dept-tab" data-bs-toggle="tab"
+                            data-bs-target="#reference-dept" type="button" role="tab" aria-controls="reference-dept"
+                            aria-selected="true">
+                            <i class="bi bi-door-open me-1"></i>รายชื่อห้องตรวจ (Departments)
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="reference-ward-tab" data-bs-toggle="tab"
+                            data-bs-target="#reference-ward" type="button" role="tab" aria-controls="reference-ward"
+                            aria-selected="false">
+                            <i class="bi bi-hospital me-1"></i>รายชื่อหอผู้ป่วย (Wards)
+                        </button>
+                    </li>
+                </ul>
+
+                <div class="tab-content" id="referenceTabsContent">
+                    <!-- HOSxP Departments Tab -->
+                    <div class="tab-pane fade show active" id="reference-dept" role="tabpanel"
+                        aria-labelledby="reference-dept-tab">
+                        <div class="alert alert-warning py-2 small">
+                            <i class="bi bi-info-circle-fill me-2"></i>ใช้ค่าจากคอลัมน์ <strong>"รหัสห้องตรวจ"</strong>
+                            ไประบุในตั้งค่า OPD หรือ NCD
+                        </div>
+                        <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+                            <table class="table table-sm table-bordered table-striped table-hover">
+                                <thead class="table-dark sticky-top">
+                                    <tr>
+                                        <th>รหัสห้องตรวจ</th>
+                                        <th>ห้องตรวจ</th>
+                                        <th>แผนก</th>
+                                        <th class="text-center">สถานะ</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($hosxp_departments as $dept)
+                                        <tr>
+                                            <td class="fw-bold text-primary">{{ $dept->depcode }}</td>
+                                            <td>{{ $dept->department }}</td>
+                                            <td>{{ $dept->spclty }}</td>
+                                            <td class="text-center">
+                                                @if($dept->depcode_active == 'Y')
+                                                    <span class="badge bg-success">ใช้งาน</span>
+                                                @else
+                                                    <span class="badge bg-secondary">ปิด</span>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- HOSxP Wards Tab -->
+                    <div class="tab-pane fade" id="reference-ward" role="tabpanel" aria-labelledby="reference-ward-tab">
+                        <div class="alert alert-warning py-2 small">
+                            <i class="bi bi-info-circle-fill me-2"></i>ใช้ค่าจากคอลัมน์ <strong>"รหัส Ward"</strong>
+                            ไประบุในตั้งค่า IPD
+                        </div>
+                        <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+                            <table class="table table-sm table-bordered table-striped table-hover">
+                                <thead class="table-dark sticky-top">
+                                    <tr>
+                                        <th>รหัส Ward</th>
+                                        <th>ชื่อ Ward</th>
+                                        <th>แผนก</th>
+                                        <th class="text-center">สถานะ</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($hosxp_wards as $ward)
+                                        <tr>
+                                            <td class="fw-bold text-primary">{{ $ward->ward }}</td>
+                                            <td>{{ $ward->name }}</td>
+                                            <td>{{ $ward->spclty }}</td>
+                                            <td class="text-center">
+                                                @if($ward->ward_active == 'Y')
+                                                    <span class="badge bg-success">ใช้งาน</span>
+                                                @else
+                                                    <span class="badge bg-secondary">ปิด</span>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- End Card Reference Data -->
+    </div><!-- End Main Container -->
+
+    <div class="container-fluid mb-5 px-md-4">
+        <!-- ================= NOTIFY URLs ================= -->
+        <div class="card shadow-sm border-0">
+            <div class="card-header text-white" style="background-color: #2774abff;">
+                <strong><i class="bi bi-bell-fill me-2"></i>URL สำหรับแจ้งเตือน (Notify URLs)</strong>
+            </div>
+            <div class="card-body bg-light py-4">
+                <div class="alert alert-warning py-2 small mb-4">
+                    <i class="bi bi-info-circle-fill me-2"></i>ใช้ URL เหล่านี้ในการตั้งค่า <strong>Cron Job</strong>
+                    หรือรันผ่าน Browser เพื่อกระตุ้นการส่งแจ้งเตือน Telegram ตามช่วงเวลาที่กำหนด
+                </div>
+
+                <div class="row g-3">
+                    <!-- Column 1: เวรดึก -->
+                    <div class="col-md-6 col-xl-3">
+                        <div class="bg-white p-3 rounded shadow-sm border-top border-4 h-100"
+                            style="border-top-color: #6f42c1 !important;">
+                            <h6 class="fw-bold d-flex align-items-center mb-3" style="color: #6f42c1;">
+                                <i class="bi bi-moon-stars-fill me-2"></i>สรุปเวรดึก (รัน 08.00 น.)
+                            </h6>
+                            <div class="space-y-3">
+                                <div class="mb-3">
+                                    <label class="form-label small text-muted mb-1">ER (อุบัติเหตุ-ฉุกเฉิน)</label>
+                                    <div class="input-group input-group-sm shadow-sm">
+                                        <input type="text" class="form-control bg-light border-end-0"
+                                            value="{{ url('hnplus/product/er_night_notify') }}" readonly>
+                                        <button class="btn btn-outline-secondary border-start-0" type="button"
+                                            onclick="copyToClipboard(this)"><i class="bi bi-clipboard"></i></button>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="form-label small text-muted mb-1">IPD (ผู้ป่วยใน)</label>
+                                    <div class="input-group input-group-sm shadow-sm">
+                                        <input type="text" class="form-control bg-light border-end-0"
+                                            value="{{ url('hnplus/product/ipd_night_notify') }}" readonly>
+                                        <button class="btn btn-outline-secondary border-start-0" type="button"
+                                            onclick="copyToClipboard(this)"><i class="bi bi-clipboard"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Column 2: เวรเช้า -->
+                    <div class="col-md-6 col-xl-3">
+                        <div class="bg-white p-3 rounded shadow-sm border-top border-4 h-100"
+                            style="border-top-color: #28a745 !important;">
+                            <h6 class="fw-bold d-flex align-items-center mb-3" style="color: #28a745;">
+                                <i class="bi bi-sun-fill me-2"></i>สรุปเวรเช้า (รัน 16.00 น.)
+                            </h6>
+                            <div class="space-y-3">
+                                <div class="mb-3">
+                                    <label class="form-label small text-muted mb-1">ER (อุบัติเหตุ-ฉุกเฉิน)</label>
+                                    <div class="input-group input-group-sm shadow-sm">
+                                        <input type="text" class="form-control bg-light border-end-0"
+                                            value="{{ url('hnplus/product/er_morning_notify') }}" readonly>
+                                        <button class="btn btn-outline-secondary border-start-0" type="button"
+                                            onclick="copyToClipboard(this)"><i class="bi bi-clipboard"></i></button>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label small text-muted mb-1">IPD (ผู้ป่วยใน)</label>
+                                    <div class="input-group input-group-sm shadow-sm">
+                                        <input type="text" class="form-control bg-light border-end-0"
+                                            value="{{ url('hnplus/product/ipd_morning_notify') }}" readonly>
+                                        <button class="btn btn-outline-secondary border-start-0" type="button"
+                                            onclick="copyToClipboard(this)"><i class="bi bi-clipboard"></i></button>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label small text-muted mb-1">OPD (ผู้ป่วยนอก)</label>
+                                    <div class="input-group input-group-sm shadow-sm">
+                                        <input type="text" class="form-control bg-light border-end-0"
+                                            value="{{ url('hnplus/product/opd_morning_notify') }}" readonly>
+                                        <button class="btn btn-outline-secondary border-start-0" type="button"
+                                            onclick="copyToClipboard(this)"><i class="bi bi-clipboard"></i></button>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label small text-muted mb-1">NCD (คลินิก NCD)</label>
+                                    <div class="input-group input-group-sm shadow-sm">
+                                        <input type="text" class="form-control bg-light border-end-0"
+                                            value="{{ url('hnplus/product/ncd_morning_notify') }}" readonly>
+                                        <button class="btn btn-outline-secondary border-start-0" type="button"
+                                            onclick="copyToClipboard(this)"><i class="bi bi-clipboard"></i></button>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="form-label small text-muted mb-1">ARI (คลินิก ARI)</label>
+                                    <div class="input-group input-group-sm shadow-sm">
+                                        <input type="text" class="form-control bg-light border-end-0"
+                                            value="{{ url('hnplus/product/ari_morning_notify') }}" readonly>
+                                        <button class="btn btn-outline-secondary border-start-0" type="button"
+                                            onclick="copyToClipboard(this)"><i class="bi bi-clipboard"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Column 3: เวรบ่าย -->
+                    <div class="col-md-6 col-xl-3">
+                        <div class="bg-white p-3 rounded shadow-sm border-top border-4 h-100"
+                            style="border-top-color: #fd7e14 !important;">
+                            <h6 class="fw-bold d-flex align-items-center mb-3" style="color: #fd7e14;">
+                                <i class="bi bi-sunset-fill me-2"></i>สรุปเวรบ่าย (รัน 00.01 น.)
+                            </h6>
+                            <div class="space-y-3">
+                                <div class="mb-3">
+                                    <label class="form-label small text-muted mb-1">ER (อุบัติเหตุ-ฉุกเฉิน)</label>
+                                    <div class="input-group input-group-sm shadow-sm">
+                                        <input type="text" class="form-control bg-light border-end-0"
+                                            value="{{ url('hnplus/product/er_afternoon_notify') }}" readonly>
+                                        <button class="btn btn-outline-secondary border-start-0" type="button"
+                                            onclick="copyToClipboard(this)"><i class="bi bi-clipboard"></i></button>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="form-label small text-muted mb-1">IPD (ผู้ป่วยใน)</label>
+                                    <div class="input-group input-group-sm shadow-sm">
+                                        <input type="text" class="form-control bg-light border-end-0"
+                                            value="{{ url('hnplus/product/ipd_afternoon_notify') }}" readonly>
+                                        <button class="btn btn-outline-secondary border-start-0" type="button"
+                                            onclick="copyToClipboard(this)"><i class="bi bi-clipboard"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Column 4: เวร BD -->
+                    <div class="col-md-6 col-xl-3">
+                        <div class="bg-white p-3 rounded shadow-sm border-top border-4 h-100"
+                            style="border-top-color: #17a2b8 !important;">
+                            <h6 class="fw-bold d-flex align-items-center mb-3" style="color: #17a2b8;">
+                                <i class="bi bi-clock-fill me-2"></i>สรุปเวร BD (รัน 20.00 น.)
+                            </h6>
+                            <div class="space-y-3">
+                                <div>
+                                    <label class="form-label small text-muted mb-1">OPD (ผู้ป่วยนอก - เวร BD)</label>
+                                    <div class="input-group input-group-sm shadow-sm">
+                                        <input type="text" class="form-control bg-light border-end-0"
+                                            value="{{ url('hnplus/product/opd_bd_notify') }}" readonly>
+                                        <button class="btn btn-outline-secondary border-start-0" type="button"
+                                            onclick="copyToClipboard(this)"><i class="bi bi-clipboard"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
+
+
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            /* =====================================================
+               Git Pull
+            ===================================================== */
+            const gitBtn = document.getElementById('gitPullBtn');
+            if (gitBtn) {
+                gitBtn.addEventListener('click', function () {
+
+                    Swal.fire({
+                        title: 'ยืนยัน Git Pull?',
+                        text: 'ระบบจะดึงโค้ดล่าสุดจาก Git',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'ใช่, ดำเนินการ',
+                        cancelButtonText: 'ยกเลิก'
+                    }).then((result) => {
+
+                        if (!result.isConfirmed) return;
+
+                        const outputBox = document.getElementById('gitOutput');
+                        outputBox.textContent = 'กำลังดำเนินการ...';
+
+                        fetch("{{ route('admin.git.pull') }}", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "X-CSRF-TOKEN": document
+                                    .querySelector('meta[name="csrf-token"]')
+                                    .getAttribute('content')
+                            }
+                        })
+                            .then(res => res.json())
+                            .then(data => {
+
+                                outputBox.textContent =
+                                    data.output || data.error || 'ไม่มีข้อมูล';
+
+                                if (
+                                    data.output &&
+                                    (
+                                        data.output.includes('Updating') ||
+                                        data.output.includes('Already up to date')
+                                    )
+                                ) {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'สำเร็จ',
+                                        text: 'Git Pull เรียบร้อย',
+                                        timer: 1500,
+                                        showConfirmButton: false
+                                    });
+
+                                    setTimeout(() => {
+                                        window.location.href =
+                                            "{{ route('admin.main_setting') }}";
+                                    }, 2000);
+                                }
+                            })
+                            .catch(err => {
+                                outputBox.textContent = 'เกิดข้อผิดพลาด: ' + err;
+                            });
+                    });
+                });
+            }
+
+        });
+
+
+        /* =====================================================
+           Upgrade Structure
+        ===================================================== */
+        function confirmUpgrade() {
+            Swal.fire({
+                title: 'ยืนยันการดำเนินการ?',
+                text: 'คุณต้องการ Upgrade Structure หรือไม่?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'ใช่, ดำเนินการ!',
+                cancelButtonText: 'ยกเลิก'
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+                    Swal.fire({
+                        title: 'กำลังดำเนินการ...',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+
+                    document.getElementById('structureForm').submit();
+                }
+            });
+        }
+    </script>
+
+    @if(session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'สำเร็จ',
+                text: @json(session('success')),
+                timer: 2000,
+                showConfirmButton: false
+            });
+        </script>
+    @endif
+
+    @if(session('error'))
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'ผิดพลาด',
+                text: @json(session('error')),
+                showConfirmButton: true
+            });
+        </script>
+    @endif
+@endpush
