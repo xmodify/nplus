@@ -1,18 +1,20 @@
 @extends('layouts.hnplus')
 
 @section('content')
-    <div class="container mt-3 mb-0">
+    <div class="container mt-4 mb-0 fade-in-up">
 
         <!-- ================= ACTION BUTTONS ================= -->
-        <div class="mb-3">
-            <button class="btn btn-danger" id="gitPullBtn">
-                <i class="bi bi-git"></i> Git Pull
+        <div class="mb-4 d-flex gap-2">
+            <button class="btn btn-danger px-4 shadow-sm" id="gitPullBtn">
+                <i class="bi bi-git me-2"></i>Git Pull
             </button>
 
             <form id="structureForm" method="POST" action="{{ route('admin.up_structure') }}" style="display:inline;">
                 @csrf
-                <button type="button" class="btn btn-primary" onclick="confirmUpgrade()">
-                    <i class="bi bi-arrow-repeat"></i> Upgrade Structure
+                <button type="button" class="btn btn-primary px-4 shadow-sm text-white"
+                    style="background-color: #0d6efd !important; border-color: #0d6efd !important;"
+                    onclick="confirmUpgrade()">
+                    <i class="bi bi-arrow-repeat me-2"></i>Upgrade Structure
                 </button>
             </form>
         </div>
@@ -21,11 +23,11 @@
         <pre id="gitOutput" style="background:#eeee; padding:1rem; border-radius:6px; margin-bottom: 20px;"></pre>
 
         <!-- ================= SETTINGS TABS ================= -->
-        <div class="card">
-            <div class="card-header text-white" style="background-color:#23A7A7;">
-                <strong>ตัั้งค่าระบบ (Main Setting)</strong>
+        <div class="card border-0 mb-4 h-auto shadow-sm">
+            <div class="card-header">
+                <strong><i class="bi bi-gear-fill me-2"></i>ตั้งค่าระบบ (Main Setting)</strong>
             </div>
-            <div class="card-body">
+            <div class="card-body p-4">
 
                 <form action="{{ route('admin.main_setting.update') }}" method="POST">
                     @csrf
@@ -40,20 +42,20 @@
                                 role="tab" aria-controls="er" aria-selected="false">ER</button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="ipd-tab" data-bs-toggle="tab" data-bs-target="#ipd" type="button"
-                                role="tab" aria-controls="ipd" aria-selected="false">IPD</button>
+                            <button class="nav-link" id="ipd-tab" data-bs-toggle="tab" data-bs-target="#ipd"
+                                type="button" role="tab" aria-controls="ipd" aria-selected="false">IPD</button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="opd-tab" data-bs-toggle="tab" data-bs-target="#opd" type="button"
-                                role="tab" aria-controls="opd" aria-selected="false">OPD</button>
+                            <button class="nav-link" id="opd-tab" data-bs-toggle="tab" data-bs-target="#opd"
+                                type="button" role="tab" aria-controls="opd" aria-selected="false">OPD</button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="ncd-tab" data-bs-toggle="tab" data-bs-target="#ncd" type="button"
-                                role="tab" aria-controls="ncd" aria-selected="false">NCD</button>
+                            <button class="nav-link" id="ncd-tab" data-bs-toggle="tab" data-bs-target="#ncd"
+                                type="button" role="tab" aria-controls="ncd" aria-selected="false">NCD</button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="ari-tab" data-bs-toggle="tab" data-bs-target="#ari" type="button"
-                                role="tab" aria-controls="ari" aria-selected="false">ARI</button>
+                            <button class="nav-link" id="ari-tab" data-bs-toggle="tab" data-bs-target="#ari"
+                                type="button" role="tab" aria-controls="ari" aria-selected="false">ARI</button>
                         </li>
 
                     </ul>
@@ -71,7 +73,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach($general_settings as $setting)
+                                        @foreach ($general_settings as $setting)
                                             <tr>
                                                 <td>{{ $setting->id }}</td>
                                                 <td>{{ $setting->name_th }}</td>
@@ -98,13 +100,13 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach($er_settings as $setting)
+                                        @foreach ($er_settings as $setting)
                                             <tr>
                                                 <td>{{ $setting->id }}</td>
                                                 <td>{{ $setting->name_th }}</td>
                                                 <td>
-                                                    <input type="text" class="form-control" name="{{ $setting->name }}"
-                                                        value="{{ $setting->value }}">
+                                                    <input type="text" class="form-control"
+                                                        name="{{ $setting->name }}" value="{{ $setting->value }}">
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -125,13 +127,13 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach($ipd_settings as $setting)
+                                        @foreach ($ipd_settings as $setting)
                                             <tr>
                                                 <td>{{ $setting->id }}</td>
                                                 <td>{{ $setting->name_th }}</td>
                                                 <td>
-                                                    <input type="text" class="form-control" name="{{ $setting->name }}"
-                                                        value="{{ $setting->value }}">
+                                                    <input type="text" class="form-control"
+                                                        name="{{ $setting->name }}" value="{{ $setting->value }}">
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -152,13 +154,13 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach($opd_settings as $setting)
+                                        @foreach ($opd_settings as $setting)
                                             <tr>
                                                 <td>{{ $setting->id }}</td>
                                                 <td>{{ $setting->name_th }}</td>
                                                 <td>
-                                                    <input type="text" class="form-control" name="{{ $setting->name }}"
-                                                        value="{{ $setting->value }}">
+                                                    <input type="text" class="form-control"
+                                                        name="{{ $setting->name }}" value="{{ $setting->value }}">
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -179,13 +181,13 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach($ncd_settings as $setting)
+                                        @foreach ($ncd_settings as $setting)
                                             <tr>
                                                 <td>{{ $setting->id }}</td>
                                                 <td>{{ $setting->name_th }}</td>
                                                 <td>
-                                                    <input type="text" class="form-control" name="{{ $setting->name }}"
-                                                        value="{{ $setting->value }}">
+                                                    <input type="text" class="form-control"
+                                                        name="{{ $setting->name }}" value="{{ $setting->value }}">
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -206,13 +208,13 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach($ari_settings as $setting)
+                                        @foreach ($ari_settings as $setting)
                                             <tr>
                                                 <td>{{ $setting->id }}</td>
                                                 <td>{{ $setting->name_th }}</td>
                                                 <td>
-                                                    <input type="text" class="form-control" name="{{ $setting->name }}"
-                                                        value="{{ $setting->value }}">
+                                                    <input type="text" class="form-control"
+                                                        name="{{ $setting->name }}" value="{{ $setting->value }}">
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -225,9 +227,10 @@
 
                     </div>
 
-                    <div class="mt-3 text-end">
-                        <button type="submit" class="btn btn-success"><i class="bi bi-save"></i>
-                            บันทึกการเปลี่ยนแปลง</button>
+                    <div class="mt-4 text-end">
+                        <button type="submit" class="btn btn-success px-5 py-2 fw-bold shadow-sm">
+                            <i class="bi bi-save me-2"></i>บันทึกการเปลี่ยนแปลง
+                        </button>
                     </div>
                 </form>
             </div>
@@ -254,23 +257,23 @@
         </script>
 
         <!-- ================= HOSxP REFERENCE DATA ================= -->
-        <div class="card mt-4 mb-5 shadow-sm">
-            <div class="card-header text-white" style="background-color: #2393a7ff;">
+        <div class="card border-0 mb-4 h-auto shadow-sm">
+            <div class="card-header">
                 <strong><i class="bi bi-database-fill-gear me-2"></i>ข้อมูลอ้างอิงจาก HOSxP (Reference Data)</strong>
             </div>
             <div class="card-body">
                 <ul class="nav nav-tabs mb-3" id="referenceTabs" role="tablist">
                     <li class="nav-item" role="presentation">
                         <button class="nav-link active" id="reference-dept-tab" data-bs-toggle="tab"
-                            data-bs-target="#reference-dept" type="button" role="tab" aria-controls="reference-dept"
-                            aria-selected="true">
+                            data-bs-target="#reference-dept" type="button" role="tab"
+                            aria-controls="reference-dept" aria-selected="true">
                             <i class="bi bi-door-open me-1"></i>รายชื่อห้องตรวจ (Departments)
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="reference-ward-tab" data-bs-toggle="tab"
-                            data-bs-target="#reference-ward" type="button" role="tab" aria-controls="reference-ward"
-                            aria-selected="false">
+                            data-bs-target="#reference-ward" type="button" role="tab"
+                            aria-controls="reference-ward" aria-selected="false">
                             <i class="bi bi-hospital me-1"></i>รายชื่อหอผู้ป่วย (Wards)
                         </button>
                     </li>
@@ -295,13 +298,13 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach($hosxp_departments as $dept)
+                                    @foreach ($hosxp_departments as $dept)
                                         <tr>
                                             <td class="fw-bold text-primary">{{ $dept->depcode }}</td>
                                             <td>{{ $dept->department }}</td>
                                             <td>{{ $dept->spclty }}</td>
                                             <td class="text-center">
-                                                @if($dept->depcode_active == 'Y')
+                                                @if ($dept->depcode_active == 'Y')
                                                     <span class="badge bg-success">ใช้งาน</span>
                                                 @else
                                                     <span class="badge bg-secondary">ปิด</span>
@@ -331,13 +334,13 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach($hosxp_wards as $ward)
+                                    @foreach ($hosxp_wards as $ward)
                                         <tr>
                                             <td class="fw-bold text-primary">{{ $ward->ward }}</td>
                                             <td>{{ $ward->name }}</td>
                                             <td>{{ $ward->spclty }}</td>
                                             <td class="text-center">
-                                                @if($ward->ward_active == 'Y')
+                                                @if ($ward->ward_active == 'Y')
                                                     <span class="badge bg-success">ใช้งาน</span>
                                                 @else
                                                     <span class="badge bg-secondary">ปิด</span>
@@ -356,8 +359,8 @@
 
     <div class="container-fluid mb-5 px-md-4">
         <!-- ================= NOTIFY URLs ================= -->
-        <div class="card shadow-sm border-0">
-            <div class="card-header text-white" style="background-color: #2774abff;">
+        <div class="card border-0 mb-5 h-auto shadow-sm">
+            <div class="card-header">
                 <strong><i class="bi bi-bell-fill me-2"></i>URL สำหรับแจ้งเตือน (Notify URLs)</strong>
             </div>
             <div class="card-body bg-light py-4">
@@ -513,14 +516,14 @@
 
 @push('scripts')
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
 
             /* =====================================================
                Git Pull
             ===================================================== */
             const gitBtn = document.getElementById('gitPullBtn');
             if (gitBtn) {
-                gitBtn.addEventListener('click', function () {
+                gitBtn.addEventListener('click', function() {
 
                     Swal.fire({
                         title: 'ยืนยัน Git Pull?',
@@ -537,14 +540,14 @@
                         outputBox.textContent = 'กำลังดำเนินการ...';
 
                         fetch("{{ route('admin.git.pull') }}", {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json",
-                                "X-CSRF-TOKEN": document
-                                    .querySelector('meta[name="csrf-token"]')
-                                    .getAttribute('content')
-                            }
-                        })
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                    "X-CSRF-TOKEN": document
+                                        .querySelector('meta[name="csrf-token"]')
+                                        .getAttribute('content')
+                                }
+                            })
                             .then(res => res.json())
                             .then(data => {
 
@@ -610,7 +613,7 @@
         }
     </script>
 
-    @if(session('success'))
+    @if (session('success'))
         <script>
             Swal.fire({
                 icon: 'success',
@@ -622,7 +625,7 @@
         </script>
     @endif
 
-    @if(session('error'))
+    @if (session('error'))
         <script>
             Swal.fire({
                 icon: 'error',

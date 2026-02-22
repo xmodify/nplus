@@ -7,141 +7,221 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>ระบบบันทึกผลิตภาพทางการพยาบาล</title>
 
+    <!-- ✅ Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- ✅ Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     <!-- ✅ Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- ✅ SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- ✅ Beautiful Admin -->
+    <link href="{{ asset('css/beautiful_admin.css') }}" rel="stylesheet">
+
+    <!-- ✅ Google Fonts: Prompt -->
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- ✅ Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- ✅ Custom Premium CSS -->
+    <link rel="stylesheet" href="{{ asset('css/beautiful_admin.css') }}">
 
     <style>
         body {
-            background: #f4f7fa;
-            font-family: "Prompt", sans-serif;
-        }
-
-        .card {
-            border-radius: 15px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .form-label {
-            font-weight: 600;
+            background: radial-gradient(circle at top right, #f8f9fa, #e9ecef);
+            font-family: 'Prompt', sans-serif;
+            min-height: 100vh;
         }
     </style>
 </head>
 
 <body>
-    <div class="container py-4">
-        <div class="card mx-auto" style="max-width: 700px;">
-            <div class="card-header text-white text-center" style="background-color:#23A7A7;">
-                <h5 class="mb-0">
-                    <strong>ระบบบันทึกผลิตภาพทางการพยาบาล<br>แผนกผู้ป่วยใน สามัญ<br>เวรเช้า</strong>
-                </h5>
+    <div class="container py-5">
+        <div class="card-premium mx-auto shadow-lg"
+            style="max-width: 650px; border: none; border-radius: 20px; overflow: hidden;">
+            <div class="header-gradient text-white text-center py-4">
+                <div class="mb-2">
+                    <i class="bi bi-hospital-fill fs-1"></i>
+                </div>
+                <h4 class="mb-0 fw-bold">ระบบบันทึกผลิตภาพทางการพยาบาล</h4>
+                <p class="mb-0 opacity-75">แผนกผู้ป่วยใน สามัญ (IPD) | เวรเช้า</p>
             </div>
 
-            <div class="card-body">
-                <h6 class="text-primary text-center mb-3">
-                    วันที่ {{ DateThai(date('Y-m-d')) }} <br> ช่วงเวลา 08.00-16.00 น.
-                </h6>
+            <div class="card-body p-4 p-md-5">
+                <div class="text-center mb-4">
+                    <span class="badge bg-soft-primary text-primary px-3 py-2 rounded-pill">
+                        <i class="bi bi-calendar3 me-2"></i>วันที่ {{ DateThai(date('Y-m-d')) }}
+                    </span>
+                    <div class="text-secondary small mt-2">
+                        <i class="bi bi-clock me-1"></i> ช่วงเวลา 08.00 - 16.00 น.
+                    </div>
+                </div>
 
                 <form id="productForm" action="{{ url('hnplus/product/ipd_morning_save') }}" method="POST">
                     @csrf
                     <input type="hidden" name="report_date" value="{{ date('Y-m-d') }}">
                     <input type="hidden" name="shift_time" value="เวรเช้า">
 
-                    @foreach($shift as $row)
-                        <div class="row mb-2">
-                            <div class="col-8">จำนวนผู้ป่วย</div>
-                            <div class="col text-end"><strong>{{ $row->patient_all }}</strong> ราย</div>
-                        </div>
-                        <input type="hidden" name="patient_all" value="{{ $row->patient_all }}">
+                    <div class="bg-light rounded-4 p-4 mb-4 border border-white shadow-sm">
+                        <h6 class="fw-bold mb-3 text-dark border-bottom pb-2">
+                            <i class="bi bi-people-fill me-2 text-primary"></i>รายละเอียดผู้ป่วย
+                        </h6>
+                        @foreach ($shift as $row)
+                            <div
+                                class="d-flex justify-content-between align-items-center mb-2 px-2 py-1 bg-white rounded-3 shadow-sm border border-light">
+                                <span class="text-secondary small">จำนวนผู้ป่วยทั้งหมด</span>
+                                <span class="fw-bold text-primary fs-5">{{ $row->patient_all }} <small
+                                        class="fw-normal text-muted fs-6">ราย</small></span>
+                            </div>
+                            <input type="hidden" name="patient_all" value="{{ $row->patient_all }}">
 
-                        <div class="row mb-2">
-                            <div class="col-8">Convalescent</div>
-                            <div class="col text-end"><strong>{{ $row->convalescent }}</strong> ราย</div>
-                        </div>
-                        <input type="hidden" name="convalescent" value="{{ $row->convalescent }}">
+                            <div class="row g-2 mt-1">
+                                <div class="col-6">
+                                    <div class="p-2 bg-white rounded-3 shadow-sm border border-light text-center">
+                                        <div class="text-success small mb-1">Convalescent</div>
+                                        <div class="fw-bold text-dark">{{ $row->convalescent }}</div>
+                                    </div>
+                                </div>
+                                <input type="hidden" name="convalescent" value="{{ $row->convalescent }}">
 
-                        <div class="row mb-2">
-                            <div class="col-8">Moderate</div>
-                            <div class="col text-end"><strong>{{ $row->Moderate }}</strong> ราย</div>
-                        </div>
-                        <input type="hidden" name="Moderate" value="{{ $row->Moderate }}">
+                                <div class="col-6">
+                                    <div class="p-2 bg-white rounded-3 shadow-sm border border-light text-center">
+                                        <div class="text-warning small mb-1">Moderate</div>
+                                        <div class="fw-bold text-dark">{{ $row->Moderate }}</div>
+                                    </div>
+                                </div>
+                                <input type="hidden" name="Moderate" value="{{ $row->Moderate }}">
 
-                        <div class="row mb-2">
-                            <div class="col-8">Semi critical</div>
-                            <div class="col text-end"><strong>{{ $row->Semi_critical }}</strong> ราย</div>
-                        </div>
-                        <input type="hidden" name="Semi_critical" value="{{ $row->Semi_critical }}">
+                                <div class="col-4">
+                                    <div class="p-2 bg-white rounded-3 shadow-sm border border-light text-center">
+                                        <div class="text-info small mb-1">Semi critical</div>
+                                        <div class="fw-bold text-dark">{{ $row->Semi_critical }}</div>
+                                    </div>
+                                </div>
+                                <input type="hidden" name="Semi_critical" value="{{ $row->Semi_critical }}">
 
-                        <div class="row mb-2">
-                            <div class="col-8">Critical</div>
-                            <div class="col text-end"><strong>{{ $row->Critical }}</strong> ราย</div>
-                        </div>
-                        <input type="hidden" name="Critical" value="{{ $row->Critical }}">
+                                <div class="col-4">
+                                    <div class="p-2 bg-white rounded-3 shadow-sm border border-light text-center">
+                                        <div class="text-danger small mb-1">Critical</div>
+                                        <div class="fw-bold text-dark">{{ $row->Critical }}</div>
+                                    </div>
+                                </div>
+                                <input type="hidden" name="Critical" value="{{ $row->Critical }}">
 
-                        <div class="row mb-4">
-                            <div class="col-8">ไม่ระบุความรุนแรง</div>
-                            <div class="col text-end"><strong>{{ $row->severe_type_null }}</strong> ราย</div>
-                        </div>
-                        <input type="hidden" name="severe_type_null" value="{{ $row->severe_type_null }}">
-                    @endforeach
-
-                    <div class="mb-3">
-                        <label for="nurse_oncall" class="form-label">อัตรากำลัง Oncall (ไม่มีใส่ 0)</label>
-                        <input type="number" id="nurse_oncall" name="nurse_oncall" class="form-control"
-                            placeholder="ระบุจำนวน" step="any" min="0">
+                                <div class="col-4">
+                                    <div class="p-2 bg-white rounded-3 shadow-sm border border-light text-center">
+                                        <div class="text-secondary small mb-1">ไม่ระบุ</div>
+                                        <div class="fw-bold text-dark">{{ $row->severe_type_null }}</div>
+                                    </div>
+                                </div>
+                                <input type="hidden" name="severe_type_null" value="{{ $row->severe_type_null }}">
+                            </div>
+                        @endforeach
                     </div>
 
-                    <div class="mb-3">
-                        <label for="nurse_partime" class="form-label">อัตรากำลังเสริม (ไม่มีใส่ 0)</label>
-                        <input type="number" id="nurse_partime" name="nurse_partime" class="form-control"
-                            placeholder="ระบุจำนวน" step="any" min="0">
+                    <div class="mb-4">
+                        <label for="nurse_fulltime" class="form-label text-secondary small fw-bold">
+                            <i class="bi bi-person-check-fill me-1"></i>อัตรากำลังปกติ
+                        </label>
+                        <div class="input-group shadow-sm">
+                            <input type="number" id="nurse_fulltime" name="nurse_fulltime"
+                                class="form-control border-end-0 py-2" placeholder="ระบุจำนวน" step="any"
+                                min="0">
+                            <span class="input-group-text bg-white text-muted small">คน</span>
+                        </div>
                     </div>
 
-                    <div class="mb-3">
-                        <label for="nurse_fulltime" class="form-label">อัตรากำลังปกติ</label>
-                        <input type="number" id="nurse_fulltime" name="nurse_fulltime" class="form-control"
-                            placeholder="ระบุจำนวน" step="any" min="0">
+                    <div class="mb-4">
+                        <label for="nurse_partime" class="form-label text-secondary small fw-bold">
+                            <i class="bi bi-person-add me-1"></i>อัตรากำลังเสริม
+                        </label>
+                        <div class="input-group shadow-sm">
+                            <input type="number" id="nurse_partime" name="nurse_partime"
+                                class="form-control border-end-0 py-2" placeholder="0" step="any"
+                                min="0">
+                            <span class="input-group-text bg-white text-muted small">คน</span>
+                        </div>
                     </div>
 
-                    <div class="mb-3">
-                        <label for="recorder" class="form-label">ผู้บันทึก</label>
-                        <input type="text" id="recorder" name="recorder" class="form-control"
-                            placeholder="ชื่อ-สกุล ผู้บันทึก">
+                    <div class="mb-4">
+                        <label for="nurse_oncall" class="form-label text-secondary small fw-bold">
+                            <i class="bi bi-person-plus me-1"></i>อัตรากำลัง Oncall
+                        </label>
+                        <div class="input-group shadow-sm">
+                            <input type="number" id="nurse_oncall" name="nurse_oncall"
+                                class="form-control border-end-0 py-2" placeholder="0" step="any"
+                                min="0">
+                            <span class="input-group-text bg-white text-muted small">คน</span>
+                        </div>
                     </div>
 
-                    <div class="mb-3">
-                        <label for="note" class="form-label">หมายเหตุ</label>
-                        <input type="text" id="note" name="note" class="form-control"
-                            placeholder="หมายเหตุเพิ่มเติม (ถ้ามี)">
+                    <div class="mb-4">
+                        <label for="recorder" class="form-label text-secondary small fw-bold">
+                            <i class="bi bi-pencil-square me-1"></i>ผู้บันทึก
+                        </label>
+                        <input type="text" id="recorder" name="recorder" class="form-control py-2 shadow-sm"
+                            placeholder="ชื่อ-นามสกุล">
                     </div>
 
-                    <div class="text-center">
-                        <button type="submit" class="btn text-white px-4"
-                            style="background-color:#23A7A7;">ส่งข้อมูล</button>
-                        <button type="reset" class="btn btn-secondary px-4">ล้างข้อมูล</button>
+                    <div class="mb-4">
+                        <label for="note" class="form-label text-secondary small fw-bold">
+                            <i class="bi bi-chat-left-text me-1"></i>หมายเหตุ
+                        </label>
+                        <textarea id="note" name="note" class="form-control py-2 shadow-sm" rows="2"
+                            placeholder="ข้อมูลเพิ่มเติม (ถ้ามี)"></textarea>
+                    </div>
+
+                    <div class="d-grid gap-2 mt-5">
+                        <button type="submit"
+                            class="btn btn-primary btn-lg fw-bold py-3 shadow border-0 rounded-pill">
+                            <i class="bi bi-send-fill me-2"></i>ส่งข้อมูล
+                        </button>
+                        <button type="reset" class="btn btn-link text-muted btn-sm mt-2 text-decoration-none">
+                            ล้างข้อมูลทั้งหมด
+                        </button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 
-    <!-- ✅ SweetAlert ตรวจสอบก่อนส่ง -->
     <script>
-        document.getElementById('productForm').addEventListener('submit', function (e) {
+        document.getElementById('productForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
-            const nurse_oncall = document.getElementById('nurse_oncall').value.trim();
-            const nurse_partime = document.getElementById('nurse_partime').value.trim();
-            const nurse_fulltime = document.getElementById('nurse_fulltime').value.trim();
-            const recorder = document.getElementById('recorder').value.trim();
+            const fields = [{
+                    id: 'nurse_fulltime',
+                    label: 'อัตรากำลังปกติ'
+                },
+                {
+                    id: 'nurse_partime',
+                    label: 'อัตรากำลังเสริม'
+                },
+                {
+                    id: 'nurse_oncall',
+                    label: 'อัตรากำลัง Oncall'
+                },
+                {
+                    id: 'recorder',
+                    label: 'ผู้บันทึก'
+                }
+            ];
 
-            if (!nurse_oncall || !nurse_partime || !nurse_fulltime || !recorder) {
+            let missingFields = [];
+            fields.forEach(field => {
+                const element = document.getElementById(field.id);
+                if (!element.value.trim()) {
+                    missingFields.push(field.label);
+                }
+            });
+
+            if (missingFields.length > 0) {
                 Swal.fire({
                     icon: 'warning',
                     title: 'กรอกข้อมูลไม่ครบ',
-                    text: 'กรุณากรอกข้อมูลให้ครบทุกช่องที่จำเป็นก่อนส่ง!',
-                    confirmButtonText: 'ตกลง'
+                    html: `กรุณากรอก: <b>${missingFields.join(', ')}</b>`,
+                    confirmButtonText: 'ตกลง',
+                    confirmButtonColor: '#23A7A7'
                 });
                 return;
             }
@@ -152,7 +232,8 @@
                 icon: 'question',
                 showCancelButton: true,
                 confirmButtonText: 'บันทึกข้อมูล',
-                cancelButtonText: 'ยกเลิก'
+                cancelButtonText: 'ยกเลิก',
+                confirmButtonColor: '#23A7A7'
             }).then((result) => {
                 if (result.isConfirmed) {
                     e.target.submit();

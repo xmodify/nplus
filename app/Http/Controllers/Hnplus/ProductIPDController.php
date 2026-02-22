@@ -18,8 +18,8 @@ class ProductIPDController extends Controller
     //ipd_report--------------------------------------------------------------------------------------------------------------------------
     public function ipd_report(Request $request)
     {
-        $start_date = $request->start_date ?: date('Y-m-d', strtotime("first day of this month"));
-        $end_date = $request->end_date ?: date('Y-m-d');
+        $start_date = $request->start_date ? DateThaiToEn($request->start_date) : date('Y-m-d', strtotime("first day of this month"));
+        $end_date = $request->end_date ? DateThaiToEn($request->end_date) : date('Y-m-d');
 
         // $product=Nurse_productivity_ipd::whereBetween('report_date',[$start_date, $end_date])
         //     ->orderBy('report_date', 'desc')->get(); 

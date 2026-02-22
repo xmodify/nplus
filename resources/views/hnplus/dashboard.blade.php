@@ -16,10 +16,17 @@
             background: linear-gradient(120deg, #20c997, #0d6efd);
             border-radius: var(--card-border-radius);
             color: white;
-            padding: 3rem 2.5rem;
+            padding: 2rem 1.5rem;
+            /* Reduced padding for mobile */
             position: relative;
             box-shadow: 0 10px 30px rgba(13, 110, 253, 0.15);
             overflow: hidden;
+        }
+
+        @media (min-width: 768px) {
+            .dashboard-header {
+                padding: 3rem 2.5rem;
+            }
         }
 
         .dashboard-header::before {
@@ -138,7 +145,7 @@
                                 </div>
                                 <div>
                                     <h5 class="fw-bold text-dark mb-1">งานอุบัติเหตุ-ฉุกเฉิน</h5>
-                                    <div class="d-flex align-items-center text-muted small">
+                                    <div class="d-flex align-items-center text-muted small flex-wrap">
                                         <i class="bi bi-clock-history me-1"></i> {{ $er_stats['shift'] }}
                                     </div>
                                 </div>
@@ -209,7 +216,7 @@
                                 </div>
                                 <div>
                                     <h5 class="fw-bold text-dark mb-1">ผู้ป่วยใน</h5>
-                                    <div class="d-flex align-items-center text-muted small">
+                                    <div class="d-flex align-items-center text-muted small flex-wrap">
                                         <i class="bi bi-clock-history me-1"></i> {{ $ipd_stats['shift'] }}
                                     </div>
                                 </div>
@@ -274,7 +281,7 @@
                                 </div>
                                 <div>
                                     <h5 class="fw-bold text-dark mb-1">ผู้ป่วยนอก</h5>
-                                    <div class="d-flex align-items-center text-muted small">
+                                    <div class="d-flex align-items-center text-muted small flex-wrap">
                                         <i class="bi bi-clock-history me-1"></i> {{ $opd_stats['shift'] }}
                                     </div>
                                 </div>
@@ -282,15 +289,16 @@
                             <span class="badge bg-success rounded-pill px-3 py-2">OPD</span>
                         </div>
 
-                        <div class="d-flex align-items-center justify-content-between bg-light rounded-4 p-4 border">
-                            <div class="d-flex align-items-center gap-3">
-                                <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center"
-                                    style="width: 48px; height: 48px;">
-                                    <i class="bi bi-people fs-4"></i>
+                        <div
+                            class="d-flex align-items-center justify-content-between bg-light rounded-4 p-3 p-sm-4 border">
+                            <div class="d-flex align-items-center gap-2 gap-sm-3">
+                                <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center flex-shrink-0"
+                                    style="width: 40px; height: 40px; @media (min-width: 576px) { width: 48px; height: 48px; }">
+                                    <i class="bi bi-people fs-5 fs-sm-4"></i>
                                 </div>
-                                <span class="text-muted fw-medium">ผู้ป่วยทั้งหมดในเวร</span>
+                                <span class="text-muted fw-medium small">ผู้ป่วยทั้งหมดในเวร</span>
                             </div>
-                            <div class="display-4 fw-bold text-success">{{ $opd_stats['patient_all'] }}</div>
+                            <div class="display-6 display-sm-4 fw-bold text-success">{{ $opd_stats['patient_all'] }}</div>
                         </div>
                     </div>
                 </a>
@@ -308,7 +316,7 @@
                                 </div>
                                 <div>
                                     <h5 class="fw-bold text-dark mb-1">คลินิก NCD</h5>
-                                    <div class="d-flex align-items-center text-muted small">
+                                    <div class="d-flex align-items-center text-muted small flex-wrap">
                                         <i class="bi bi-clock-history me-1"></i> {{ $ncd_stats['shift'] }}
                                     </div>
                                 </div>
@@ -316,15 +324,17 @@
                             <span class="badge bg-warning text-dark rounded-pill px-3 py-2">NCD</span>
                         </div>
 
-                        <div class="d-flex align-items-center justify-content-between bg-light rounded-4 p-4 border">
-                            <div class="d-flex align-items-center gap-3">
-                                <div class="rounded-circle bg-warning text-dark d-flex align-items-center justify-content-center"
-                                    style="width: 48px; height: 48px;">
-                                    <i class="bi bi-clipboard2-pulse fs-4"></i>
+                        <div
+                            class="d-flex align-items-center justify-content-between bg-light rounded-4 p-3 p-sm-4 border">
+                            <div class="d-flex align-items-center gap-2 gap-sm-3">
+                                <div class="rounded-circle bg-warning text-dark d-flex align-items-center justify-content-center flex-shrink-0"
+                                    style="width: 40px; height: 40px; @media (min-width: 576px) { width: 48px; height: 48px; }">
+                                    <i class="bi bi-clipboard2-pulse fs-5 fs-sm-4"></i>
                                 </div>
-                                <span class="text-muted fw-medium">ผู้ป่วยทั้งหมดในเวร</span>
+                                <span class="text-muted fw-medium small">ผู้ป่วยทั้งหมดในเวร</span>
                             </div>
-                            <div class="display-4 fw-bold text-warning text-dark">{{ $ncd_stats['patient_all'] }}</div>
+                            <div class="display-6 display-sm-4 fw-bold text-warning text-dark">
+                                {{ $ncd_stats['patient_all'] }}</div>
                         </div>
                     </div>
                 </a>
@@ -342,7 +352,7 @@
                                 </div>
                                 <div>
                                     <h5 class="fw-bold text-dark mb-1">คลินิก ARI</h5>
-                                    <div class="d-flex align-items-center text-muted small">
+                                    <div class="d-flex align-items-center text-muted small flex-wrap">
                                         <i class="bi bi-clock-history me-1"></i> {{ $ari_stats['shift'] }}
                                     </div>
                                 </div>
@@ -350,15 +360,17 @@
                             <span class="badge bg-secondary rounded-pill px-3 py-2">ARI</span>
                         </div>
 
-                        <div class="d-flex align-items-center justify-content-between bg-light rounded-4 p-4 border">
-                            <div class="d-flex align-items-center gap-3">
-                                <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center"
-                                    style="width: 48px; height: 48px;">
-                                    <i class="bi bi-person-bounding-box fs-4"></i>
+                        <div
+                            class="d-flex align-items-center justify-content-between bg-light rounded-4 p-3 p-sm-4 border">
+                            <div class="d-flex align-items-center gap-2 gap-sm-3">
+                                <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center flex-shrink-0"
+                                    style="width: 40px; height: 40px; @media (min-width: 576px) { width: 48px; height: 48px; }">
+                                    <i class="bi bi-person-bounding-box fs-5 fs-sm-4"></i>
                                 </div>
-                                <span class="text-muted fw-medium">ผู้ป่วยทั้งหมดในเวร</span>
+                                <span class="text-muted fw-medium small">ผู้ป่วยทั้งหมดในเวร</span>
                             </div>
-                            <div class="display-4 fw-bold text-secondary">{{ $ari_stats['patient_all'] }}</div>
+                            <div class="display-6 display-sm-4 fw-bold text-secondary">{{ $ari_stats['patient_all'] }}
+                            </div>
                         </div>
                     </div>
                 </a>
