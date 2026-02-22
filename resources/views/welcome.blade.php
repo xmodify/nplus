@@ -176,17 +176,23 @@
                         </div>
 
                         <!-- Row 2: Bottom 2 Severities -->
-                        <div class="col-6">
+                        <div class="col-4">
                             <div
                                 class="stat-item p-3 rounded-4 bg-soft-success text-center h-100 border border-success border-opacity-10">
                                 <div class="display-6 fw-bold text-success mb-1">{{ $er_stats['semi_urgent'] }}</div>
                                 <div class="small fw-semibold text-success text-opacity-75">Semi Urgent</div>
                             </div>
                         </div>
-                        <div class="col-6">
+                        <div class="col-4">
                             <div class="stat-item p-3 rounded-4 bg-light text-center h-100 border text-muted">
                                 <div class="display-6 fw-bold text-dark mb-1">{{ $er_stats['non_urgent'] }}</div>
                                 <div class="small fw-semibold">Non Urgent</div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="stat-item p-3 rounded-4 bg-light text-center h-100 border text-muted">
+                                <div class="display-6 fw-bold text-dark mb-1">{{ $er_stats['unknown'] }}</div>
+                                <div class="small fw-semibold text-truncate">ไม่บันทึกความรุนแรง</div>
                             </div>
                         </div>
                     </div>
@@ -213,7 +219,7 @@
                     </div>
 
                     <div class="row g-3">
-                        <div class="col-3">
+                        <div class="col-4">
                             <div
                                 class="stat-item p-2 py-3 rounded-4 bg-soft-danger text-center h-100 border border-danger border-opacity-10">
                                 <div class="h3 fw-bold text-danger mb-1">{{ $ipd_stats['critical'] }}</div>
@@ -221,7 +227,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-3">
+                        <div class="col-4">
                             <div
                                 class="stat-item p-2 py-3 rounded-4 bg-soft-warning text-center h-100 border border-warning border-opacity-25">
                                 <div class="h3 fw-bold text-warning mb-1">{{ $ipd_stats['semi_critical'] }}</div>
@@ -229,7 +235,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-3">
+                        <div class="col-4">
                             <div
                                 class="stat-item p-2 py-3 rounded-4 bg-soft-info text-center h-100 border border-info border-opacity-25">
                                 <div class="h3 fw-bold text-info mb-1">{{ $ipd_stats['moderate'] }}</div>
@@ -237,11 +243,18 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-3">
+                        <div class="col-4">
                             <div
                                 class="stat-item p-2 py-3 rounded-4 bg-soft-success text-center h-100 border border-success border-opacity-10">
                                 <div class="h3 fw-bold text-success mb-1">{{ $ipd_stats['convalescent'] }}</div>
                                 <div class="small fw-bold text-success text-opacity-75" style="font-size: 0.7rem;">Conv.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="stat-item p-2 py-3 rounded-4 bg-light text-center h-100 border text-muted">
+                                <div class="h3 fw-bold text-dark mb-1">{{ $ipd_stats['severe_type_null'] }}</div>
+                                <div class="small fw-bold text-muted" style="font-size: 0.65rem;">ไม่บันทึกความรุนแรง
                                 </div>
                             </div>
                         </div>
@@ -367,7 +380,7 @@
             setInterval(updateClock, 1000);
 
             // Reload page every 1 minute (60000 ms)
-            setInterval(function () {
+            setInterval(function() {
                 window.location.reload();
             }, 60000);
         </script>

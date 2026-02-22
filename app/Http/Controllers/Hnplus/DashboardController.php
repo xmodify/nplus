@@ -57,7 +57,8 @@ class DashboardController extends Controller
                 COALESCE(SUM(CASE WHEN et.export_code IN ('2') THEN 1 ELSE 0 END), 0) AS emergent,
                 COALESCE(SUM(CASE WHEN et.export_code IN ('3') THEN 1 ELSE 0 END), 0) AS urgent,
                 COALESCE(SUM(CASE WHEN et.export_code IN ('4') THEN 1 ELSE 0 END), 0) AS semi_urgent,
-                COALESCE(SUM(CASE WHEN et.export_code IN ('5') THEN 1 ELSE 0 END), 0) AS non_urgent
+                COALESCE(SUM(CASE WHEN et.export_code IN ('5') THEN 1 ELSE 0 END), 0) AS non_urgent,
+                COALESCE(SUM(CASE WHEN et.export_code NOT IN ('1','2','3','4','5') OR et.export_code IS NULL THEN 1 ELSE 0 END), 0) AS unknown
             FROM er_regist e
             LEFT JOIN er_emergency_type et 
                 ON et.er_emergency_type = e.er_emergency_type
@@ -73,6 +74,7 @@ class DashboardController extends Controller
             'urgent' => $er_result->urgent ?? 0,
             'semi_urgent' => $er_result->semi_urgent ?? 0,
             'non_urgent' => $er_result->non_urgent ?? 0,
+            'unknown' => $er_result->unknown ?? 0,
         ];
 
         // 2. IPD Data (Latest Evaluation per Patient)
@@ -103,6 +105,7 @@ class DashboardController extends Controller
             'semi_critical' => $ipd_result->Semi_critical ?? 0,
             'moderate' => $ipd_result->Moderate ?? 0,
             'convalescent' => $ipd_result->convalescent ?? 0,
+            'severe_type_null' => $ipd_result->severe_type_null ?? 0,
         ];
 
         // 3. OPD & NCD & ARI Logic
