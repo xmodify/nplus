@@ -45,3 +45,15 @@
 			#!/bin/sh
 			echo "❌ git push ถูกบล็อกไว้ ห้าม push ไปยัง GitHub"
 			exit 1
+#################################################################
+กรณี up Laravel xampp
+----------------------------------------------------------------
+	composer install --no-dev --optimize-autoloader
+	composer dump-autoload -o
+	php artisan optimize:clear
+#################################################################
+tip git
+-----------------------------------------------------------------
+อยากรวมโค้ด GitHub เข้ามา	git pull origin main --rebase
+ไม่แคร์โค้ดที่ เครื่อง  git reset --hard && git pull origin main
+ไม่แคร์โค้ด GitHub ลบมันทิ้ง	git push --force origin main

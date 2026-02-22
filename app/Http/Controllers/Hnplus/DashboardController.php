@@ -36,11 +36,13 @@ class DashboardController extends Controller
             $shift_name = 'เวรดึก';
             $start_time = '00:00:01';
             $end_time = '07:59:59';
-        } elseif ($currentTime >= '08:00:00' && $currentTime <= '15:59:59') {
+        }
+        elseif ($currentTime >= '08:00:00' && $currentTime <= '15:59:59') {
             $shift_name = 'เวรเช้า';
             $start_time = '08:00:00';
             $end_time = '15:59:59';
-        } else {
+        }
+        else {
             $shift_name = 'เวรบ่าย';
             $start_time = '16:00:00';
             $end_time = '23:59:59';
@@ -73,7 +75,7 @@ class DashboardController extends Controller
             'non_urgent' => $er_result->non_urgent ?? 0,
         ];
 
-        // 2. IPD Data (Dynamic Shift)
+        // 2. IPD Data (Latest Evaluation per Patient)
         $ipd_query = "
             SELECT
                 SUM(CASE WHEN ipd_nurse_eval_range_code LIKE '1%' THEN 1 ELSE 0 END) AS convalescent,
@@ -83,21 +85,17 @@ class DashboardController extends Controller
                 SUM(CASE WHEN ipd_nurse_eval_range_code IS NULL OR ipd_nurse_eval_range_code = '' THEN 1 ELSE 0 END) AS severe_type_null,
                 COUNT(DISTINCT an) AS patient_all
             FROM (
-                SELECT n.an, n.ipd_nurse_eval_range_code
+                SELECT i.an, 
+                (SELECT n.ipd_nurse_eval_range_code 
+                 FROM ipd_nurse_note n 
+                 WHERE n.an = i.an 
+                 ORDER BY n.note_date DESC, n.note_time DESC 
+                 LIMIT 1) as ipd_nurse_eval_range_code
                 FROM ipt i
-                JOIN ipd_nurse_note n ON n.an = i.an
-                JOIN (
-                    SELECT an, note_date, MAX(note_time) AS last_time
-                    FROM ipd_nurse_note
-                    WHERE note_date = CURDATE() AND note_time BETWEEN ? AND ?
-                    GROUP BY an, note_date
-                ) x ON x.an = n.an AND x.note_date = n.note_date AND x.last_time = n.note_time
                 WHERE i.ward IN ($ipd_ward) AND i.confirm_discharge = 'N'
             ) t
         ";
-        // Note: $ipd_ward is injected directly because usually it's a string of IDs like "'01','02'". Binding might treat it as a single string literal.
-        // Ensure $start_time and $end_time are passed as bindings.
-        $ipd_result = DB::connection('hosxp')->selectOne($ipd_query, [$start_time, $end_time]);
+        $ipd_result = DB::connection('hosxp')->selectOne($ipd_query);
 
         $ipd_stats = [
             'shift' => $shift_name,
