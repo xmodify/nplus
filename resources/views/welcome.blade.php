@@ -94,6 +94,7 @@
     </style>
 
     <div class="container py-3">
+        @php $app_settings = \App\Models\MainSetting::pluck('value', 'name')->toArray(); @endphp
         <!-- Welcome Header -->
         <div class="row mb-4">
             <div class="col-12">
@@ -131,424 +132,451 @@
 
         <!-- Main Dashboard Grid (Non-clickable) -->
         <div class="row g-4">
-            <!-- ER Report -->
-            <div class="col-12 col-xl-6">
-                <div class="stat-card h-100 position-relative overflow-hidden">
-                    <div class="card-status-bar bg-danger"></div>
-                    <div class="d-flex justify-content-between align-items-start mb-4">
-                        <div class="d-flex align-items-center gap-3">
-                            <div class="icon-circle bg-danger bg-opacity-10 text-danger">
-                                <i class="bi bi-heart-pulse-fill"></i>
-                            </div>
-                            <div>
-                                <h5 class="fw-bold text-dark mb-1">งานอุบัติเหตุ-ฉุกเฉิน</h5>
-                                <div class="d-flex align-items-center text-muted small">
-                                    <i class="bi bi-clock-history me-1"></i> {{ $er_stats['shift'] }}
+            @if (isset($app_settings['er_active']) && $app_settings['er_active'] == 'Y')
+                <!-- ER Report -->
+                <div class="col-12 col-xl-6">
+                    <div class="stat-card h-100 position-relative overflow-hidden">
+                        <div class="card-status-bar bg-danger"></div>
+                        <div class="d-flex justify-content-between align-items-start mb-4">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="icon-circle bg-danger bg-opacity-10 text-danger">
+                                    <i class="bi bi-heart-pulse-fill"></i>
+                                </div>
+                                <div>
+                                    <h5 class="fw-bold text-dark mb-1">งานอุบัติเหตุ-ฉุกเฉิน</h5>
+                                    <div class="d-flex align-items-center text-muted small">
+                                        <i class="bi bi-clock-history me-1"></i> {{ $er_stats['shift'] }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <span class="badge bg-danger rounded-pill px-3 py-2">ER</span>
-                    </div>
-
-                    <div class="row g-3">
-                        <!-- Row 1: Top 3 Severities -->
-                        <div class="col-4">
-                            <div
-                                class="stat-item p-3 rounded-4 bg-soft-danger text-center h-100 border border-danger border-opacity-10">
-                                <div class="display-6 fw-bold text-danger mb-1">{{ $er_stats['resuscitation'] }}</div>
-                                <div class="small fw-semibold text-danger text-opacity-75 text-truncate">Resuscitation</div>
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="stat-item p-3 rounded-4 text-center h-100 border border-warning border-opacity-25"
-                                style="background-color: rgba(253, 126, 20, 0.1);">
-                                <div class="display-6 fw-bold mb-1" style="color: #fd7e14;">{{ $er_stats['emergent'] }}
-                                </div>
-                                <div class="small fw-semibold text-truncate" style="color: #fd7e14;">Emergent</div>
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div
-                                class="stat-item p-3 rounded-4 bg-soft-warning text-center h-100 border border-warning border-opacity-25">
-                                <div class="display-6 fw-bold text-warning mb-1">{{ $er_stats['urgent'] }}</div>
-                                <div class="small fw-semibold text-warning text-opacity-75 text-truncate">Urgent</div>
-                            </div>
+                            <span class="badge bg-danger rounded-pill px-3 py-2">ER</span>
                         </div>
 
-                        <!-- Row 2: Bottom 2 Severities -->
-                        <div class="col-4">
-                            <div
-                                class="stat-item p-3 rounded-4 bg-soft-success text-center h-100 border border-success border-opacity-10">
-                                <div class="display-6 fw-bold text-success mb-1">{{ $er_stats['semi_urgent'] }}</div>
-                                <div class="small fw-semibold text-success text-opacity-75">Semi Urgent</div>
+                        <div class="row g-3">
+                            <!-- Row 1: Top 3 Severities -->
+                            <div class="col-4">
+                                <div
+                                    class="stat-item p-3 rounded-4 bg-soft-danger text-center h-100 border border-danger border-opacity-10">
+                                    <div class="display-6 fw-bold text-danger mb-1">{{ $er_stats['resuscitation'] }}</div>
+                                    <div class="small fw-semibold text-danger text-opacity-75 text-truncate">Resuscitation
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="stat-item p-3 rounded-4 bg-light text-center h-100 border text-muted">
-                                <div class="display-6 fw-bold text-dark mb-1">{{ $er_stats['non_urgent'] }}</div>
-                                <div class="small fw-semibold">Non Urgent</div>
+                            <div class="col-4">
+                                <div class="stat-item p-3 rounded-4 text-center h-100 border border-warning border-opacity-25"
+                                    style="background-color: rgba(253, 126, 20, 0.1);">
+                                    <div class="display-6 fw-bold mb-1" style="color: #fd7e14;">{{ $er_stats['emergent'] }}
+                                    </div>
+                                    <div class="small fw-semibold text-truncate" style="color: #fd7e14;">Emergent</div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="stat-item p-3 rounded-4 bg-light text-center h-100 border text-muted">
-                                <div class="display-6 fw-bold text-dark mb-1">{{ $er_stats['unknown'] }}</div>
-                                <div class="small fw-semibold text-truncate">ไม่บันทึกความรุนแรง</div>
+                            <div class="col-4">
+                                <div
+                                    class="stat-item p-3 rounded-4 bg-soft-warning text-center h-100 border border-warning border-opacity-25">
+                                    <div class="display-6 fw-bold text-warning mb-1">{{ $er_stats['urgent'] }}</div>
+                                    <div class="small fw-semibold text-warning text-opacity-75 text-truncate">Urgent</div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <!-- IPD Report -->
-            <div class="col-12 col-xl-6">
-                <div class="stat-card h-100 position-relative overflow-hidden">
-                    <div class="card-status-bar bg-primary"></div>
-                    <div class="d-flex justify-content-between align-items-start mb-4">
-                        <div class="d-flex align-items-center gap-3">
-                            <div class="icon-circle bg-primary bg-opacity-10 text-primary">
-                                <i class="fa-solid fa-bed-pulse"></i>
-                            </div>
-                            <div>
-                                <h5 class="fw-bold text-dark mb-1">ผู้ป่วยใน</h5>
-                                <div class="d-flex align-items-center text-muted small">
-                                    <i class="bi bi-clock-history me-1"></i> {{ $ipd_stats['shift'] }}
+                            <!-- Row 2: Bottom 2 Severities -->
+                            <div class="col-4">
+                                <div
+                                    class="stat-item p-3 rounded-4 bg-soft-success text-center h-100 border border-success border-opacity-10">
+                                    <div class="display-6 fw-bold text-success mb-1">{{ $er_stats['semi_urgent'] }}</div>
+                                    <div class="small fw-semibold text-success text-opacity-75">Semi Urgent</div>
                                 </div>
                             </div>
-                        </div>
-                        <span class="badge bg-primary rounded-pill px-3 py-2">IPD</span>
-                    </div>
-
-                    <div class="row g-3">
-                        <div class="col-4">
-                            <div
-                                class="stat-item p-2 py-3 rounded-4 bg-soft-danger text-center h-100 border border-danger border-opacity-10">
-                                <div class="h3 fw-bold text-danger mb-1">{{ $ipd_stats['critical'] }}</div>
-                                <div class="small fw-bold text-danger text-opacity-75" style="font-size: 0.7rem;">Critical
+                            <div class="col-4">
+                                <div class="stat-item p-3 rounded-4 bg-light text-center h-100 border text-muted">
+                                    <div class="display-6 fw-bold text-dark mb-1">{{ $er_stats['non_urgent'] }}</div>
+                                    <div class="small fw-semibold">Non Urgent</div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-4">
-                            <div
-                                class="stat-item p-2 py-3 rounded-4 bg-soft-warning text-center h-100 border border-warning border-opacity-25">
-                                <div class="h3 fw-bold text-warning mb-1">{{ $ipd_stats['semi_critical'] }}</div>
-                                <div class="small fw-bold text-warning text-opacity-75" style="font-size: 0.7rem;">Semi-Cri
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div
-                                class="stat-item p-2 py-3 rounded-4 bg-soft-info text-center h-100 border border-info border-opacity-25">
-                                <div class="h3 fw-bold text-info mb-1">{{ $ipd_stats['moderate'] }}</div>
-                                <div class="small fw-bold text-info text-opacity-75" style="font-size: 0.7rem;">Moderate
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div
-                                class="stat-item p-2 py-3 rounded-4 bg-soft-success text-center h-100 border border-success border-opacity-10">
-                                <div class="h3 fw-bold text-success mb-1">{{ $ipd_stats['convalescent'] }}</div>
-                                <div class="small fw-bold text-success text-opacity-75" style="font-size: 0.7rem;">Conv.
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="stat-item p-2 py-3 rounded-4 bg-light text-center h-100 border text-muted">
-                                <div class="h3 fw-bold text-dark mb-1">{{ $ipd_stats['severe_type_null'] }}</div>
-                                <div class="small fw-bold text-muted" style="font-size: 0.65rem;">ไม่บันทึกความรุนแรง
+                            <div class="col-4">
+                                <div class="stat-item p-3 rounded-4 bg-light text-center h-100 border text-muted">
+                                    <div class="display-6 fw-bold text-dark mb-1">{{ $er_stats['unknown'] }}</div>
+                                    <div class="small fw-semibold text-truncate">ไม่บันทึกความรุนแรง</div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            @endif
 
-            <!-- VIP Report -->
-            <div class="col-12 col-xl-6">
-                <div class="stat-card h-100 position-relative overflow-hidden">
-                    <div class="card-status-bar bg-warning"></div>
-                    <div class="d-flex justify-content-between align-items-start mb-4">
-                        <div class="d-flex align-items-center gap-3">
-                            <div class="icon-circle bg-warning bg-opacity-10 text-warning">
-                                <i class="fa-solid fa-couch"></i>
-                            </div>
-                            <div>
-                                <h5 class="fw-bold text-dark mb-1">งานผู้ป่วยห้องพิเศษ VIP</h5>
-                                <div class="d-flex align-items-center text-muted small">
-                                    <i class="bi bi-clock-history me-1"></i> {{ $vip_stats['shift'] }}
+            @if (isset($app_settings['ipd_active']) && $app_settings['ipd_active'] == 'Y')
+                <!-- IPD Report -->
+                <div class="col-12 col-xl-6">
+                    <div class="stat-card h-100 position-relative overflow-hidden">
+                        <div class="card-status-bar bg-primary"></div>
+                        <div class="d-flex justify-content-between align-items-start mb-4">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="icon-circle bg-primary bg-opacity-10 text-primary">
+                                    <i class="fa-solid fa-bed-pulse"></i>
+                                </div>
+                                <div>
+                                    <h5 class="fw-bold text-dark mb-1">ผู้ป่วยใน</h5>
+                                    <div class="d-flex align-items-center text-muted small">
+                                        <i class="bi bi-clock-history me-1"></i> {{ $ipd_stats['shift'] }}
+                                    </div>
                                 </div>
                             </div>
+                            <span class="badge bg-primary rounded-pill px-3 py-2">IPD</span>
                         </div>
-                        <span class="badge bg-warning text-dark rounded-pill px-3 py-2">VIP</span>
-                    </div>
 
-                    <div class="row g-3">
-                        <div class="col-4">
-                            <div
-                                class="stat-item p-2 py-3 rounded-4 bg-soft-danger text-center h-100 border border-danger border-opacity-10">
-                                <div class="h3 fw-bold text-danger mb-1">{{ $vip_stats['critical'] }}</div>
-                                <div class="small fw-bold text-danger text-opacity-75" style="font-size: 0.7rem;">Critical
+                        <div class="row g-3">
+                            <div class="col-4">
+                                <div
+                                    class="stat-item p-2 py-3 rounded-4 bg-soft-danger text-center h-100 border border-danger border-opacity-10">
+                                    <div class="h3 fw-bold text-danger mb-1">{{ $ipd_stats['critical'] }}</div>
+                                    <div class="small fw-bold text-danger text-opacity-75" style="font-size: 0.7rem;">
+                                        Critical
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-4">
-                            <div
-                                class="stat-item p-2 py-3 rounded-4 bg-soft-warning text-center h-100 border border-warning border-opacity-25">
-                                <div class="h3 fw-bold text-warning mb-1">{{ $vip_stats['semi_critical'] }}</div>
-                                <div class="small fw-bold text-warning text-opacity-75" style="font-size: 0.7rem;">
-                                    Semi-Cri
+                            <div class="col-4">
+                                <div
+                                    class="stat-item p-2 py-3 rounded-4 bg-soft-warning text-center h-100 border border-warning border-opacity-25">
+                                    <div class="h3 fw-bold text-warning mb-1">{{ $ipd_stats['semi_critical'] }}</div>
+                                    <div class="small fw-bold text-warning text-opacity-75" style="font-size: 0.7rem;">
+                                        Semi-Cri
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-4">
-                            <div
-                                class="stat-item p-2 py-3 rounded-4 bg-soft-info text-center h-100 border border-info border-opacity-25">
-                                <div class="h3 fw-bold text-info mb-1">{{ $vip_stats['moderate'] }}</div>
-                                <div class="small fw-bold text-info text-opacity-75" style="font-size: 0.7rem;">Moderate
+                            <div class="col-4">
+                                <div
+                                    class="stat-item p-2 py-3 rounded-4 bg-soft-info text-center h-100 border border-info border-opacity-25">
+                                    <div class="h3 fw-bold text-info mb-1">{{ $ipd_stats['moderate'] }}</div>
+                                    <div class="small fw-bold text-info text-opacity-75" style="font-size: 0.7rem;">Moderate
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-4">
-                            <div
-                                class="stat-item p-2 py-3 rounded-4 bg-soft-success text-center h-100 border border-success border-opacity-10">
-                                <div class="h3 fw-bold text-success mb-1">{{ $vip_stats['convalescent'] }}</div>
-                                <div class="small fw-bold text-success text-opacity-75" style="font-size: 0.7rem;">Conv.
+                            <div class="col-4">
+                                <div
+                                    class="stat-item p-2 py-3 rounded-4 bg-soft-success text-center h-100 border border-success border-opacity-10">
+                                    <div class="h3 fw-bold text-success mb-1">{{ $ipd_stats['convalescent'] }}</div>
+                                    <div class="small fw-bold text-success text-opacity-75" style="font-size: 0.7rem;">Conv.
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="stat-item p-2 py-3 rounded-4 bg-light text-center h-100 border text-muted">
-                                <div class="h3 fw-bold text-dark mb-1">{{ $vip_stats['severe_type_null'] }}</div>
-                                <div class="small fw-bold text-muted" style="font-size: 0.65rem;">ไม่บันทึกความรุนแรง
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- LR Report -->
-            <div class="col-12 col-xl-6">
-                <div class="stat-card h-100 position-relative overflow-hidden">
-                    <div class="card-status-bar bg-danger"></div>
-                    <div class="d-flex justify-content-between align-items-start mb-4">
-                        <div class="d-flex align-items-center gap-3">
-                            <div class="icon-circle bg-danger bg-opacity-10 text-danger">
-                                <i class="fa-solid fa-person-breastfeeding"></i>
-                            </div>
-                            <div>
-                                <h5 class="fw-bold text-dark mb-1">งานห้องคลอด LR</h5>
-                                <div class="d-flex align-items-center text-muted small">
-                                    <i class="bi bi-clock-history me-1"></i> {{ $lr_stats['shift'] }}
-                                </div>
-                            </div>
-                        </div>
-                        <span class="badge bg-danger rounded-pill px-3 py-2">LR</span>
-                    </div>
-
-                    <div class="row g-3">
-                        <div class="col-4">
-                            <div
-                                class="stat-item p-2 py-3 rounded-4 bg-soft-danger text-center h-100 border border-danger border-opacity-10">
-                                <div class="h3 fw-bold text-danger mb-1">{{ $lr_stats['critical'] }}</div>
-                                <div class="small fw-bold text-danger text-opacity-75" style="font-size: 0.7rem;">Critical
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div
-                                class="stat-item p-2 py-3 rounded-4 bg-soft-warning text-center h-100 border border-warning border-opacity-25">
-                                <div class="h3 fw-bold text-warning mb-1">{{ $lr_stats['semi_critical'] }}</div>
-                                <div class="small fw-bold text-warning text-opacity-75" style="font-size: 0.7rem;">
-                                    Semi-Cri
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div
-                                class="stat-item p-2 py-3 rounded-4 bg-soft-info text-center h-100 border border-info border-opacity-25">
-                                <div class="h3 fw-bold text-info mb-1">{{ $lr_stats['moderate'] }}</div>
-                                <div class="small fw-bold text-info text-opacity-75" style="font-size: 0.7rem;">Moderate
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div
-                                class="stat-item p-2 py-3 rounded-4 bg-soft-success text-center h-100 border border-success border-opacity-10">
-                                <div class="h3 fw-bold text-success mb-1">{{ $lr_stats['convalescent'] }}</div>
-                                <div class="small fw-bold text-success text-opacity-75" style="font-size: 0.7rem;">Conv.
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="stat-item p-2 py-3 rounded-4 bg-light text-center h-100 border text-muted">
-                                <div class="h3 fw-bold text-dark mb-1">{{ $lr_stats['severe_type_null'] }}</div>
-                                <div class="small fw-bold text-muted" style="font-size: 0.65rem;">ไม่บันทึกความรุนแรง
+                            <div class="col-4">
+                                <div class="stat-item p-2 py-3 rounded-4 bg-light text-center h-100 border text-muted">
+                                    <div class="h3 fw-bold text-dark mb-1">{{ $ipd_stats['severe_type_null'] }}</div>
+                                    <div class="small fw-bold text-muted" style="font-size: 0.65rem;">ไม่บันทึกความรุนแรง
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            @endif
 
-            <!-- OPD Report -->
-            <div class="col-12 col-md-6 col-xl-4">
-                <div class="stat-card h-100 position-relative overflow-hidden">
-                    <div class="card-status-bar bg-success"></div>
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <div class="d-flex align-items-center gap-3">
-                            <div class="icon-circle bg-success bg-opacity-10 text-success">
-                                <i class="bi bi-people-fill"></i>
+            @if (isset($app_settings['vip_active']) && $app_settings['vip_active'] == 'Y')
+                <!-- VIP Report -->
+                <div class="col-12 col-xl-6">
+                    <div class="stat-card h-100 position-relative overflow-hidden">
+                        <div class="card-status-bar bg-warning"></div>
+                        <div class="d-flex justify-content-between align-items-start mb-4">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="icon-circle bg-warning bg-opacity-10 text-warning">
+                                    <i class="fa-solid fa-couch"></i>
+                                </div>
+                                <div>
+                                    <h5 class="fw-bold text-dark mb-1">งานผู้ป่วยห้องพิเศษ VIP</h5>
+                                    <div class="d-flex align-items-center text-muted small">
+                                        <i class="bi bi-clock-history me-1"></i> {{ $vip_stats['shift'] }}
+                                    </div>
+                                </div>
                             </div>
-                            <div>
-                                <h5 class="fw-bold text-dark mb-1">ผู้ป่วยนอก</h5>
-                                <div class="d-flex align-items-center text-muted small">
-                                    <i class="bi bi-clock-history me-1"></i> {{ $opd_stats['shift'] }}
+                            <span class="badge bg-warning text-dark rounded-pill px-3 py-2">VIP</span>
+                        </div>
+
+                        <div class="row g-3">
+                            <div class="col-4">
+                                <div
+                                    class="stat-item p-2 py-3 rounded-4 bg-soft-danger text-center h-100 border border-danger border-opacity-10">
+                                    <div class="h3 fw-bold text-danger mb-1">{{ $vip_stats['critical'] }}</div>
+                                    <div class="small fw-bold text-danger text-opacity-75" style="font-size: 0.7rem;">
+                                        Critical
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div
+                                    class="stat-item p-2 py-3 rounded-4 bg-soft-warning text-center h-100 border border-warning border-opacity-25">
+                                    <div class="h3 fw-bold text-warning mb-1">{{ $vip_stats['semi_critical'] }}</div>
+                                    <div class="small fw-bold text-warning text-opacity-75" style="font-size: 0.7rem;">
+                                        Semi-Cri
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div
+                                    class="stat-item p-2 py-3 rounded-4 bg-soft-info text-center h-100 border border-info border-opacity-25">
+                                    <div class="h3 fw-bold text-info mb-1">{{ $vip_stats['moderate'] }}</div>
+                                    <div class="small fw-bold text-info text-opacity-75" style="font-size: 0.7rem;">
+                                        Moderate
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div
+                                    class="stat-item p-2 py-3 rounded-4 bg-soft-success text-center h-100 border border-success border-opacity-10">
+                                    <div class="h3 fw-bold text-success mb-1">{{ $vip_stats['convalescent'] }}</div>
+                                    <div class="small fw-bold text-success text-opacity-75" style="font-size: 0.7rem;">
+                                        Conv.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="stat-item p-2 py-3 rounded-4 bg-light text-center h-100 border text-muted">
+                                    <div class="h3 fw-bold text-dark mb-1">{{ $vip_stats['severe_type_null'] }}</div>
+                                    <div class="small fw-bold text-muted" style="font-size: 0.65rem;">ไม่บันทึกความรุนแรง
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <span class="badge bg-success rounded-pill px-3 py-2">OPD</span>
-                    </div>
-
-                    <div class="d-flex align-items-center justify-content-between bg-light rounded-4 p-4 border">
-                        <div class="d-flex align-items-center gap-3">
-                            <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center"
-                                style="width: 48px; height: 48px;">
-                                <i class="bi bi-people fs-4"></i>
-                            </div>
-                            <span class="text-muted fw-medium">ผู้ป่วยทั้งหมดในเวร</span>
-                        </div>
-                        <div class="display-4 fw-bold text-success">{{ $opd_stats['patient_all'] }}</div>
                     </div>
                 </div>
-            </div>
+            @endif
 
-            <!-- NCD Report -->
-            <div class="col-12 col-md-6 col-xl-4">
-                <div class="stat-card h-100 position-relative overflow-hidden">
-                    <div class="card-status-bar bg-warning"></div>
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <div class="d-flex align-items-center gap-3">
-                            <div class="icon-circle bg-warning bg-opacity-10 text-warning">
-                                <i class="bi bi-heart-pulse-fill"></i>
+            @if (isset($app_settings['lr_active']) && $app_settings['lr_active'] == 'Y')
+                <!-- LR Report -->
+                <div class="col-12 col-xl-6">
+                    <div class="stat-card h-100 position-relative overflow-hidden">
+                        <div class="card-status-bar bg-danger"></div>
+                        <div class="d-flex justify-content-between align-items-start mb-4">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="icon-circle bg-danger bg-opacity-10 text-danger">
+                                    <i class="fa-solid fa-person-breastfeeding"></i>
+                                </div>
+                                <div>
+                                    <h5 class="fw-bold text-dark mb-1">งานห้องคลอด LR</h5>
+                                    <div class="d-flex align-items-center text-muted small">
+                                        <i class="bi bi-clock-history me-1"></i> {{ $lr_stats['shift'] }}
+                                    </div>
+                                </div>
                             </div>
-                            <div>
-                                <h5 class="fw-bold text-dark mb-1">คลินิก NCD</h5>
-                                <div class="d-flex align-items-center text-muted small">
-                                    <i class="bi bi-clock-history me-1"></i> {{ $ncd_stats['shift'] }}
+                            <span class="badge bg-danger rounded-pill px-3 py-2">LR</span>
+                        </div>
+
+                        <div class="row g-3">
+                            <div class="col-4">
+                                <div
+                                    class="stat-item p-2 py-3 rounded-4 bg-soft-danger text-center h-100 border border-danger border-opacity-10">
+                                    <div class="h3 fw-bold text-danger mb-1">{{ $lr_stats['critical'] }}</div>
+                                    <div class="small fw-bold text-danger text-opacity-75" style="font-size: 0.7rem;">
+                                        Critical
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div
+                                    class="stat-item p-2 py-3 rounded-4 bg-soft-warning text-center h-100 border border-warning border-opacity-25">
+                                    <div class="h3 fw-bold text-warning mb-1">{{ $lr_stats['semi_critical'] }}</div>
+                                    <div class="small fw-bold text-warning text-opacity-75" style="font-size: 0.7rem;">
+                                        Semi-Cri
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div
+                                    class="stat-item p-2 py-3 rounded-4 bg-soft-info text-center h-100 border border-info border-opacity-25">
+                                    <div class="h3 fw-bold text-info mb-1">{{ $lr_stats['moderate'] }}</div>
+                                    <div class="small fw-bold text-info text-opacity-75" style="font-size: 0.7rem;">
+                                        Moderate
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div
+                                    class="stat-item p-2 py-3 rounded-4 bg-soft-success text-center h-100 border border-success border-opacity-10">
+                                    <div class="h3 fw-bold text-success mb-1">{{ $lr_stats['convalescent'] }}</div>
+                                    <div class="small fw-bold text-success text-opacity-75" style="font-size: 0.7rem;">
+                                        Conv.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="stat-item p-2 py-3 rounded-4 bg-light text-center h-100 border text-muted">
+                                    <div class="h3 fw-bold text-dark mb-1">{{ $lr_stats['severe_type_null'] }}</div>
+                                    <div class="small fw-bold text-muted" style="font-size: 0.65rem;">ไม่บันทึกความรุนแรง
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <span class="badge bg-warning text-dark rounded-pill px-3 py-2">NCD</span>
-                    </div>
-
-                    <div class="d-flex align-items-center justify-content-between bg-light rounded-4 p-4 border">
-                        <div class="d-flex align-items-center gap-3">
-                            <div class="rounded-circle bg-warning text-dark d-flex align-items-center justify-content-center"
-                                style="width: 48px; height: 48px;">
-                                <i class="bi bi-clipboard2-pulse fs-4"></i>
-                            </div>
-                            <span class="text-muted fw-medium">ผู้ป่วยทั้งหมดในเวร</span>
-                        </div>
-                        <div class="display-4 fw-bold text-warning text-dark">{{ $ncd_stats['patient_all'] }}</div>
                     </div>
                 </div>
-            </div>
+            @endif
 
-            <!-- ARI Report -->
-            <div class="col-12 col-md-6 col-xl-4">
-                <div class="stat-card h-100 position-relative overflow-hidden">
-                    <div class="card-status-bar bg-secondary"></div>
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <div class="d-flex align-items-center gap-3">
-                            <div class="icon-circle bg-secondary bg-opacity-10 text-secondary">
-                                <i class="bi bi-mask"></i>
-                            </div>
-                            <div>
-                                <h5 class="fw-bold text-dark mb-1">คลินิก ARI</h5>
-                                <div class="d-flex align-items-center text-muted small">
-                                    <i class="bi bi-clock-history me-1"></i> {{ $ari_stats['shift'] }}
+            @if (isset($app_settings['opd_active']) && $app_settings['opd_active'] == 'Y')
+                <!-- OPD Report -->
+                <div class="col-12 col-md-6 col-xl-4">
+                    <div class="stat-card h-100 position-relative overflow-hidden">
+                        <div class="card-status-bar bg-success"></div>
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="icon-circle bg-success bg-opacity-10 text-success">
+                                    <i class="bi bi-people-fill"></i>
+                                </div>
+                                <div>
+                                    <h5 class="fw-bold text-dark mb-1">ผู้ป่วยนอก</h5>
+                                    <div class="d-flex align-items-center text-muted small">
+                                        <i class="bi bi-clock-history me-1"></i> {{ $opd_stats['shift'] }}
+                                    </div>
                                 </div>
                             </div>
+                            <span class="badge bg-success rounded-pill px-3 py-2">OPD</span>
                         </div>
-                        <span class="badge bg-secondary rounded-pill px-3 py-2">ARI</span>
-                    </div>
 
-                    <div class="d-flex align-items-center justify-content-between bg-light rounded-4 p-4 border">
-                        <div class="d-flex align-items-center gap-3">
-                            <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center"
-                                style="width: 48px; height: 48px;">
-                                <i class="bi bi-person-bounding-box fs-4"></i>
+                        <div class="d-flex align-items-center justify-content-between bg-light rounded-4 p-4 border">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center"
+                                    style="width: 48px; height: 48px;">
+                                    <i class="bi bi-people fs-4"></i>
+                                </div>
+                                <span class="text-muted fw-medium">ผู้ป่วยทั้งหมดในเวร</span>
                             </div>
-                            <span class="text-muted fw-medium">ผู้ป่วยทั้งหมดในเวร</span>
+                            <div class="display-4 fw-bold text-success">{{ $opd_stats['patient_all'] }}</div>
                         </div>
-                        <div class="display-4 fw-bold text-secondary">{{ $ari_stats['patient_all'] }}</div>
                     </div>
                 </div>
-            </div>
+            @endif
 
-            <!-- CKD Report -->
-            <div class="col-12 col-md-6 col-xl-4">
-                <div class="stat-card h-100 position-relative overflow-hidden">
-                    <div class="card-status-bar bg-info"></div>
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <div class="d-flex align-items-center gap-3">
-                            <div class="icon-circle bg-info bg-opacity-10 text-info">
-                                <i class="fa-solid fa-water"></i>
-                            </div>
-                            <div>
-                                <h5 class="fw-bold text-dark mb-1">คลินิก CKD</h5>
-                                <div class="d-flex align-items-center text-muted small">
-                                    <i class="bi bi-clock-history me-1"></i> {{ $ckd_stats['shift'] }}
+            @if (isset($app_settings['ncd_active']) && $app_settings['ncd_active'] == 'Y')
+                <!-- NCD Report -->
+                <div class="col-12 col-md-6 col-xl-4">
+                    <div class="stat-card h-100 position-relative overflow-hidden">
+                        <div class="card-status-bar bg-warning"></div>
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="icon-circle bg-warning bg-opacity-10 text-warning">
+                                    <i class="bi bi-heart-pulse-fill"></i>
+                                </div>
+                                <div>
+                                    <h5 class="fw-bold text-dark mb-1">คลินิก NCD</h5>
+                                    <div class="d-flex align-items-center text-muted small">
+                                        <i class="bi bi-clock-history me-1"></i> {{ $ncd_stats['shift'] }}
+                                    </div>
                                 </div>
                             </div>
+                            <span class="badge bg-warning text-dark rounded-pill px-3 py-2">NCD</span>
                         </div>
-                        <span class="badge bg-info rounded-pill px-3 py-2">CKD</span>
-                    </div>
 
-                    <div class="d-flex align-items-center justify-content-between bg-light rounded-4 p-4 border">
-                        <div class="d-flex align-items-center gap-3">
-                            <div class="rounded-circle bg-info text-white d-flex align-items-center justify-content-center"
-                                style="width: 48px; height: 48px;">
-                                <i class="bi bi-people fs-4"></i>
+                        <div class="d-flex align-items-center justify-content-between bg-light rounded-4 p-4 border">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="rounded-circle bg-warning text-dark d-flex align-items-center justify-content-center"
+                                    style="width: 48px; height: 48px;">
+                                    <i class="bi bi-clipboard2-pulse fs-4"></i>
+                                </div>
+                                <span class="text-muted fw-medium">ผู้ป่วยทั้งหมดในเวร</span>
                             </div>
-                            <span class="text-muted fw-medium">ผู้ป่วยทั้งหมดในเวร</span>
+                            <div class="display-4 fw-bold text-warning text-dark">{{ $ncd_stats['patient_all'] }}</div>
                         </div>
-                        <div class="display-4 fw-bold text-info">{{ $ckd_stats['patient_all'] }}</div>
                     </div>
                 </div>
-            </div>
+            @endif
 
-            <!-- HD Report -->
-            <div class="col-12 col-md-6 col-xl-4">
-                <div class="stat-card h-100 position-relative overflow-hidden">
-                    <div class="card-status-bar bg-secondary"></div>
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <div class="d-flex align-items-center gap-3">
-                            <div class="icon-circle bg-secondary bg-opacity-10 text-secondary">
-                                <i class="fa-solid fa-hospital-user"></i>
-                            </div>
-                            <div>
-                                <h5 class="fw-bold text-dark mb-1">หน่วยไตเทียม HD</h5>
-                                <div class="d-flex align-items-center text-muted small">
-                                    <i class="bi bi-clock-history me-1"></i> {{ $hd_stats['shift'] }}
+            @if (isset($app_settings['ari_active']) && $app_settings['ari_active'] == 'Y')
+                <!-- ARI Report -->
+                <div class="col-12 col-md-6 col-xl-4">
+                    <div class="stat-card h-100 position-relative overflow-hidden">
+                        <div class="card-status-bar bg-secondary"></div>
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="icon-circle bg-secondary bg-opacity-10 text-secondary">
+                                    <i class="bi bi-mask"></i>
+                                </div>
+                                <div>
+                                    <h5 class="fw-bold text-dark mb-1">คลินิก ARI</h5>
+                                    <div class="d-flex align-items-center text-muted small">
+                                        <i class="bi bi-clock-history me-1"></i> {{ $ari_stats['shift'] }}
+                                    </div>
                                 </div>
                             </div>
+                            <span class="badge bg-secondary rounded-pill px-3 py-2">ARI</span>
                         </div>
-                        <span class="badge bg-secondary rounded-pill px-3 py-2">HD</span>
-                    </div>
 
-                    <div class="d-flex align-items-center justify-content-between bg-light rounded-4 p-4 border">
-                        <div class="d-flex align-items-center gap-3">
-                            <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center"
-                                style="width: 48px; height: 48px;">
-                                <i class="bi bi-people fs-4"></i>
+                        <div class="d-flex align-items-center justify-content-between bg-light rounded-4 p-4 border">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center"
+                                    style="width: 48px; height: 48px;">
+                                    <i class="bi bi-person-bounding-box fs-4"></i>
+                                </div>
+                                <span class="text-muted fw-medium">ผู้ป่วยทั้งหมดในเวร</span>
                             </div>
-                            <span class="text-muted fw-medium">ผู้ป่วยทั้งหมดในเวร</span>
+                            <div class="display-4 fw-bold text-secondary">{{ $ari_stats['patient_all'] }}</div>
                         </div>
-                        <div class="display-4 fw-bold text-secondary">{{ $hd_stats['patient_all'] }}</div>
                     </div>
                 </div>
-            </div>
+            @endif
+
+            @if (isset($app_settings['ckd_active']) && $app_settings['ckd_active'] == 'Y')
+                <!-- CKD Report -->
+                <div class="col-12 col-md-6 col-xl-4">
+                    <div class="stat-card h-100 position-relative overflow-hidden">
+                        <div class="card-status-bar bg-info"></div>
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="icon-circle bg-info bg-opacity-10 text-info">
+                                    <i class="fa-solid fa-water"></i>
+                                </div>
+                                <div>
+                                    <h5 class="fw-bold text-dark mb-1">คลินิก CKD</h5>
+                                    <div class="d-flex align-items-center text-muted small">
+                                        <i class="bi bi-clock-history me-1"></i> {{ $ckd_stats['shift'] }}
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="badge bg-info rounded-pill px-3 py-2">CKD</span>
+                        </div>
+
+                        <div class="d-flex align-items-center justify-content-between bg-light rounded-4 p-4 border">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="rounded-circle bg-info text-white d-flex align-items-center justify-content-center"
+                                    style="width: 48px; height: 48px;">
+                                    <i class="bi bi-people fs-4"></i>
+                                </div>
+                                <span class="text-muted fw-medium">ผู้ป่วยทั้งหมดในเวร</span>
+                            </div>
+                            <div class="display-4 fw-bold text-info">{{ $ckd_stats['patient_all'] }}</div>
+                        </div>
+                    </div>
+                </div>
+            @endif
+
+            @if (isset($app_settings['hd_active']) && $app_settings['hd_active'] == 'Y')
+                <!-- HD Report -->
+                <div class="col-12 col-md-6 col-xl-4">
+                    <div class="stat-card h-100 position-relative overflow-hidden">
+                        <div class="card-status-bar bg-secondary"></div>
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="icon-circle bg-secondary bg-opacity-10 text-secondary">
+                                    <i class="fa-solid fa-hospital-user"></i>
+                                </div>
+                                <div>
+                                    <h5 class="fw-bold text-dark mb-1">หน่วยไตเทียม HD</h5>
+                                    <div class="d-flex align-items-center text-muted small">
+                                        <i class="bi bi-clock-history me-1"></i> {{ $hd_stats['shift'] }}
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="badge bg-secondary rounded-pill px-3 py-2">HD</span>
+                        </div>
+
+                        <div class="d-flex align-items-center justify-content-between bg-light rounded-4 p-4 border">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center"
+                                    style="width: 48px; height: 48px;">
+                                    <i class="bi bi-people fs-4"></i>
+                                </div>
+                                <span class="text-muted fw-medium">ผู้ป่วยทั้งหมดในเวร</span>
+                            </div>
+                            <div class="display-4 fw-bold text-secondary">{{ $hd_stats['patient_all'] }}</div>
+                        </div>
+                    </div>
+                </div>
+            @endif
         </div>
     </div>
     @push('scripts')

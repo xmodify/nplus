@@ -14,7 +14,27 @@ class MainSettingController extends Controller
 {
     public function index()
     {
-        $settings = MainSetting::all();
+        $settings = MainSetting::all()->sortBy(function ($setting) {
+            $name = $setting->name;
+            $weight = 50;
+
+            // Custom logical ordering for department settings
+            if (str_ends_with($name, '_active'))
+                $weight = 10;
+            elseif (str_ends_with($name, '_department') || str_ends_with($name, '_ward'))
+                $weight = 20;
+            elseif (str_ends_with($name, '_working_hours'))
+                $weight = 30;
+            elseif (str_contains($name, '_patient_type'))
+                $weight = 40;
+            // Push Telegram down to the bottom
+            elseif (str_ends_with($name, '_notifytelegram'))
+                $weight = 90;
+            elseif (str_ends_with($name, '_notifytelegram_save'))
+                $weight = 91;
+
+            return sprintf('%02d_%s', $weight, $name);
+        });
 
         $general_settings = $settings->filter(function ($item) {
             return !str_starts_with($item->name, 'er_') &&
@@ -132,6 +152,7 @@ class MainSettingController extends Controller
             ['name_th' => 'ER ชม.ผู้ป่วยไม่ฉุกเฉิน(Non Urgent)', 'name' => 'er_patient_type5', 'value' => '0.24'],
             ['name_th' => 'ER NotifyTelegram แจ้งเตือน', 'name' => 'er_notifytelegram', 'value' => ''],
             ['name_th' => 'ER NotifyTelegram บันทึก', 'name' => 'er_notifytelegram_save', 'value' => ''],
+            ['name_th' => 'ER สถานะ', 'name' => 'er_active', 'value' => 'Y'],
             ['name_th' => 'IPD รหัส Ward (HOSxP)', 'name' => 'ipd_ward', 'value' => '01'],
             ['name_th' => 'IPD ชม.การทำงานพยาบาล', 'name' => 'ipd_working_hours', 'value' => '7'],
             ['name_th' => 'IPD ชม.ผู้ป่วยพักฟื้น(Convalescent)', 'name' => 'ipd_patient_type1', 'value' => '1.5'],
@@ -140,33 +161,37 @@ class MainSettingController extends Controller
             ['name_th' => 'IPD ชม.ผู้ป่วยหนัก(Critical)', 'name' => 'ipd_patient_type4', 'value' => '7.5'],
             ['name_th' => 'IPD NotifyTelegram แจ้งเตือน', 'name' => 'ipd_notifytelegram', 'value' => ''],
             ['name_th' => 'IPD NotifyTelegram บันทึก', 'name' => 'ipd_notifytelegram_save', 'value' => ''],
+            ['name_th' => 'IPD สถานะ', 'name' => 'ipd_active', 'value' => 'Y'],
             ['name_th' => 'OPD รหัสห้องตรวจ (HOSxP)', 'name' => 'opd_department', 'value' => ''],
             ['name_th' => 'OPD ชม.การทำงานพยาบาล', 'name' => 'opd_working_hours', 'value' => '7'],
             ['name_th' => 'OPD ชม.ผู้ป่วยทั่วไป', 'name' => 'opd_patient_type', 'value' => '0.24'],
             ['name_th' => 'OPD NotifyTelegram แจ้งเตือน', 'name' => 'opd_notifytelegram', 'value' => ''],
             ['name_th' => 'OPD NotifyTelegram บันทึก', 'name' => 'opd_notifytelegram_save', 'value' => ''],
+            ['name_th' => 'OPD สถานะ', 'name' => 'opd_active', 'value' => 'Y'],
             ['name_th' => 'NCD รหัสห้องตรวจ (HOSxP)', 'name' => 'ncd_department', 'value' => ''],
             ['name_th' => 'NCD ชม.การทำงานพยาบาล', 'name' => 'ncd_working_hours', 'value' => '8'],
             ['name_th' => 'NCD ชม.ผู้ป่วยทั่วไป', 'name' => 'ncd_patient_type', 'value' => '0.24'],
             ['name_th' => 'NCD NotifyTelegram แจ้งเตือน', 'name' => 'ncd_notifytelegram', 'value' => ''],
             ['name_th' => 'NCD NotifyTelegram บันทึก', 'name' => 'ncd_notifytelegram_save', 'value' => ''],
+            ['name_th' => 'NCD สถานะ', 'name' => 'ncd_active', 'value' => 'Y'],
             ['name_th' => 'ARI รหัสห้องตรวจ (HOSxP)', 'name' => 'ari_department', 'value' => ''],
             ['name_th' => 'ARI ชม.การทำงานพยาบาล', 'name' => 'ari_working_hours', 'value' => '7'],
             ['name_th' => 'ARI ชม.ผู้ป่วยทั่วไป', 'name' => 'ari_patient_type', 'value' => '0.24'],
             ['name_th' => 'ARI NotifyTelegram แจ้งเตือน', 'name' => 'ari_notifytelegram', 'value' => ''],
             ['name_th' => 'ARI NotifyTelegram บันทึก', 'name' => 'ari_notifytelegram_save', 'value' => ''],
+            ['name_th' => 'ARI สถานะ', 'name' => 'ari_active', 'value' => 'Y'],
             ['name_th' => 'CKD รหัสห้องตรวจ (HOSxP)', 'name' => 'ckd_department', 'value' => ''],
             ['name_th' => 'CKD ชม.การทำงานพยาบาล', 'name' => 'ckd_working_hours', 'value' => '7'],
             ['name_th' => 'CKD ชม.ผู้ป่วยทั่วไป', 'name' => 'ckd_patient_type', 'value' => '0.24'],
             ['name_th' => 'CKD NotifyTelegram แจ้งเตือน', 'name' => 'ckd_notifytelegram', 'value' => ''],
             ['name_th' => 'CKD NotifyTelegram บันทึก', 'name' => 'ckd_notifytelegram_save', 'value' => ''],
+            ['name_th' => 'CKD สถานะ', 'name' => 'ckd_active', 'value' => 'Y'],
             ['name_th' => 'HD รหัสห้องตรวจ (HOSxP)', 'name' => 'hd_department', 'value' => ''],
             ['name_th' => 'HD ชม.ทำงานพยาบาล', 'name' => 'hd_working_hours', 'value' => '7'],
             ['name_th' => 'HD ชม.ผู้ป่วยทั่วไป', 'name' => 'hd_patient_type', 'value' => '0.24'],
             ['name_th' => 'HD NotifyTelegram แจ้งเตือน', 'name' => 'hd_notifytelegram', 'value' => ''],
             ['name_th' => 'HD NotifyTelegram บันทึก', 'name' => 'hd_notifytelegram_save', 'value' => ''],
-
-            // VIP Settings
+            ['name_th' => 'HD สถานะ', 'name' => 'hd_active', 'value' => 'Y'],
             ['name_th' => 'VIP รหัส Ward (HOSxP)', 'name' => 'vip_ward', 'value' => ''],
             ['name_th' => 'VIP ชม.ทำงานพยาบาล', 'name' => 'vip_working_hours', 'value' => '7'],
             ['name_th' => 'VIP ชม.ผู้ป่วย Type 1', 'name' => 'vip_patient_type1', 'value' => '1.5'],
@@ -175,8 +200,7 @@ class MainSettingController extends Controller
             ['name_th' => 'VIP ชม.ผู้ป่วย Type 4', 'name' => 'vip_patient_type4', 'value' => '7.5'],
             ['name_th' => 'VIP NotifyTelegram แจ้งเตือน', 'name' => 'vip_notifytelegram', 'value' => ''],
             ['name_th' => 'VIP NotifyTelegram บันทึก', 'name' => 'vip_notifytelegram_save', 'value' => ''],
-
-            // LR Settings
+            ['name_th' => 'VIP สถานะ', 'name' => 'vip_active', 'value' => 'Y'],
             ['name_th' => 'LR รหัส Ward (HOSxP)', 'name' => 'lr_ward', 'value' => ''],
             ['name_th' => 'LR ชม.ทำงานพยาบาล', 'name' => 'lr_working_hours', 'value' => '7'],
             ['name_th' => 'LR ชม.ผู้ป่วย Type 1', 'name' => 'lr_patient_type1', 'value' => '1.5'],
@@ -185,6 +209,7 @@ class MainSettingController extends Controller
             ['name_th' => 'LR ชม.ผู้ป่วย Type 4', 'name' => 'lr_patient_type4', 'value' => '7.5'],
             ['name_th' => 'LR NotifyTelegram แจ้งเตือน', 'name' => 'lr_notifytelegram', 'value' => ''],
             ['name_th' => 'LR NotifyTelegram บันทึก', 'name' => 'lr_notifytelegram_save', 'value' => ''],
+            ['name_th' => 'LR สถานะ', 'name' => 'lr_active', 'value' => 'Y'],
         ];
         foreach ($main_setting as $row) {
             $check = MainSetting::where('name', $row['name'])->count();
@@ -206,16 +231,21 @@ class MainSettingController extends Controller
         }
 
         //After Table-----------------------------------------------------------------------------------------------------------
-        // $tables = [
-        //     // ---------------- lookup ----------------
-        //     'lookup_icode' => [
-        //         ['name' => 'ems', 'type' => 'VARCHAR(1) NULL', 'after' => 'kidney'],
-        //     ],
-        //     'lookup_ward' => [
-        //         ['name' => 'ward_normal', 'type' => 'VARCHAR(1) NULL', 'after' => 'ward_name'],
-        //         ['name' => 'bed_qty', 'type' => 'INT UNSIGNED NULL', 'after' => 'ward_homeward'],
-        //     ],            
-        // ];
+        $productivity_tables = [
+            'productivity_ari', 'productivity_ckd', 'productivity_er',
+            'productivity_hd', 'productivity_ipd', 'productivity_lr',
+            'productivity_ncd', 'productivity_opd', 'productivity_vip'
+        ];
+
+        foreach ($productivity_tables as $ptable) {
+            if (Schema::hasTable($ptable)) {
+                if (!Schema::hasColumn($ptable, 'active')) {
+                    Schema::table($ptable, function (Blueprint $table) {
+                        $table->string('active', 1)->default('Y')->after('id');
+                    });
+                }
+            }
+        }
 
         try {
             // Create Productivity CKD Table if not exists

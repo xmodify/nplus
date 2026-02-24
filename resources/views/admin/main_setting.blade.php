@@ -92,8 +92,20 @@
                                             <tr>
                                                 <td>{{ $setting->name_th }}</td>
                                                 <td>
-                                                    <input type="text" class="form-control"
-                                                        name="{{ $setting->name }}" value="{{ $setting->value }}">
+                                                    @if (str_ends_with($setting->name, '_active'))
+                                                        <select class="form-select border-primary"
+                                                            name="{{ $setting->name }}">
+                                                            <option value="Y"
+                                                                {{ $setting->value == 'Y' ? 'selected' : '' }}>เปิดใช้งาน
+                                                                (Y)</option>
+                                                            <option value="N"
+                                                                {{ $setting->value == 'N' ? 'selected' : '' }}>ปิดใช้งาน (N)
+                                                            </option>
+                                                        </select>
+                                                    @else
+                                                        <input type="text" class="form-control"
+                                                            name="{{ $setting->name }}" value="{{ $setting->value }}">
+                                                    @endif
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -117,8 +129,20 @@
                                             <tr>
                                                 <td>{{ $setting->name_th }}</td>
                                                 <td>
-                                                    <input type="text" class="form-control"
-                                                        name="{{ $setting->name }}" value="{{ $setting->value }}">
+                                                    @if (str_ends_with($setting->name, '_active'))
+                                                        <select class="form-select border-primary"
+                                                            name="{{ $setting->name }}">
+                                                            <option value="Y"
+                                                                {{ $setting->value == 'Y' ? 'selected' : '' }}>เปิดใช้งาน
+                                                                (Y)</option>
+                                                            <option value="N"
+                                                                {{ $setting->value == 'N' ? 'selected' : '' }}>ปิดใช้งาน
+                                                                (N)</option>
+                                                        </select>
+                                                    @else
+                                                        <input type="text" class="form-control"
+                                                            name="{{ $setting->name }}" value="{{ $setting->value }}">
+                                                    @endif
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -142,8 +166,20 @@
                                             <tr>
                                                 <td>{{ $setting->name_th }}</td>
                                                 <td>
-                                                    <input type="text" class="form-control"
-                                                        name="{{ $setting->name }}" value="{{ $setting->value }}">
+                                                    @if (str_ends_with($setting->name, '_active'))
+                                                        <select class="form-select border-primary"
+                                                            name="{{ $setting->name }}">
+                                                            <option value="Y"
+                                                                {{ $setting->value == 'Y' ? 'selected' : '' }}>เปิดใช้งาน
+                                                                (Y)</option>
+                                                            <option value="N"
+                                                                {{ $setting->value == 'N' ? 'selected' : '' }}>ปิดใช้งาน
+                                                                (N)</option>
+                                                        </select>
+                                                    @else
+                                                        <input type="text" class="form-control"
+                                                            name="{{ $setting->name }}" value="{{ $setting->value }}">
+                                                    @endif
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -167,8 +203,20 @@
                                             <tr>
                                                 <td>{{ $setting->name_th }}</td>
                                                 <td>
-                                                    <input type="text" class="form-control"
-                                                        name="{{ $setting->name }}" value="{{ $setting->value }}">
+                                                    @if (str_ends_with($setting->name, '_active'))
+                                                        <select class="form-select border-primary"
+                                                            name="{{ $setting->name }}">
+                                                            <option value="Y"
+                                                                {{ $setting->value == 'Y' ? 'selected' : '' }}>เปิดใช้งาน
+                                                                (Y)</option>
+                                                            <option value="N"
+                                                                {{ $setting->value == 'N' ? 'selected' : '' }}>ปิดใช้งาน
+                                                                (N)</option>
+                                                        </select>
+                                                    @else
+                                                        <input type="text" class="form-control"
+                                                            name="{{ $setting->name }}" value="{{ $setting->value }}">
+                                                    @endif
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -192,8 +240,20 @@
                                             <tr>
                                                 <td>{{ $setting->name_th }}</td>
                                                 <td>
-                                                    <input type="text" class="form-control"
-                                                        name="{{ $setting->name }}" value="{{ $setting->value }}">
+                                                    @if (str_ends_with($setting->name, '_active'))
+                                                        <select class="form-select border-primary"
+                                                            name="{{ $setting->name }}">
+                                                            <option value="Y"
+                                                                {{ $setting->value == 'Y' ? 'selected' : '' }}>เปิดใช้งาน
+                                                                (Y)</option>
+                                                            <option value="N"
+                                                                {{ $setting->value == 'N' ? 'selected' : '' }}>ปิดใช้งาน
+                                                                (N)</option>
+                                                        </select>
+                                                    @else
+                                                        <input type="text" class="form-control"
+                                                            name="{{ $setting->name }}" value="{{ $setting->value }}">
+                                                    @endif
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -217,8 +277,20 @@
                                             <tr>
                                                 <td>{{ $setting->name_th }}</td>
                                                 <td>
-                                                    <input type="text" class="form-control"
-                                                        name="{{ $setting->name }}" value="{{ $setting->value }}">
+                                                    @if (str_ends_with($setting->name, '_active'))
+                                                        <select class="form-select border-primary"
+                                                            name="{{ $setting->name }}">
+                                                            <option value="Y"
+                                                                {{ $setting->value == 'Y' ? 'selected' : '' }}>เปิดใช้งาน
+                                                                (Y)</option>
+                                                            <option value="N"
+                                                                {{ $setting->value == 'N' ? 'selected' : '' }}>ปิดใช้งาน
+                                                                (N)</option>
+                                                        </select>
+                                                    @else
+                                                        <input type="text" class="form-control"
+                                                            name="{{ $setting->name }}" value="{{ $setting->value }}">
+                                                    @endif
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -242,8 +314,20 @@
                                             <tr>
                                                 <td>{{ $setting->name_th }}</td>
                                                 <td>
-                                                    <input type="text" class="form-control"
-                                                        name="{{ $setting->name }}" value="{{ $setting->value }}">
+                                                    @if (str_ends_with($setting->name, '_active'))
+                                                        <select class="form-select border-primary"
+                                                            name="{{ $setting->name }}">
+                                                            <option value="Y"
+                                                                {{ $setting->value == 'Y' ? 'selected' : '' }}>เปิดใช้งาน
+                                                                (Y)</option>
+                                                            <option value="N"
+                                                                {{ $setting->value == 'N' ? 'selected' : '' }}>ปิดใช้งาน
+                                                                (N)</option>
+                                                        </select>
+                                                    @else
+                                                        <input type="text" class="form-control"
+                                                            name="{{ $setting->name }}" value="{{ $setting->value }}">
+                                                    @endif
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -267,8 +351,20 @@
                                             <tr>
                                                 <td>{{ $setting->name_th }}</td>
                                                 <td>
-                                                    <input type="text" class="form-control"
-                                                        name="{{ $setting->name }}" value="{{ $setting->value }}">
+                                                    @if (str_ends_with($setting->name, '_active'))
+                                                        <select class="form-select border-primary"
+                                                            name="{{ $setting->name }}">
+                                                            <option value="Y"
+                                                                {{ $setting->value == 'Y' ? 'selected' : '' }}>เปิดใช้งาน
+                                                                (Y)</option>
+                                                            <option value="N"
+                                                                {{ $setting->value == 'N' ? 'selected' : '' }}>ปิดใช้งาน
+                                                                (N)</option>
+                                                        </select>
+                                                    @else
+                                                        <input type="text" class="form-control"
+                                                            name="{{ $setting->name }}" value="{{ $setting->value }}">
+                                                    @endif
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -292,8 +388,20 @@
                                             <tr>
                                                 <td>{{ $setting->name_th }}</td>
                                                 <td>
-                                                    <input type="text" class="form-control"
-                                                        name="{{ $setting->name }}" value="{{ $setting->value }}">
+                                                    @if (str_ends_with($setting->name, '_active'))
+                                                        <select class="form-select border-primary"
+                                                            name="{{ $setting->name }}">
+                                                            <option value="Y"
+                                                                {{ $setting->value == 'Y' ? 'selected' : '' }}>เปิดใช้งาน
+                                                                (Y)</option>
+                                                            <option value="N"
+                                                                {{ $setting->value == 'N' ? 'selected' : '' }}>ปิดใช้งาน
+                                                                (N)</option>
+                                                        </select>
+                                                    @else
+                                                        <input type="text" class="form-control"
+                                                            name="{{ $setting->name }}" value="{{ $setting->value }}">
+                                                    @endif
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -317,8 +425,20 @@
                                             <tr>
                                                 <td>{{ $setting->name_th }}</td>
                                                 <td>
-                                                    <input type="text" class="form-control"
-                                                        name="{{ $setting->name }}" value="{{ $setting->value }}">
+                                                    @if (str_ends_with($setting->name, '_active'))
+                                                        <select class="form-select border-primary"
+                                                            name="{{ $setting->name }}">
+                                                            <option value="Y"
+                                                                {{ $setting->value == 'Y' ? 'selected' : '' }}>เปิดใช้งาน
+                                                                (Y)</option>
+                                                            <option value="N"
+                                                                {{ $setting->value == 'N' ? 'selected' : '' }}>ปิดใช้งาน
+                                                                (N)</option>
+                                                        </select>
+                                                    @else
+                                                        <input type="text" class="form-control"
+                                                            name="{{ $setting->name }}" value="{{ $setting->value }}">
+                                                    @endif
                                                 </td>
                                             </tr>
                                         @endforeach

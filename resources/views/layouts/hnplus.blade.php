@@ -120,6 +120,7 @@
                     <!-- LEFT (ตามที่กำหนดมาเท่านั้น) -->
                     <ul class="navbar-nav me-auto">
                         @auth
+                            @php $app_settings = \App\Models\MainSetting::pluck('value', 'name')->toArray(); @endphp
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle text-white nav-link-premium" href="#"
                                     data-bs-toggle="dropdown">
@@ -127,53 +128,72 @@
                                 </a>
 
                                 <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0">
-                                    <li>
-                                        <a class="dropdown-item py-2" href="{{ url('hnplus/product/er_report') }}">
-                                            <i class="bi bi-hospital text-danger me-2"></i>งานอุบัติเหตุ-ฉุกเฉิน ER
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item py-2" href="{{ url('hnplus/product/ipd_report') }}">
-                                            <i class="fa-solid fa-bed text-success me-2 ms-1"></i>งานผู้ป่วยในสามัญ IPD
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item py-2" href="{{ url('hnplus/product/vip_report') }}">
-                                            <i class="fa-solid fa-couch text-warning me-2 ms-1"></i>งานผู้ป่วยห้องพิเศษ VIP
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item py-2" href="{{ url('hnplus/product/lr_report') }}">
-                                            <i
-                                                class="fa-solid fa-person-breastfeeding text-danger me-2 ms-1"></i>งานห้องคลอด
-                                            LR
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item py-2" href="{{ url('hnplus/product/opd_report') }}">
-                                            <i class="bi bi-person-lines-fill text-primary me-2"></i>งานผู้ป่วยนอก OPD
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item py-2" href="{{ url('hnplus/product/ncd_report') }}">
-                                            <i class="bi bi-heart-pulse text-info me-2"></i>งานผู้ป่วย NCD
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item py-2" href="{{ url('hnplus/product/ari_report') }}">
-                                            <i class="bi bi-thermometer-half text-warning me-2"></i>งานผู้ป่วย ARI
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item py-2" href="{{ url('hnplus/product/ckd_report') }}">
-                                            <i class="bi bi-heart-pulse text-dark me-2"></i>งานผู้ป่วย CKD
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item py-2" href="{{ url('hnplus/product/hd_report') }}">
-                                            <i class="bi bi-droplet-fill text-primary me-2"></i>งานฟอกเลือดไตเทียม HD
-                                        </a>
-                                    </li>
+                                    @if (isset($app_settings['er_active']) && $app_settings['er_active'] == 'Y')
+                                        <li>
+                                            <a class="dropdown-item py-2" href="{{ url('hnplus/product/er_report') }}">
+                                                <i class="bi bi-hospital text-danger me-2"></i>งานอุบัติเหตุ-ฉุกเฉิน ER
+                                            </a>
+                                        </li>
+                                    @endif
+                                    @if (isset($app_settings['ipd_active']) && $app_settings['ipd_active'] == 'Y')
+                                        <li>
+                                            <a class="dropdown-item py-2" href="{{ url('hnplus/product/ipd_report') }}">
+                                                <i class="fa-solid fa-bed text-success me-2 ms-1"></i>งานผู้ป่วยในสามัญ IPD
+                                            </a>
+                                        </li>
+                                    @endif
+                                    @if (isset($app_settings['vip_active']) && $app_settings['vip_active'] == 'Y')
+                                        <li>
+                                            <a class="dropdown-item py-2" href="{{ url('hnplus/product/vip_report') }}">
+                                                <i class="fa-solid fa-couch text-warning me-2 ms-1"></i>งานผู้ป่วยห้องพิเศษ
+                                                VIP
+                                            </a>
+                                        </li>
+                                    @endif
+                                    @if (isset($app_settings['lr_active']) && $app_settings['lr_active'] == 'Y')
+                                        <li>
+                                            <a class="dropdown-item py-2" href="{{ url('hnplus/product/lr_report') }}">
+                                                <i
+                                                    class="fa-solid fa-person-breastfeeding text-danger me-2 ms-1"></i>งานห้องคลอด
+                                                LR
+                                            </a>
+                                        </li>
+                                    @endif
+                                    @if (isset($app_settings['opd_active']) && $app_settings['opd_active'] == 'Y')
+                                        <li>
+                                            <a class="dropdown-item py-2" href="{{ url('hnplus/product/opd_report') }}">
+                                                <i class="bi bi-person-lines-fill text-primary me-2"></i>งานผู้ป่วยนอก OPD
+                                            </a>
+                                        </li>
+                                    @endif
+                                    @if (isset($app_settings['ncd_active']) && $app_settings['ncd_active'] == 'Y')
+                                        <li>
+                                            <a class="dropdown-item py-2" href="{{ url('hnplus/product/ncd_report') }}">
+                                                <i class="bi bi-heart-pulse text-info me-2"></i>งานผู้ป่วย NCD
+                                            </a>
+                                        </li>
+                                    @endif
+                                    @if (isset($app_settings['ari_active']) && $app_settings['ari_active'] == 'Y')
+                                        <li>
+                                            <a class="dropdown-item py-2" href="{{ url('hnplus/product/ari_report') }}">
+                                                <i class="bi bi-thermometer-half text-warning me-2"></i>งานผู้ป่วย ARI
+                                            </a>
+                                        </li>
+                                    @endif
+                                    @if (isset($app_settings['ckd_active']) && $app_settings['ckd_active'] == 'Y')
+                                        <li>
+                                            <a class="dropdown-item py-2" href="{{ url('hnplus/product/ckd_report') }}">
+                                                <i class="bi bi-heart-pulse text-dark me-2"></i>งานผู้ป่วย CKD
+                                            </a>
+                                        </li>
+                                    @endif
+                                    @if (isset($app_settings['hd_active']) && $app_settings['hd_active'] == 'Y')
+                                        <li>
+                                            <a class="dropdown-item py-2" href="{{ url('hnplus/product/hd_report') }}">
+                                                <i class="bi bi-droplet-fill text-primary me-2"></i>งานฟอกเลือดไตเทียม HD
+                                            </a>
+                                        </li>
+                                    @endif
                                 </ul>
                             </li>
                         @endauth
