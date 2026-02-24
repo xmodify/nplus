@@ -27,8 +27,8 @@ class ProductLRController extends Controller
         $lr_working_hours = MainSetting::where('name', 'lr_working_hours')->value('value') ?? 7;
 
         $product_summary = DB::select('
-            SELECT CASE WHEN shift_time = "‡«√‡™È“" THEN "1" WHEN shift_time = "‡«√∫Ë“¬" THEN "2"
-            WHEN shift_time = "‡«√¥÷°" THEN "3" END AS "id",shift_time,COUNT(shift_time) AS shift_time_sum,
+            SELECT CASE WHEN shift_time = "‡πÄ‡∏ß‡∏£‡πÄ‡∏ä‡πâ‡∏≤" THEN "1" WHEN shift_time = "‡πÄ‡∏ß‡∏£‡∏ö‡πà‡∏≤‡∏¢" THEN "2"
+            WHEN shift_time = "‡πÄ‡∏ß‡∏£‡∏î‡∏∂‡∏Å" THEN "3" END AS "id",shift_time,COUNT(shift_time) AS shift_time_sum,
             SUM(patient_all) AS patient_all,
             SUM(patient_convalescent) AS patient_convalescent,
             SUM(patient_moderate) AS patient_moderate,
@@ -53,9 +53,9 @@ class ProductLRController extends Controller
         $afternoon = [];
         foreach ($grouped as $date => $rows) {
             $report_date[] = DateThai($date);
-            $night[] = optional($rows->firstWhere('shift_time', '‡«√¥÷°'))->productivity ?? 0;
-            $morning[] = optional($rows->firstWhere('shift_time', '‡«√‡™È“'))->productivity ?? 0;
-            $afternoon[] = optional($rows->firstWhere('shift_time', '‡«√∫Ë“¬'))->productivity ?? 0;
+            $night[] = optional($rows->firstWhere('shift_time', 'üåô‡πÄ‡∏ß‡∏£‡∏î‡∏∂‡∏Å'))->productivity ?? 0;
+            $morning[] = optional($rows->firstWhere('shift_time', '‡πÄ‡∏ß‡∏£‡πÄ‡∏ä‡πâ‡∏≤'))->productivity ?? 0;
+            $afternoon[] = optional($rows->firstWhere('shift_time', '‡πÄ‡∏ß‡∏£‡∏ö‡πà‡∏≤‡∏¢'))->productivity ?? 0;
         }
 
         $del_product = Auth::check() && Auth::user()->del_product === 'Y';
@@ -76,27 +76,27 @@ class ProductLRController extends Controller
     public function lr_product_delete($id)
     {
         Productivity_lr::find($id)->delete();
-        return redirect()->route('hnplus.product.lr_report')->with('danger', '≈∫¢ÈÕ¡Ÿ≈‡√’¬∫√ÈÕ¬·≈È«');
+        return redirect()->route('hnplus.product.lr_report')->with('danger', '‡∏•‡∏ö‡∏Ç‡πâ‡∏≠‡∏°‡∏π‡∏•‡πÄ‡∏£‡∏µ‡∏¢‡∏ö‡∏£‡πâ‡∏≠‡∏¢‡πÅ‡∏•‡πâ‡∏ß');
     }
 
     // Notify Functions
     public function lr_night_notify()
     {
         $lr_ward = MainSetting::where('name', 'lr_ward')->value('value') ?? '08';
-        return $this->notify('??‡«√¥÷°', '00:00:01', '07:59:59', $lr_ward, 'lr_night', '?? ß“πÀÈÕß§≈Õ¥ LR', 'lr_notifytelegram');
+        return $this->notify('üåô‡πÄ‡∏ß‡∏£‡∏î‡∏∂‡∏Å', '00:00:01', '07:59:59', $lr_ward, 'lr_night', 'üõèÔ∏è ‡∏á‡∏≤‡∏ô‡∏´‡πâ‡∏≠‡∏á‡∏Ñ‡∏•‡∏≠‡∏î LR', 'lr_notifytelegram');
     }
 
     public function lr_morning_notify()
     {
         $lr_ward = MainSetting::where('name', 'lr_ward')->value('value') ?? '08';
-        return $this->notify('??‡«√‡™È“', '08:00:00', '15:59:59', $lr_ward, 'lr_morning', '?? ß“πÀÈÕß§≈Õ¥ LR', 'lr_notifytelegram');
+        return $this->notify('‡πÄ‡∏ß‡∏£‡πÄ‡∏ä‡πâ‡∏≤', '08:00:00', '15:59:59', $lr_ward, 'lr_morning', 'üõèÔ∏è ‡∏á‡∏≤‡∏ô‡∏´‡πâ‡∏≠‡∏á‡∏Ñ‡∏•‡∏≠‡∏î LR', 'lr_notifytelegram');
     }
 
     public function lr_afternoon_notify()
     {
         $lr_ward = MainSetting::where('name', 'lr_ward')->value('value') ?? '08';
         $target_date = date('Y-m-d');
-        return $this->notify('??‡«√∫Ë“¬', '16:00:00', '23:59:59', $lr_ward, 'lr_afternoon', '?? ß“πÀÈÕß§≈Õ¥ LR', 'lr_notifytelegram', $target_date);
+        return $this->notify('‡πÄ‡∏ß‡∏£‡∏ö‡πà‡∏≤‡∏¢', '16:00:00', '23:59:59', $lr_ward, 'lr_afternoon', 'üõèÔ∏è ‡∏á‡∏≤‡∏ô‡∏´‡πâ‡∏≠‡∏á‡∏Ñ‡∏•‡∏≠‡∏î LR', 'lr_notifytelegram', $target_date);
     }
 
     private function notify($shift_name, $start_time, $end_time, $wards, $route, $dep_name, $telegram_key, $date = null)
@@ -126,7 +126,7 @@ class ProductLRController extends Controller
 
         $row = $notify[0];
         $url = url("hnplus/product/$route");
-        $message = "$dep_name\n«—π∑’Ë " . DateThai($date) . "\n‡«≈“ $start_time-$end_time $shift_name\nºŸÈªË«¬„π‡«√ {$row->patient_all} √“¬\n -Convalescent {$row->convalescent}\n -Moderate {$row->Moderate}\n -Semi critical {$row->Semi_critical}\n -Critical {$row->Critical}\n -‰¡Ë√–∫ÿ§«“¡√ÿπ·√ß {$row->severe_type_null}\n\n∫—π∑÷° Productivity\n$url\n";
+        $message = "$dep_name\n" . "‡∏ß‡∏±‡∏ô‡∏ó‡∏µ‡πà " . DateThai($date) . "\n" . "‡πÄ‡∏ß‡∏•‡∏≤ $start_time-$end_time $shift_name\n" . "‡∏ú‡∏π‡πâ‡∏õ‡πà‡∏ß‡∏¢‡πÉ‡∏ô‡πÄ‡∏ß‡∏£ {$row->patient_all} ‡∏£‡∏≤‡∏¢\n" . " -Convalescent {$row->convalescent} ‡∏£‡∏≤‡∏¢\n" . " -Moderate {$row->Moderate} ‡∏£‡∏≤‡∏¢\n" . " -Semi critical {$row->Semi_critical} ‡∏£‡∏≤‡∏¢\n" . " -Critical {$row->Critical} ‡∏£‡∏≤‡∏¢\n" . " -‡πÑ‡∏°‡πà‡∏£‡∏∞‡∏ö‡∏∏‡∏Ñ‡∏ß‡∏≤‡∏°‡∏£‡∏∏‡∏ô‡πÅ‡∏£‡∏á {$row->severe_type_null} ‡∏£‡∏≤‡∏¢\n\n" . "‡∏ö‡∏±‡∏ô‡∏ó‡∏∂‡∏Å Productivity \n" . "$url\n";
 
         $token = MainSetting::where('name', 'telegram_token')->value('value');
         $chat_ids = explode(',', MainSetting::where('name', $telegram_key)->value('value'));
@@ -170,9 +170,9 @@ class ProductLRController extends Controller
     }
 
     // Save Functions
-    public function lr_night_save(Request $request) { return $this->save_shift($request, '??‡«√¥÷°', '00.00ñ08.00 π.'); }
-    public function lr_morning_save(Request $request) { return $this->save_shift($request, '??‡«√‡™È“', '08.00ñ16.00 π.'); }
-    public function lr_afternoon_save(Request $request) { return $this->save_shift($request, '??‡«√∫Ë“¬', '16.00ñ24.00 π.'); }
+    public function lr_night_save(Request $request) { return $this->save_shift($request, 'üåô‡πÄ‡∏ß‡∏£‡∏î‡∏∂‡∏Å', '00.00-08.00 ‡∏ô.'); }
+    public function lr_morning_save(Request $request) { return $this->save_shift($request, '‡πÄ‡∏ß‡∏£‡πÄ‡∏ä‡πâ‡∏≤', '08.00-16.00 ‡∏ô.'); }
+    public function lr_afternoon_save(Request $request) { return $this->save_shift($request, '‡πÄ‡∏ß‡∏£‡∏ö‡πà‡∏≤‡∏¢', '16.00-24.00 ‡∏ô.'); }
 
     private function save_shift(Request $request, $shift_name, $time_range)
     {
@@ -204,13 +204,13 @@ class ProductLRController extends Controller
             ]
         );
 
-        $msg = "?? ß“πÀÈÕß§≈Õ¥ LR\n«—π∑’Ë " . DateThai(date('Y-m-d')) . "\n‡«≈“ $time_range $shift_name\nºŸÈªË«¬„π‡«√: $p_all √“¬\n - Convalescent: {$request->convalescent}\n - Moderate: {$request->Moderate}\n - Semi critical: {$request->Semi_critical}\n - Critical: {$request->Critical}\n????? Oncall: {$request->nurse_oncall}\n????? ‡ √‘¡: {$request->nurse_partime}\n????? ª°µ‘: {$request->nurse_fulltime}\n?? Productivity: " . number_format($prod, 2) . "\nºŸÈ∫—π∑÷°: {$request->recorder}";
+        $msg = "üõèÔ∏è ‡∏á‡∏≤‡∏ô‡∏´‡πâ‡∏≠‡∏á‡∏Ñ‡∏•‡∏≠‡∏î LR\n" . "‡∏ß‡∏±‡∏ô‡∏ó‡∏µ‡πà " . DateThai(date('Y-m-d')) . "\n" . "‡πÄ‡∏ß‡∏•‡∏≤ $time_range $shift_name\n" . "‡∏ú‡∏π‡πâ‡∏õ‡πà‡∏ß‡∏¢‡πÉ‡∏ô‡πÄ‡∏ß‡∏£: $p_all ‡∏£‡∏≤‡∏¢\n" . " - Convalescent: {$request->convalescent} ‡∏£‡∏≤‡∏¢\n" . " - Moderate: {$request->Moderate} ‡∏£‡∏≤‡∏¢\n" . " - Semi critical: {$request->Semi_critical} ‡∏£‡∏≤‡∏¢\n" . " - Critical: {$request->Critical} ‡∏£‡∏≤‡∏¢\n" . "‡∏û‡∏¢‡∏≤‡∏ö‡∏≤‡∏• Oncall: {$request->nurse_oncall}\n" . "‡∏û‡∏¢‡∏≤‡∏ö‡∏≤‡∏• Part time: {$request->nurse_partime}\n" . "‡∏û‡∏¢‡∏≤‡∏ö‡∏≤‡∏• Full time: {$request->nurse_fulltime}\n" . "‡∏Ñ‡πà‡∏≤ Productivity: " . number_format($prod, 2) . "\n" . "‡∏ú‡∏π‡πâ‡∏ö‡∏±‡∏ô‡∏ó‡∏∂‡∏Å: {$request->recorder}";
 
         $token = MainSetting::where('name', 'telegram_token')->value('value');
         $chat_ids = explode(',', MainSetting::where('name', 'lr_notifytelegram_save')->value('value'));
         foreach ($chat_ids as $chat_id) {
             Http::asForm()->post("https://api.telegram.org/bot$token/sendMessage", ['chat_id' => trim($chat_id), 'text' => $msg]);
         }
-        return redirect()->back()->with('success', "?  Ëß¢ÈÕ¡Ÿ≈$shift_name‡√’¬∫√ÈÕ¬·≈È«");
+        return redirect()->back()->with('success', "‡∏ö‡∏±‡∏ô‡∏ó‡∏∂‡∏Å‡∏Ç‡πâ‡∏≠‡∏°‡∏π‡∏• $shift_name ‡πÄ‡∏£‡∏µ‡∏¢‡∏ö‡∏£‡πâ‡∏≠‡∏¢‡πÅ‡∏•‡πâ‡∏ß");
     }
 }

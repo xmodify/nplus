@@ -27,8 +27,8 @@ class ProductVIPController extends Controller
         $vip_working_hours = MainSetting::where('name', 'vip_working_hours')->value('value') ?? 7;
 
         $product_summary = DB::select('
-            SELECT CASE WHEN shift_time = "������" THEN "1" WHEN shift_time = "��ú���" THEN "2"
-            WHEN shift_time = "��ô֡" THEN "3" END AS "id",shift_time,COUNT(shift_time) AS shift_time_sum,
+            SELECT CASE WHEN shift_time = "เวรเช้า" THEN "1" WHEN shift_time = "เวรบ่าย" THEN "2"
+            WHEN shift_time = "เวรดึก" THEN "3" END AS "id",shift_time,COUNT(shift_time) AS shift_time_sum,
             SUM(patient_all) AS patient_all,
             SUM(patient_convalescent) AS patient_convalescent,
             SUM(patient_moderate) AS patient_moderate,
@@ -53,9 +53,9 @@ class ProductVIPController extends Controller
         $afternoon = [];
         foreach ($grouped as $date => $rows) {
             $report_date[] = DateThai($date);
-            $night[] = optional($rows->firstWhere('shift_time', '��ô֡'))->productivity ?? 0;
-            $morning[] = optional($rows->firstWhere('shift_time', '������'))->productivity ?? 0;
-            $afternoon[] = optional($rows->firstWhere('shift_time', '��ú���'))->productivity ?? 0;
+            $night[] = optional($rows->firstWhere('shift_time', '🌙เวรดึก'))->productivity ?? 0;
+            $morning[] = optional($rows->firstWhere('shift_time', 'เวรเช้า'))->productivity ?? 0;
+            $afternoon[] = optional($rows->firstWhere('shift_time', 'เวรบ่าย'))->productivity ?? 0;
         }
 
         $del_product = Auth::check() && Auth::user()->del_product === 'Y';
@@ -76,27 +76,27 @@ class ProductVIPController extends Controller
     public function vip_product_delete($id)
     {
         Productivity_vip::find($id)->delete();
-        return redirect()->route('hnplus.product.vip_report')->with('danger', 'ź���������º��������');
+        return redirect()->route('hnplus.product.vip_report')->with('danger', 'ลบข้อมูลเรียบร้อยแล้ว');
     }
 
     // Notify Functions
     public function vip_night_notify()
     {
-        $vip_ward = MainSetting::where('name', 'vip_ward')->value('value') ?? '12';
-        return $this->notify('??��ô֡', '00:00:01', '07:59:59', $vip_ward, 'vip_night', '??? �ҹ��ͧ����� VIP', 'vip_notifytelegram');
+        $vip_ward = MainSetting::where('name', 'vip_ward')->value('value') ?? '08';
+        return $this->notify('🌙เวรดึก', '00:00:01', '07:59:59', $vip_ward, 'vip_night', '🛏️ งานห้องผู้ป่วยพิเศษ VIP', 'vip_notifytelegram');
     }
 
     public function vip_morning_notify()
     {
-        $vip_ward = MainSetting::where('name', 'vip_ward')->value('value') ?? '12';
-        return $this->notify('??������', '08:00:00', '15:59:59', $vip_ward, 'vip_morning', '??? �ҹ��ͧ����� VIP', 'vip_notifytelegram');
+        $vip_ward = MainSetting::where('name', 'vip_ward')->value('value') ?? '08';
+        return $this->notify('เวรเช้า', '08:00:00', '15:59:59', $vip_ward, 'vip_morning', '🛏️ งานห้องผู้ป่วยพิเศษ VIP', 'vip_notifytelegram');
     }
 
     public function vip_afternoon_notify()
     {
-        $vip_ward = MainSetting::where('name', 'vip_ward')->value('value') ?? '12';
+        $vip_ward = MainSetting::where('name', 'vip_ward')->value('value') ?? '08';
         $target_date = date('Y-m-d');
-        return $this->notify('??��ú���', '16:00:00', '23:59:59', $vip_ward, 'vip_afternoon', '??? �ҹ��ͧ����� VIP', 'vip_notifytelegram', $target_date);
+        return $this->notify('เวรบ่าย', '16:00:00', '23:59:59', $vip_ward, 'vip_afternoon', '🛏️ งานห้องผู้ป่วยพิเศษ VIP', 'vip_notifytelegram', $target_date);
     }
 
     private function notify($shift_name, $start_time, $end_time, $wards, $route, $dep_name, $telegram_key, $date = null)
@@ -126,7 +126,7 @@ class ProductVIPController extends Controller
 
         $row = $notify[0];
         $url = url("hnplus/product/$route");
-        $message = "$dep_name\n�ѹ��� " . DateThai($date) . "\n���� $start_time-$end_time $shift_name\n���������� {$row->patient_all} ���\n -Convalescent {$row->convalescent}\n -Moderate {$row->Moderate}\n -Semi critical {$row->Semi_critical}\n -Critical {$row->Critical}\n -����кؤ����ع�ç {$row->severe_type_null}\n\n�ѹ�֡ Productivity\n$url\n";
+        $message = "$dep_name\n" . "วันที่ " . DateThai($date) . "\n" . "เวลา $start_time-$end_time $shift_name\n" . "ผู้ป่วยในเวร {$row->patient_all} ราย\n" . " -Convalescent {$row->convalescent} ราย\n" . " -Moderate {$row->Moderate} ราย\n" . " -Semi critical {$row->Semi_critical} ราย\n" . " -Critical {$row->Critical} ราย\n" . " -ไม่ระบุความรุนแรง {$row->severe_type_null} ราย\n\n" . "บันทึก Productivity \n" . "$url\n";
 
         $token = MainSetting::where('name', 'telegram_token')->value('value');
         $chat_ids = explode(',', MainSetting::where('name', $telegram_key)->value('value'));
@@ -170,9 +170,9 @@ class ProductVIPController extends Controller
     }
 
     // Save Functions
-    public function vip_night_save(Request $request) { return $this->save_shift($request, '??��ô֡', '00.00�08.00 �.'); }
-    public function vip_morning_save(Request $request) { return $this->save_shift($request, '??������', '08.00�16.00 �.'); }
-    public function vip_afternoon_save(Request $request) { return $this->save_shift($request, '??��ú���', '16.00�24.00 �.'); }
+    public function vip_night_save(Request $request) { return $this->save_shift($request, '🌙เวรดึก', '00.00-08.00 น.'); }
+    public function vip_morning_save(Request $request) { return $this->save_shift($request, 'เวรเช้า', '08.00-16.00 น.'); }
+    public function vip_afternoon_save(Request $request) { return $this->save_shift($request, 'เวรบ่าย', '16.00-24.00 น.'); }
 
     private function save_shift(Request $request, $shift_name, $time_range)
     {
@@ -204,13 +204,13 @@ class ProductVIPController extends Controller
             ]
         );
 
-        $msg = "??? �ҹ��ͧ����� VIP\n�ѹ��� " . DateThai(date('Y-m-d')) . "\n���� $time_range $shift_name\n����������: $p_all ���\n - Convalescent: {$request->convalescent}\n - Moderate: {$request->Moderate}\n - Semi critical: {$request->Semi_critical}\n - Critical: {$request->Critical}\n????? Oncall: {$request->nurse_oncall}\n????? �����: {$request->nurse_partime}\n????? ����: {$request->nurse_fulltime}\n?? Productivity: " . number_format($prod, 2) . "\n���ѹ�֡: {$request->recorder}";
+        $msg = "🛏️ งานห้องผู้ป่วยพิเศษ VIP\n" . "วันที่ " . DateThai(date('Y-m-d')) . "\n" . "เวลา $time_range $shift_name\n" . "ผู้ป่วยในเวร: $p_all ราย\n" . " - Convalescent: {$request->convalescent} ราย\n" . " - Moderate: {$request->Moderate} ราย\n" . " - Semi critical: {$request->Semi_critical} ราย\n" . " - Critical: {$request->Critical} ราย\n" . "พยาบาล Oncall: {$request->nurse_oncall}\n" . "พยาบาล Part time: {$request->nurse_partime}\n" . "พยาบาล Full time: {$request->nurse_fulltime}\n" . "ค่า Productivity: " . number_format($prod, 2) . "\n" . "ผู้บันทึก: {$request->recorder}";
 
         $token = MainSetting::where('name', 'telegram_token')->value('value');
         $chat_ids = explode(',', MainSetting::where('name', 'vip_notifytelegram_save')->value('value'));
         foreach ($chat_ids as $chat_id) {
             Http::asForm()->post("https://api.telegram.org/bot$token/sendMessage", ['chat_id' => trim($chat_id), 'text' => $msg]);
         }
-        return redirect()->back()->with('success', "? �觢�����$shift_name���º��������");
+        return redirect()->back()->with('success', "บันทึกข้อมูล $shift_name เรียบร้อยแล้ว");
     }
 }

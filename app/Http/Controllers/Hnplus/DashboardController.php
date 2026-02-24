@@ -175,7 +175,7 @@ class DashboardController extends Controller
         // 4. VIP Data
         $vip_stats = ['shift' => $shift_name, 'critical' => 0, 'semi_critical' => 0, 'moderate' => 0, 'convalescent' => 0, 'severe_type_null' => 0];
         if ($vip_ward != "''" && $vip_ward != "") {
-            $vip_query = str_replace('$ipd_ward', $vip_ward, $ipd_query);
+            $vip_query = str_replace($ipd_ward, $vip_ward, $ipd_query);
             $vip_result = DB::connection('hosxp')->selectOne($vip_query);
             $vip_stats = [
                 'shift' => $shift_name,
@@ -190,7 +190,7 @@ class DashboardController extends Controller
         // 5. LR Data
         $lr_stats = ['shift' => $shift_name, 'critical' => 0, 'semi_critical' => 0, 'moderate' => 0, 'convalescent' => 0, 'severe_type_null' => 0];
         if ($lr_ward != "''" && $lr_ward != "") {
-            $lr_query = str_replace('$ipd_ward', $lr_ward, $ipd_query);
+            $lr_query = str_replace($ipd_ward, $lr_ward, $ipd_query);
             $lr_result = DB::connection('hosxp')->selectOne($lr_query);
             $lr_stats = [
                 'shift' => $shift_name,
@@ -205,7 +205,7 @@ class DashboardController extends Controller
         // 6. CKD Data
         $ckd_stats = ['shift' => 'เวรเช้า', 'patient_all' => 0];
         if ($ckd_dep != "''" && $ckd_dep != "") {
-            $ckd_query = str_replace('$ncd_dep', $ckd_dep, $ncd_query);
+            $ckd_query = str_replace($ncd_dep, $ckd_dep, $ncd_query);
             $ckd_result = DB::connection('hosxp')->selectOne($ckd_query, [$morning_st, $morning_et]);
             $ckd_stats = [
                 'shift' => 'เวรเช้า',
