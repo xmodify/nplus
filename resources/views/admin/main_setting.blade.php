@@ -46,6 +46,14 @@
                                 type="button" role="tab" aria-controls="ipd" aria-selected="false">IPD</button>
                         </li>
                         <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="vip-tab" data-bs-toggle="tab" data-bs-target="#vip"
+                                type="button" role="tab" aria-controls="vip" aria-selected="false">VIP</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="lr-tab" data-bs-toggle="tab" data-bs-target="#lr" type="button"
+                                role="tab" aria-controls="lr" aria-selected="false">LR</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
                             <button class="nav-link" id="opd-tab" data-bs-toggle="tab" data-bs-target="#opd"
                                 type="button" role="tab" aria-controls="opd" aria-selected="false">OPD</button>
                         </li>
@@ -65,15 +73,6 @@
                             <button class="nav-link" id="hd-tab" data-bs-toggle="tab" data-bs-target="#hd"
                                 type="button" role="tab" aria-controls="hd" aria-selected="false">HD</button>
                         </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="vip-tab" data-bs-toggle="tab" data-bs-target="#vip"
-                                type="button" role="tab" aria-controls="vip" aria-selected="false">VIP</button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="lr-tab" data-bs-toggle="tab" data-bs-target="#lr"
-                                type="button" role="tab" aria-controls="lr" aria-selected="false">LR</button>
-                        </li>
-
                     </ul>
 
                     <div class="tab-content pt-3" id="settingTabsContent">
@@ -84,15 +83,13 @@
                                 <table class="table table-bordered table-striped">
                                     <thead class="table-light">
                                         <tr>
-                                            <th style="width: 5%">ID</th>
-                                            <th style="width: 45%">Name (TH)</th>
+                                            <th style="width: 50%">Name (TH)</th>
                                             <th style="width: 50%">Value</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($general_settings as $setting)
                                             <tr>
-                                                <td>{{ $setting->id }}</td>
                                                 <td>{{ $setting->name_th }}</td>
                                                 <td>
                                                     <input type="text" class="form-control"
@@ -111,15 +108,13 @@
                                 <table class="table table-bordered table-striped">
                                     <thead class="table-light">
                                         <tr>
-                                            <th style="width: 5%">ID</th>
-                                            <th style="width: 45%">Name (TH)</th>
+                                            <th style="width: 50%">Name (TH)</th>
                                             <th style="width: 50%">Value</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($er_settings as $setting)
                                             <tr>
-                                                <td>{{ $setting->id }}</td>
                                                 <td>{{ $setting->name_th }}</td>
                                                 <td>
                                                     <input type="text" class="form-control"
@@ -138,15 +133,13 @@
                                 <table class="table table-bordered table-striped">
                                     <thead class="table-light">
                                         <tr>
-                                            <th style="width: 5%">ID</th>
-                                            <th style="width: 45%">Name (TH)</th>
+                                            <th style="width: 50%">Name (TH)</th>
                                             <th style="width: 50%">Value</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($ipd_settings as $setting)
                                             <tr>
-                                                <td>{{ $setting->id }}</td>
                                                 <td>{{ $setting->name_th }}</td>
                                                 <td>
                                                     <input type="text" class="form-control"
@@ -165,15 +158,13 @@
                                 <table class="table table-bordered table-striped">
                                     <thead class="table-light">
                                         <tr>
-                                            <th style="width: 5%">ID</th>
-                                            <th style="width: 45%">Name (TH)</th>
+                                            <th style="width: 50%">Name (TH)</th>
                                             <th style="width: 50%">Value</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($opd_settings as $setting)
                                             <tr>
-                                                <td>{{ $setting->id }}</td>
                                                 <td>{{ $setting->name_th }}</td>
                                                 <td>
                                                     <input type="text" class="form-control"
@@ -192,15 +183,13 @@
                                 <table class="table table-bordered table-striped">
                                     <thead class="table-light">
                                         <tr>
-                                            <th style="width: 5%">ID</th>
-                                            <th style="width: 45%">Name (TH)</th>
+                                            <th style="width: 50%">Name (TH)</th>
                                             <th style="width: 50%">Value</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($ncd_settings as $setting)
                                             <tr>
-                                                <td>{{ $setting->id }}</td>
                                                 <td>{{ $setting->name_th }}</td>
                                                 <td>
                                                     <input type="text" class="form-control"
@@ -219,15 +208,13 @@
                                 <table class="table table-bordered table-striped">
                                     <thead class="table-light">
                                         <tr>
-                                            <th style="width: 5%">ID</th>
-                                            <th style="width: 45%">Name (TH)</th>
+                                            <th style="width: 50%">Name (TH)</th>
                                             <th style="width: 50%">Value</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($ari_settings as $setting)
                                             <tr>
-                                                <td>{{ $setting->id }}</td>
                                                 <td>{{ $setting->name_th }}</td>
                                                 <td>
                                                     <input type="text" class="form-control"
@@ -246,15 +233,13 @@
                                 <table class="table table-bordered table-striped">
                                     <thead class="table-light">
                                         <tr>
-                                            <th style="width: 5%">ID</th>
-                                            <th style="width: 45%">Name (TH)</th>
+                                            <th style="width: 50%">Name (TH)</th>
                                             <th style="width: 50%">Value</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($ckd_settings as $setting)
                                             <tr>
-                                                <td>{{ $setting->id }}</td>
                                                 <td>{{ $setting->name_th }}</td>
                                                 <td>
                                                     <input type="text" class="form-control"
@@ -273,15 +258,13 @@
                                 <table class="table table-bordered table-striped">
                                     <thead class="table-light">
                                         <tr>
-                                            <th style="width: 5%">ID</th>
-                                            <th style="width: 45%">Name (TH)</th>
+                                            <th style="width: 50%">Name (TH)</th>
                                             <th style="width: 50%">Value</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($hd_settings as $setting)
                                             <tr>
-                                                <td>{{ $setting->id }}</td>
                                                 <td>{{ $setting->name_th }}</td>
                                                 <td>
                                                     <input type="text" class="form-control"
@@ -300,15 +283,13 @@
                                 <table class="table table-bordered table-striped">
                                     <thead class="table-light">
                                         <tr>
-                                            <th style="width: 5%">ID</th>
-                                            <th style="width: 45%">Name (TH)</th>
+                                            <th style="width: 50%">Name (TH)</th>
                                             <th style="width: 50%">Value</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($vip_settings as $setting)
                                             <tr>
-                                                <td>{{ $setting->id }}</td>
                                                 <td>{{ $setting->name_th }}</td>
                                                 <td>
                                                     <input type="text" class="form-control"
@@ -327,15 +308,13 @@
                                 <table class="table table-bordered table-striped">
                                     <thead class="table-light">
                                         <tr>
-                                            <th style="width: 5%">ID</th>
-                                            <th style="width: 45%">Name (TH)</th>
+                                            <th style="width: 50%">Name (TH)</th>
                                             <th style="width: 50%">Value</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($lr_settings as $setting)
                                             <tr>
-                                                <td>{{ $setting->id }}</td>
                                                 <td>{{ $setting->name_th }}</td>
                                                 <td>
                                                     <input type="text" class="form-control"

@@ -10,7 +10,9 @@ class MainSetting extends Model
     use HasFactory;
 
     protected $table = 'main_setting';
-    protected $primaryKey = 'id';
+    protected $primaryKey = 'name';
+    public $incrementing = false;
+    protected $keyType = 'string';
     public $timestamps = false;
 
     protected $fillable = [

@@ -115,84 +115,89 @@ class MainSettingController extends Controller
         Artisan::call('migrate');
 
         //Update Table main_setting-----------------------------------------------------------------------------------------------------------
+        if (Schema::hasColumn('main_setting', 'id')) {
+            DB::statement('ALTER TABLE main_setting MODIFY id INT NOT NULL;');
+            DB::statement('ALTER TABLE main_setting DROP PRIMARY KEY;');
+            DB::statement('ALTER TABLE main_setting DROP COLUMN id;');
+            DB::statement('ALTER TABLE main_setting MODIFY name VARCHAR(100) NOT NULL;');
+            DB::statement('ALTER TABLE main_setting ADD PRIMARY KEY (name);');
+        }
         $main_setting = [
-            ['id' => 1, 'name_th' => 'Telegram Bot Token', 'name' => 'telegram_token', 'value' => ''],
-            ['id' => 2, 'name_th' => 'ER ชม.การทำงานพยาบาล', 'name' => 'er_working_hours', 'value' => '7'],
-            ['id' => 3, 'name_th' => 'ER ชม.ผู้ป่วยวิกฤต(Resuscitation)', 'name' => 'er_patient_type1', 'value' => '3.2'],
-            ['id' => 4, 'name_th' => 'ER ชม.ผู้ป่วยฉุกเฉินสูง(Emergent)', 'name' => 'er_patient_type2', 'value' => '2.5'],
-            ['id' => 5, 'name_th' => 'ER ชม.ผู้ป่วยฉุกเฉิน(Urgent) ', 'name' => 'er_patient_type3', 'value' => '1'],
-            ['id' => 6, 'name_th' => 'ER ชม.ผู้ป่วยฉุกเฉินน้อย(Semi Urgent)', 'name' => 'er_patient_type4', 'value' => '0.5'],
-            ['id' => 7, 'name_th' => 'ER ชม.ผู้ป่วยไม่ฉุกเฉิน(Non Urgent)', 'name' => 'er_patient_type5', 'value' => '0.24'],
-            ['id' => 8, 'name_th' => 'ER NotifyTelegram แจ้งเตือน', 'name' => 'er_notifytelegram', 'value' => ''],
-            ['id' => 9, 'name_th' => 'ER NotifyTelegram บันทึก', 'name' => 'er_notifytelegram_save', 'value' => ''],
-            ['id' => 10, 'name_th' => 'IPD รหัส Ward (HOSxP)', 'name' => 'ipd_ward', 'value' => '01'],
-            ['id' => 11, 'name_th' => 'IPD ชม.การทำงานพยาบาล', 'name' => 'ipd_working_hours', 'value' => '7'],
-            ['id' => 12, 'name_th' => 'IPD ชม.ผู้ป่วยพักฟื้น(Convalescent)', 'name' => 'ipd_patient_type1', 'value' => '1.5'],
-            ['id' => 13, 'name_th' => 'IPD ชม.ผู้ป่วยปานกลาง(Moderate)', 'name' => 'ipd_patient_type2', 'value' => '3.5'],
-            ['id' => 14, 'name_th' => 'IPD ชม.ผู้ป่วยกึ่งหนัก(Semi-critical)', 'name' => 'ipd_patient_type3', 'value' => '5.5'],
-            ['id' => 15, 'name_th' => 'IPD ชม.ผู้ป่วยหนัก(Critical)', 'name' => 'ipd_patient_type4', 'value' => '7.5'],
-            ['id' => 16, 'name_th' => 'IPD NotifyTelegram แจ้งเตือน', 'name' => 'ipd_notifytelegram', 'value' => ''],
-            ['id' => 17, 'name_th' => 'IPD NotifyTelegram บันทึก', 'name' => 'ipd_notifytelegram_save', 'value' => ''],
-            ['id' => 18, 'name_th' => 'OPD รหัสห้องตรวจ (HOSxP)', 'name' => 'opd_department', 'value' => ''],
-            ['id' => 19, 'name_th' => 'OPD ชม.การทำงานพยาบาล', 'name' => 'opd_working_hours', 'value' => '7'],
-            ['id' => 20, 'name_th' => 'OPD ชม.ผู้ป่วยทั่วไป', 'name' => 'opd_patient_type', 'value' => '0.24'],
-            ['id' => 21, 'name_th' => 'OPD NotifyTelegram แจ้งเตือน', 'name' => 'opd_notifytelegram', 'value' => ''],
-            ['id' => 22, 'name_th' => 'OPD NotifyTelegram บันทึก', 'name' => 'opd_notifytelegram_save', 'value' => ''],
-            ['id' => 23, 'name_th' => 'NCD รหัสห้องตรวจ (HOSxP)', 'name' => 'ncd_department', 'value' => ''],
-            ['id' => 24, 'name_th' => 'NCD ชม.การทำงานพยาบาล', 'name' => 'ncd_working_hours', 'value' => '8'],
-            ['id' => 25, 'name_th' => 'NCD ชม.ผู้ป่วยทั่วไป', 'name' => 'ncd_patient_type', 'value' => '0.24'],
-            ['id' => 26, 'name_th' => 'NCD NotifyTelegram แจ้งเตือน', 'name' => 'ncd_notifytelegram', 'value' => ''],
-            ['id' => 27, 'name_th' => 'NCD NotifyTelegram บันทึก', 'name' => 'ncd_notifytelegram_save', 'value' => ''],
-            ['id' => 28, 'name_th' => 'ARI รหัสห้องตรวจ (HOSxP)', 'name' => 'ari_department', 'value' => ''],
-            ['id' => 29, 'name_th' => 'ARI ชม.การทำงานพยาบาล', 'name' => 'ari_working_hours', 'value' => '7'],
-            ['id' => 30, 'name_th' => 'ARI ชม.ผู้ป่วยทั่วไป', 'name' => 'ari_patient_type', 'value' => '0.24'],
-            ['id' => 31, 'name_th' => 'ARI NotifyTelegram แจ้งเตือน', 'name' => 'ari_notifytelegram', 'value' => ''],
-            ['id' => 32, 'name_th' => 'ARI NotifyTelegram บันทึก', 'name' => 'ari_notifytelegram_save', 'value' => ''],
-            ['id' => 33, 'name_th' => 'CKD รหัสห้องตรวจ (HOSxP)', 'name' => 'ckd_department', 'value' => ''],
-            ['id' => 34, 'name_th' => 'CKD ชม.การทำงานพยาบาล', 'name' => 'ckd_working_hours', 'value' => '7'],
-            ['id' => 35, 'name_th' => 'CKD ชม.ผู้ป่วยทั่วไป', 'name' => 'ckd_patient_type', 'value' => '0.24'],
-            ['id' => 36, 'name_th' => 'CKD NotifyTelegram แจ้งเตือน', 'name' => 'ckd_notifytelegram', 'value' => ''],
-            ['id' => 37, 'name_th' => 'CKD NotifyTelegram บันทึก', 'name' => 'ckd_notifytelegram_save', 'value' => ''],
-            ['id' => 38, 'name_th' => 'HD รหัสห้องตรวจ (HOSxP)', 'name' => 'hd_department', 'value' => ''],
-            ['id' => 39, 'name_th' => 'HD ชม.ทำงานพยาบาล', 'name' => 'hd_working_hours', 'value' => '7'],
-            ['id' => 40, 'name_th' => 'HD ชม.ผู้ป่วยทั่วไป', 'name' => 'hd_patient_type', 'value' => '0.24'],
-            ['id' => 41, 'name_th' => 'HD NotifyTelegram แจ้งเตือน', 'name' => 'hd_notifytelegram', 'value' => ''],
-            ['id' => 42, 'name_th' => 'HD NotifyTelegram บันทึก', 'name' => 'hd_notifytelegram_save', 'value' => ''],
+            ['name_th' => 'Telegram Bot Token', 'name' => 'telegram_token', 'value' => ''],
+            ['name_th' => 'ER ชม.การทำงานพยาบาล', 'name' => 'er_working_hours', 'value' => '7'],
+            ['name_th' => 'ER ชม.ผู้ป่วยวิกฤต(Resuscitation)', 'name' => 'er_patient_type1', 'value' => '3.2'],
+            ['name_th' => 'ER ชม.ผู้ป่วยฉุกเฉินสูง(Emergent)', 'name' => 'er_patient_type2', 'value' => '2.5'],
+            ['name_th' => 'ER ชม.ผู้ป่วยฉุกเฉิน(Urgent) ', 'name' => 'er_patient_type3', 'value' => '1'],
+            ['name_th' => 'ER ชม.ผู้ป่วยฉุกเฉินน้อย(Semi Urgent)', 'name' => 'er_patient_type4', 'value' => '0.5'],
+            ['name_th' => 'ER ชม.ผู้ป่วยไม่ฉุกเฉิน(Non Urgent)', 'name' => 'er_patient_type5', 'value' => '0.24'],
+            ['name_th' => 'ER NotifyTelegram แจ้งเตือน', 'name' => 'er_notifytelegram', 'value' => ''],
+            ['name_th' => 'ER NotifyTelegram บันทึก', 'name' => 'er_notifytelegram_save', 'value' => ''],
+            ['name_th' => 'IPD รหัส Ward (HOSxP)', 'name' => 'ipd_ward', 'value' => '01'],
+            ['name_th' => 'IPD ชม.การทำงานพยาบาล', 'name' => 'ipd_working_hours', 'value' => '7'],
+            ['name_th' => 'IPD ชม.ผู้ป่วยพักฟื้น(Convalescent)', 'name' => 'ipd_patient_type1', 'value' => '1.5'],
+            ['name_th' => 'IPD ชม.ผู้ป่วยปานกลาง(Moderate)', 'name' => 'ipd_patient_type2', 'value' => '3.5'],
+            ['name_th' => 'IPD ชม.ผู้ป่วยกึ่งหนัก(Semi-critical)', 'name' => 'ipd_patient_type3', 'value' => '5.5'],
+            ['name_th' => 'IPD ชม.ผู้ป่วยหนัก(Critical)', 'name' => 'ipd_patient_type4', 'value' => '7.5'],
+            ['name_th' => 'IPD NotifyTelegram แจ้งเตือน', 'name' => 'ipd_notifytelegram', 'value' => ''],
+            ['name_th' => 'IPD NotifyTelegram บันทึก', 'name' => 'ipd_notifytelegram_save', 'value' => ''],
+            ['name_th' => 'OPD รหัสห้องตรวจ (HOSxP)', 'name' => 'opd_department', 'value' => ''],
+            ['name_th' => 'OPD ชม.การทำงานพยาบาล', 'name' => 'opd_working_hours', 'value' => '7'],
+            ['name_th' => 'OPD ชม.ผู้ป่วยทั่วไป', 'name' => 'opd_patient_type', 'value' => '0.24'],
+            ['name_th' => 'OPD NotifyTelegram แจ้งเตือน', 'name' => 'opd_notifytelegram', 'value' => ''],
+            ['name_th' => 'OPD NotifyTelegram บันทึก', 'name' => 'opd_notifytelegram_save', 'value' => ''],
+            ['name_th' => 'NCD รหัสห้องตรวจ (HOSxP)', 'name' => 'ncd_department', 'value' => ''],
+            ['name_th' => 'NCD ชม.การทำงานพยาบาล', 'name' => 'ncd_working_hours', 'value' => '8'],
+            ['name_th' => 'NCD ชม.ผู้ป่วยทั่วไป', 'name' => 'ncd_patient_type', 'value' => '0.24'],
+            ['name_th' => 'NCD NotifyTelegram แจ้งเตือน', 'name' => 'ncd_notifytelegram', 'value' => ''],
+            ['name_th' => 'NCD NotifyTelegram บันทึก', 'name' => 'ncd_notifytelegram_save', 'value' => ''],
+            ['name_th' => 'ARI รหัสห้องตรวจ (HOSxP)', 'name' => 'ari_department', 'value' => ''],
+            ['name_th' => 'ARI ชม.การทำงานพยาบาล', 'name' => 'ari_working_hours', 'value' => '7'],
+            ['name_th' => 'ARI ชม.ผู้ป่วยทั่วไป', 'name' => 'ari_patient_type', 'value' => '0.24'],
+            ['name_th' => 'ARI NotifyTelegram แจ้งเตือน', 'name' => 'ari_notifytelegram', 'value' => ''],
+            ['name_th' => 'ARI NotifyTelegram บันทึก', 'name' => 'ari_notifytelegram_save', 'value' => ''],
+            ['name_th' => 'CKD รหัสห้องตรวจ (HOSxP)', 'name' => 'ckd_department', 'value' => ''],
+            ['name_th' => 'CKD ชม.การทำงานพยาบาล', 'name' => 'ckd_working_hours', 'value' => '7'],
+            ['name_th' => 'CKD ชม.ผู้ป่วยทั่วไป', 'name' => 'ckd_patient_type', 'value' => '0.24'],
+            ['name_th' => 'CKD NotifyTelegram แจ้งเตือน', 'name' => 'ckd_notifytelegram', 'value' => ''],
+            ['name_th' => 'CKD NotifyTelegram บันทึก', 'name' => 'ckd_notifytelegram_save', 'value' => ''],
+            ['name_th' => 'HD รหัสห้องตรวจ (HOSxP)', 'name' => 'hd_department', 'value' => ''],
+            ['name_th' => 'HD ชม.ทำงานพยาบาล', 'name' => 'hd_working_hours', 'value' => '7'],
+            ['name_th' => 'HD ชม.ผู้ป่วยทั่วไป', 'name' => 'hd_patient_type', 'value' => '0.24'],
+            ['name_th' => 'HD NotifyTelegram แจ้งเตือน', 'name' => 'hd_notifytelegram', 'value' => ''],
+            ['name_th' => 'HD NotifyTelegram บันทึก', 'name' => 'hd_notifytelegram_save', 'value' => ''],
 
             // VIP Settings
-            ['id' => 43, 'name_th' => 'VIP รหัส Ward (HOSxP)', 'name' => 'vip_ward', 'value' => ''],
-            ['id' => 44, 'name_th' => 'VIP ชม.ทำงานพยาบาล', 'name' => 'vip_working_hours', 'value' => '7'],
-            ['id' => 45, 'name_th' => 'VIP ชม.ผู้ป่วย Type 1', 'name' => 'vip_patient_type1', 'value' => '1.5'],
-            ['id' => 46, 'name_th' => 'VIP ชม.ผู้ป่วย Type 2', 'name' => 'vip_patient_type2', 'value' => '3.5'],
-            ['id' => 47, 'name_th' => 'VIP ชม.ผู้ป่วย Type 3', 'name' => 'vip_patient_type3', 'value' => '5.5'],
-            ['id' => 48, 'name_th' => 'VIP ชม.ผู้ป่วย Type 4', 'name' => 'vip_patient_type4', 'value' => '7.5'],
-            ['id' => 49, 'name_th' => 'VIP NotifyTelegram แจ้งเตือน', 'name' => 'vip_notifytelegram', 'value' => ''],
-            ['id' => 50, 'name_th' => 'VIP NotifyTelegram บันทึก', 'name' => 'vip_notifytelegram_save', 'value' => ''],
+            ['name_th' => 'VIP รหัส Ward (HOSxP)', 'name' => 'vip_ward', 'value' => ''],
+            ['name_th' => 'VIP ชม.ทำงานพยาบาล', 'name' => 'vip_working_hours', 'value' => '7'],
+            ['name_th' => 'VIP ชม.ผู้ป่วย Type 1', 'name' => 'vip_patient_type1', 'value' => '1.5'],
+            ['name_th' => 'VIP ชม.ผู้ป่วย Type 2', 'name' => 'vip_patient_type2', 'value' => '3.5'],
+            ['name_th' => 'VIP ชม.ผู้ป่วย Type 3', 'name' => 'vip_patient_type3', 'value' => '5.5'],
+            ['name_th' => 'VIP ชม.ผู้ป่วย Type 4', 'name' => 'vip_patient_type4', 'value' => '7.5'],
+            ['name_th' => 'VIP NotifyTelegram แจ้งเตือน', 'name' => 'vip_notifytelegram', 'value' => ''],
+            ['name_th' => 'VIP NotifyTelegram บันทึก', 'name' => 'vip_notifytelegram_save', 'value' => ''],
 
             // LR Settings
-            ['id' => 51, 'name_th' => 'LR รหัส Ward (HOSxP)', 'name' => 'lr_ward', 'value' => ''],
-            ['id' => 52, 'name_th' => 'LR ชม.ทำงานพยาบาล', 'name' => 'lr_working_hours', 'value' => '7'],
-            ['id' => 53, 'name_th' => 'LR ชม.ผู้ป่วย Type 1', 'name' => 'lr_patient_type1', 'value' => '1.5'],
-            ['id' => 54, 'name_th' => 'LR ชม.ผู้ป่วย Type 2', 'name' => 'lr_patient_type2', 'value' => '3.5'],
-            ['id' => 55, 'name_th' => 'LR ชม.ผู้ป่วย Type 3', 'name' => 'lr_patient_type3', 'value' => '5.5'],
-            ['id' => 56, 'name_th' => 'LR ชม.ผู้ป่วย Type 4', 'name' => 'lr_patient_type4', 'value' => '7.5'],
-            ['id' => 57, 'name_th' => 'LR NotifyTelegram แจ้งเตือน', 'name' => 'lr_notifytelegram', 'value' => ''],
-            ['id' => 58, 'name_th' => 'LR NotifyTelegram บันทึก', 'name' => 'lr_notifytelegram_save', 'value' => ''],
+            ['name_th' => 'LR รหัส Ward (HOSxP)', 'name' => 'lr_ward', 'value' => ''],
+            ['name_th' => 'LR ชม.ทำงานพยาบาล', 'name' => 'lr_working_hours', 'value' => '7'],
+            ['name_th' => 'LR ชม.ผู้ป่วย Type 1', 'name' => 'lr_patient_type1', 'value' => '1.5'],
+            ['name_th' => 'LR ชม.ผู้ป่วย Type 2', 'name' => 'lr_patient_type2', 'value' => '3.5'],
+            ['name_th' => 'LR ชม.ผู้ป่วย Type 3', 'name' => 'lr_patient_type3', 'value' => '5.5'],
+            ['name_th' => 'LR ชม.ผู้ป่วย Type 4', 'name' => 'lr_patient_type4', 'value' => '7.5'],
+            ['name_th' => 'LR NotifyTelegram แจ้งเตือน', 'name' => 'lr_notifytelegram', 'value' => ''],
+            ['name_th' => 'LR NotifyTelegram บันทึก', 'name' => 'lr_notifytelegram_save', 'value' => ''],
         ];
         foreach ($main_setting as $row) {
-            $check = MainSetting::where('id', $row['id'])->count();
+            $check = MainSetting::where('name', $row['name'])->count();
             if ($check > 0) {
                 DB::table('main_setting')
-                    ->where('id', $row['id'])
+                    ->where('name', $row['name'])
                     ->update([
                     'name_th' => $row['name_th'],
-                    'name' => $row['name'],
                 ]);
             }
             else {
                 DB::table('main_setting')
                     ->insert([
-                    'id' => $row['id'],
                     'name_th' => $row['name_th'],
                     'name' => $row['name'],
                     'value' => $row['value'],
