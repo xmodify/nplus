@@ -17,11 +17,11 @@
         <div class="card-premium p-3 shadow-sm border-0 bg-white">
             <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
                 <div class="d-flex align-items-center">
-                    <div class="bg-soft-primary p-2 rounded-3 me-3">
-                        <i class="bi bi-person-lines-fill fs-4 text-primary"></i>
+                    <div class="bg-soft-danger p-2 rounded-3 me-3">
+                        <i class="fa-solid fa-person-breastfeeding fs-4 text-danger"></i>
                     </div>
                     <div>
-                        <h5 class="fw-bold text-dark mb-0">รายงานผลิตภาพทางการพยาบาลแผนกผู้ป่วยนอก (OPD)</h5>
+                        <h5 class="fw-bold text-dark mb-0">รายงานผลิตภาพทางการพยาบาลแผนกห้องคลอด (LR)</h5>
                         <small class="text-muted">ข้อมูลสรุปช่วงเวลา {{ DateThai($start_date) }} -
                             {{ DateThai($end_date) }}</small>
                     </div>
@@ -47,16 +47,14 @@
             </div>
         </div>
     </div>
-
     <!-- Section Summary Card -->
-
-    <!-- Summary Table -->
+    <!--row-->
     <div class="container-fluid mb-5">
         <div class="card-premium shadow-lg">
             <div
                 class="header-gradient text-white p-2 p-md-3 d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
                 <h6 class="mb-0 fw-bold">
-                    <i class="bi bi-graph-up-arrow me-2"></i>รายงานสรุปผลิตภาพทางการพยาบาล
+                    <i class="bi bi-graph-up-arrow me-2"></i>รายงานสรุปผลิตภาพทางการพยาบาล LR
                     <small class="opacity-75 ms-2 d-none d-lg-inline-block">({{ DateThai($start_date) }} -
                         {{ DateThai($end_date) }})</small>
                 </h6>
@@ -68,7 +66,10 @@
                             <tr>
                                 <th class="text-center">เวร</th>
                                 <th class="text-center">ผู้ป่วยในเวร</th>
-
+                                <th class="text-center">Convalescent</th>
+                                <th class="text-center">Moderate</th>
+                                <th class="text-center">Semi critical</th>
+                                <th class="text-center">Critical</th>
                                 <th class="text-center">ชม.การพยาบาล</th>
                                 <th class="text-center">อัตรากำลัง Oncall</th>
                                 <th class="text-center">อัตรากำลังเสริม</th>
@@ -82,9 +83,12 @@
                         <?php $count = 1; ?>
                         @foreach ($product_summary as $row)
                             <tr>
-                                <td align="right">{{ $row->shift_time }} {{ $row->shift_time_sum }} เวร</td>
+                                <td align="center">{{ $row->shift_time }} {{ $row->shift_time_sum }} เวร</td>
                                 <td align="right">{{ $row->patient_all }}</td>
-
+                                <td align="right">{{ $row->patient_convalescent }}</td>
+                                <td align="right">{{ $row->patient_moderate }}</td>
+                                <td align="right">{{ $row->patient_semi_critical }}</td>
+                                <td align="right">{{ $row->patient_critical }}</td>
                                 <td align="right">{{ number_format($row->patient_hr, 2) }}</td>
                                 <td align="right">{{ $row->nurse_oncall }}</td>
                                 <td align="right">{{ $row->nurse_partime }}</td>
@@ -102,8 +106,7 @@
         </div>
     </div>
     <br>
-
-    <!-- Detail Table -->
+    <!--row-->
     <div class="container-fluid mb-5">
         <div class="card-premium shadow-lg">
             <div class="header-gradient text-white p-3">
@@ -119,16 +122,18 @@
                         </div>
                     @endif
                 </div>
-
                 <div class="table-responsive">
-                    <table id="productivity_opd" class="table table-hover align-middle table-premium">
+                    <table id="productivity_day" class="table table-hover align-middle table-premium">
                         <thead class="bg-soft-blue">
                             <tr>
                                 <th class="text-center">ลำดับ</th>
-                                <th class="text-center">วันที่</th>
+                                <th class="text-center">วันที่-เวลา</th>
                                 <th class="text-center">เวร</th>
                                 <th class="text-center">ผู้ป่วยในเวร</th>
-
+                                <th class="text-center">Convalescent</th>
+                                <th class="text-center">Moderate</th>
+                                <th class="text-center">Semi critical</th>
+                                <th class="text-center">Critical</th>
                                 <th class="text-center">ชม.การพยาบาล</th>
                                 <th class="text-center">อัตรากำลัง Oncall</th>
                                 <th class="text-center">อัตรากำลังเสริม</th>
@@ -147,24 +152,27 @@
                         <?php $count = 1; ?>
                         @foreach ($product as $row)
                             <tr>
-                                <td align="right">{{ $count }}</td>
-                                <td align="right">{{ DateThai($row->report_date) }}</td>
-                                <td align="right">{{ $row->shift_time }}</td>
+                                <td align="center">{{ $count }}</td>
+                                <td align="center">{{ DateThai($row->report_date) }}</td>
+                                <td align="center">{{ $row->shift_time }}</td>
                                 <td align="right">{{ $row->patient_all }}</td>
-
-                                <td align="right">{{ number_format($row->patient_hr, 2) }}</td>
+                                <td align="right">{{ $row->patient_convalescent }}</td>
+                                <td align="right">{{ $row->patient_moderate }}</td>
+                                <td align="right">{{ $row->patient_semi_critical }}</td>
+                                <td align="right">{{ $row->patient_critical }}</td>
+                                <td align="right">{{ number_format($row->nursing_hours, 2) }}</td>
                                 <td align="right">{{ $row->nurse_oncall }}</td>
                                 <td align="right">{{ $row->nurse_partime }}</td>
                                 <td align="right">{{ $row->nurse_fulltime }}</td>
-                                <td align="right">{{ number_format($row->nurse_hr, 2) }}</td>
+                                <td align="right">{{ number_format($row->working_hours, 2) }}</td>
                                 <td align="right">{{ number_format($row->productivity, 2) }}</td>
                                 <td align="right">{{ number_format($row->nhppd, 2) }}</td>
                                 <td align="right">{{ number_format($row->nurse_shift_time, 2) }}</td>
-                                <td align="right">{{ $row->recorder }}</td>
-                                <td align="right">{{ $row->note }}</td>
+                                <td align="left">{{ $row->recorder }}</td>
+                                <td align="left">{{ $row->note }}</td>
                                 @if ($del_product)
                                     <td class="text-center">
-                                        <form action="{{ url('hnplus/product/opd_product_delete/' . $row->id) }}"
+                                        <form action="{{ url('hnplus/product/lr_product_delete/' . $row->id) }}"
                                             method="POST"
                                             onsubmit="return confirm('ต้องการลบข้อมูล {{ DateThai($row->report_date) }} {{ $row->shift_time }} Product {{ number_format($row->productivity, 2) }}?')">
                                             @csrf
@@ -182,18 +190,17 @@
         </div>
     </div>
     <br>
-
-    <!-- กราฟ Productivity -->
+    <!-- row -->
     <div class="container-fluid mb-5">
         <div class="card-premium shadow-lg">
             <div class="header-gradient text-white p-3">
                 <h6 class="mb-0 fw-bold">
-                    <i class="bi bi-bar-chart-fill me-2"></i>กราฟ Productivity แยกตามเวร
+                    <i class="bi bi-bar-chart-fill me-2"></i>กราฟ Productivity แยกตามเวร (LR)
                 </h6>
             </div>
             <div class="card-body p-4">
                 <div style="height: 400px;">
-                    <canvas id="productivity_chart"></canvas>
+                    <canvas id="productivity"></canvas>
                 </div>
             </div>
         </div>
@@ -202,17 +209,17 @@
 @endsection
 
 @push('scripts')
-    <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
+    <script type="text/javascript" language="javascript"
+        src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" language="javascript"
+        src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.3.3/js/dataTables.buttons.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.3.3/js/buttons.html5.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
 
-    <script>
+    <script type="text/javascript" class="init">
         $(document).ready(function() {
-            var table = $('#productivity_opd').DataTable({
+            var table = $('#productivity_day').DataTable({
                 dom: "<'row mb-3'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'fB>>" +
                     "<'row'<'col-sm-12'tr>>" +
                     "<'row mt-3'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
@@ -220,7 +227,7 @@
                     extend: 'excelHtml5',
                     text: '<i class="bi bi-file-earmark-excel me-1"></i> Excel',
                     className: 'btn btn-success btn-sm ms-2 shadow-sm fw-bold',
-                    title: 'รายงานผลิตภาพทางการพยาบาล_OPD_{{ $start_date }}_{{ $end_date }}'
+                    title: 'รายงานผลิตภาพทางการพยาบาล_LR_{{ $start_date }}_{{ $end_date }}'
                 }],
                 language: {
                     search: "ค้นหา: ",
@@ -235,10 +242,13 @@
                 }
             });
         });
-
-        // 📊 กราฟ Productivity แยกตามเวร
+    </script>
+    <!-- กราฟแท่งแยกตามเวร -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+    <script>
         document.addEventListener("DOMContentLoaded", () => {
-            const ctx = document.querySelector('#productivity_chart');
+            const ctx = document.querySelector('#productivity');
             if (ctx) {
                 new Chart(ctx, {
                     type: 'bar',
@@ -253,10 +263,18 @@
                                 borderWidth: 1
                             },
                             {
-                                label: 'เวร BD',
-                                data: <?php echo json_encode($bd); ?>,
+                                label: 'เวรบ่าย',
+                                data: <?php echo json_encode($afternoon); ?>,
                                 backgroundColor: 'rgba(255, 159, 64, 0.7)',
                                 borderColor: 'rgb(255, 159, 64)',
+                                borderRadius: 6,
+                                borderWidth: 1
+                            },
+                            {
+                                label: 'เวรดึก',
+                                data: <?php echo json_encode($night); ?>,
+                                backgroundColor: 'rgba(99, 102, 241, 0.7)',
+                                borderColor: 'rgb(99, 102, 241)',
                                 borderRadius: 6,
                                 borderWidth: 1
                             }
@@ -280,7 +298,7 @@
                             },
                             title: {
                                 display: true,
-                                text: 'กราฟ Productivity แยกตามเวร'
+                                text: 'กราฟ Productivity แยกตามเวร (LR)'
                             }
                         },
                         scales: {

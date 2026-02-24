@@ -128,11 +128,6 @@
 
                                 <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0">
                                     <li>
-                                        <a class="dropdown-item py-2" href="{{ url('hnplus/product/opd_report') }}">
-                                            <i class="bi bi-person-lines-fill text-primary me-2"></i>งานผู้ป่วยนอก OPD
-                                        </a>
-                                    </li>
-                                    <li>
                                         <a class="dropdown-item py-2" href="{{ url('hnplus/product/er_report') }}">
                                             <i class="bi bi-hospital text-danger me-2"></i>งานอุบัติเหตุ-ฉุกเฉิน ER
                                         </a>
@@ -143,13 +138,40 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item py-2" href="{{ url('hnplus/product/ari_report') }}">
-                                            <i class="bi bi-thermometer-half text-warning me-2"></i>งานผู้ป่วย ARI
+                                        <a class="dropdown-item py-2" href="{{ url('hnplus/product/vip_report') }}">
+                                            <i class="fa-solid fa-couch text-warning me-2 ms-1"></i>งานผู้ป่วยห้องพิเศษ VIP
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item py-2" href="{{ url('hnplus/product/lr_report') }}">
+                                            <i
+                                                class="fa-solid fa-person-breastfeeding text-danger me-2 ms-1"></i>งานห้องคลอด
+                                            LR
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item py-2" href="{{ url('hnplus/product/opd_report') }}">
+                                            <i class="bi bi-person-lines-fill text-primary me-2"></i>งานผู้ป่วยนอก OPD
                                         </a>
                                     </li>
                                     <li>
                                         <a class="dropdown-item py-2" href="{{ url('hnplus/product/ncd_report') }}">
                                             <i class="bi bi-heart-pulse text-info me-2"></i>งานผู้ป่วย NCD
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item py-2" href="{{ url('hnplus/product/ari_report') }}">
+                                            <i class="bi bi-thermometer-half text-warning me-2"></i>งานผู้ป่วย ARI
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item py-2" href="{{ url('hnplus/product/ckd_report') }}">
+                                            <i class="bi bi-heart-pulse text-dark me-2"></i>งานผู้ป่วย CKD
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item py-2" href="{{ url('hnplus/product/hd_report') }}">
+                                            <i class="bi bi-droplet-fill text-primary me-2"></i>งานฟอกเลือดไตเทียม HD
                                         </a>
                                     </li>
                                 </ul>
@@ -161,7 +183,7 @@
                     <ul class="navbar-nav ms-auto align-items-center">
                         <li>
                             <div class="badge bg-white text-primary rounded-pill px-3 py-2 shadow-sm fw-bold">
-                                <i class="bi bi-code-slash me-1"></i>V. 69-02-22 15:00
+                                <i class="bi bi-code-slash me-1"></i>V. 69-02-24 17:00
                             </div>
                         </li>
 

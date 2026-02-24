@@ -23,6 +23,10 @@ class DashboardController extends Controller
         // Based on ProductOPDController, it uses 'opd_department' setting.
         $opd_dep = MainSetting::where('name', 'opd_department')->value('value') ?? "'002','050'";
         $ari_dep = MainSetting::where('name', 'ari_department')->value('value') ?? "'ARI'";
+        $vip_ward = MainSetting::where('name', 'vip_ward')->value('value') ?? "''";
+        $lr_ward = MainSetting::where('name', 'lr_ward')->value('value') ?? "''";
+        $ckd_dep = MainSetting::where('name', 'ckd_department')->value('value') ?? "''";
+        $hd_dep = MainSetting::where('name', 'hd_department')->value('value') ?? "''";
 
         // Determine Current Shift for ER & IPD
         // - เวรดึก 00:00:01 - 07:59:59
@@ -168,10 +172,69 @@ class DashboardController extends Controller
             'patient_all' => $ari_result->patient_all ?? 0,
         ];
 
-        if (\Illuminate\Support\Facades\Auth::check()) {
-            return view('hnplus.dashboard', compact('er_stats', 'ipd_stats', 'opd_stats', 'ncd_stats', 'ari_stats', 'today', 'shift_name'));
+        // 4. VIP Data
+        $vip_stats = ['shift' => $shift_name, 'critical' => 0, 'semi_critical' => 0, 'moderate' => 0, 'convalescent' => 0, 'severe_type_null' => 0];
+        if ($vip_ward != "''" && $vip_ward != "") {
+            $vip_query = str_replace('$ipd_ward', $vip_ward, $ipd_query);
+            $vip_result = DB::connection('hosxp')->selectOne($vip_query);
+            $vip_stats = [
+                'shift' => $shift_name,
+                'critical' => $vip_result->Critical ?? 0,
+                'semi_critical' => $vip_result->Semi_critical ?? 0,
+                'moderate' => $vip_result->Moderate ?? 0,
+                'convalescent' => $vip_result->convalescent ?? 0,
+                'severe_type_null' => $vip_result->severe_type_null ?? 0,
+            ];
         }
 
-        return view('welcome', compact('er_stats', 'ipd_stats', 'opd_stats', 'ncd_stats', 'ari_stats', 'today', 'shift_name'));
+        // 5. LR Data
+        $lr_stats = ['shift' => $shift_name, 'critical' => 0, 'semi_critical' => 0, 'moderate' => 0, 'convalescent' => 0, 'severe_type_null' => 0];
+        if ($lr_ward != "''" && $lr_ward != "") {
+            $lr_query = str_replace('$ipd_ward', $lr_ward, $ipd_query);
+            $lr_result = DB::connection('hosxp')->selectOne($lr_query);
+            $lr_stats = [
+                'shift' => $shift_name,
+                'critical' => $lr_result->Critical ?? 0,
+                'semi_critical' => $lr_result->Semi_critical ?? 0,
+                'moderate' => $lr_result->Moderate ?? 0,
+                'convalescent' => $lr_result->convalescent ?? 0,
+                'severe_type_null' => $lr_result->severe_type_null ?? 0,
+            ];
+        }
+
+        // 6. CKD Data
+        $ckd_stats = ['shift' => 'เวรเช้า', 'patient_all' => 0];
+        if ($ckd_dep != "''" && $ckd_dep != "") {
+            $ckd_query = str_replace('$ncd_dep', $ckd_dep, $ncd_query);
+            $ckd_result = DB::connection('hosxp')->selectOne($ckd_query, [$morning_st, $morning_et]);
+            $ckd_stats = [
+                'shift' => 'เวรเช้า',
+                'patient_all' => $ckd_result->patient_all ?? 0,
+            ];
+        }
+
+        // 7. HD Data
+        $hd_stats = ['shift' => 'เวรเช้า', 'patient_all' => 0];
+        if ($hd_dep != "''" && $hd_dep != "") {
+            $hd_query = str_replace('$ncd_dep', $hd_dep, $hd_dep); // Wait, mapping should be depcode IN ($hd_dep)
+            // Actually the query used $ncd_dep variable name in string, let's fix that.
+            $hd_query = "
+                SELECT IFNULL(COUNT(DISTINCT o1.vn),0) AS patient_all
+                FROM opd_dep_queue o1, ovst o2 WHERE o1.depcode IN ($hd_dep)
+                AND o1.vn = o2.vn AND o2.vstdate = DATE(NOW())
+                AND o2.vsttime BETWEEN ? AND ?
+            ";
+            $hd_result = DB::connection('hosxp')->selectOne($hd_query, [$morning_st, $morning_et]);
+            $hd_stats = [
+                'shift' => 'เวรเช้า',
+                'patient_all' => $hd_result->patient_all ?? 0,
+            ];
+        }
+
+        if (\Illuminate\Support\Facades\Auth::check()) {
+            return view('hnplus.dashboard', compact('er_stats', 'ipd_stats', 'opd_stats', 'ncd_stats', 'ari_stats', 'vip_stats', 'lr_stats', 'ckd_stats', 'hd_stats', 'today', 'shift_name'));
+        }
+
+        return view('welcome', compact('er_stats', 'ipd_stats', 'opd_stats', 'ncd_stats', 'ari_stats', 'vip_stats', 'lr_stats', 'ckd_stats', 'hd_stats', 'today', 'shift_name'));
     }
 }

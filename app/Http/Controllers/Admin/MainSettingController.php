@@ -8,6 +8,7 @@ use App\Models\MainSetting;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Artisan;
 
 class MainSettingController extends Controller
 {
@@ -17,10 +18,14 @@ class MainSettingController extends Controller
 
         $general_settings = $settings->filter(function ($item) {
             return !str_starts_with($item->name, 'er_') &&
-                !str_starts_with($item->name, 'ipd_') &&
-                !str_starts_with($item->name, 'opd_') &&
-                !str_starts_with($item->name, 'ncd_') &&
-                !str_starts_with($item->name, 'ari_');
+            !str_starts_with($item->name, 'ipd_') &&
+            !str_starts_with($item->name, 'opd_') &&
+            !str_starts_with($item->name, 'ncd_') &&
+            !str_starts_with($item->name, 'ari_') &&
+            !str_starts_with($item->name, 'ckd_') &&
+            !str_starts_with($item->name, 'hd_') &&
+            !str_starts_with($item->name, 'vip_') &&
+            !str_starts_with($item->name, 'lr_');
         });
 
         $er_settings = $settings->filter(function ($item) {
@@ -41,6 +46,22 @@ class MainSettingController extends Controller
 
         $ari_settings = $settings->filter(function ($item) {
             return str_starts_with($item->name, 'ari_');
+        });
+
+        $ckd_settings = $settings->filter(function ($item) {
+            return str_starts_with($item->name, 'ckd_');
+        });
+
+        $hd_settings = $settings->filter(function ($item) {
+            return str_starts_with($item->name, 'hd_');
+        });
+
+        $vip_settings = $settings->filter(function ($item) {
+            return str_starts_with($item->name, 'vip_');
+        });
+
+        $lr_settings = $settings->filter(function ($item) {
+            return str_starts_with($item->name, 'lr_');
         });
 
         $hosxp_departments = DB::connection('hosxp')
@@ -69,7 +90,11 @@ class MainSettingController extends Controller
             'ncd_settings',
             'ari_settings',
             'hosxp_departments',
-            'hosxp_wards'
+            'hosxp_wards',
+            'ckd_settings',
+            'hd_settings',
+            'vip_settings',
+            'lr_settings'
         ));
     }
 
@@ -86,6 +111,9 @@ class MainSettingController extends Controller
 // UP Structure -----------------------------------------------------------------------------------------------------------------------    
     public function up_structure(Request $request)
     {
+        // Run Migrations
+        Artisan::call('migrate');
+
         //Update Table main_setting-----------------------------------------------------------------------------------------------------------
         $main_setting = [
             ['id' => 1, 'name_th' => 'Telegram Bot Token', 'name' => 'telegram_token', 'value' => ''],
@@ -120,6 +148,36 @@ class MainSettingController extends Controller
             ['id' => 30, 'name_th' => 'ARI ชม.ผู้ป่วยทั่วไป', 'name' => 'ari_patient_type', 'value' => '0.24'],
             ['id' => 31, 'name_th' => 'ARI NotifyTelegram แจ้งเตือน', 'name' => 'ari_notifytelegram', 'value' => ''],
             ['id' => 32, 'name_th' => 'ARI NotifyTelegram บันทึก', 'name' => 'ari_notifytelegram_save', 'value' => ''],
+            ['id' => 33, 'name_th' => 'CKD รหัสห้องตรวจ (HOSxP)', 'name' => 'ckd_department', 'value' => ''],
+            ['id' => 34, 'name_th' => 'CKD ชม.การทำงานพยาบาล', 'name' => 'ckd_working_hours', 'value' => '7'],
+            ['id' => 35, 'name_th' => 'CKD ชม.ผู้ป่วยทั่วไป', 'name' => 'ckd_patient_type', 'value' => '0.24'],
+            ['id' => 36, 'name_th' => 'CKD NotifyTelegram แจ้งเตือน', 'name' => 'ckd_notifytelegram', 'value' => ''],
+            ['id' => 37, 'name_th' => 'CKD NotifyTelegram บันทึก', 'name' => 'ckd_notifytelegram_save', 'value' => ''],
+            ['id' => 38, 'name_th' => 'HD รหัสห้องตรวจ (HOSxP)', 'name' => 'hd_department', 'value' => ''],
+            ['id' => 39, 'name_th' => 'HD ชม.ทำงานพยาบาล', 'name' => 'hd_working_hours', 'value' => '7'],
+            ['id' => 40, 'name_th' => 'HD ชม.ผู้ป่วยทั่วไป', 'name' => 'hd_patient_type', 'value' => '0.24'],
+            ['id' => 41, 'name_th' => 'HD NotifyTelegram แจ้งเตือน', 'name' => 'hd_notifytelegram', 'value' => ''],
+            ['id' => 42, 'name_th' => 'HD NotifyTelegram บันทึก', 'name' => 'hd_notifytelegram_save', 'value' => ''],
+
+            // VIP Settings
+            ['id' => 43, 'name_th' => 'VIP รหัส Ward (HOSxP)', 'name' => 'vip_ward', 'value' => ''],
+            ['id' => 44, 'name_th' => 'VIP ชม.ทำงานพยาบาล', 'name' => 'vip_working_hours', 'value' => '7'],
+            ['id' => 45, 'name_th' => 'VIP ชม.ผู้ป่วย Type 1', 'name' => 'vip_patient_type1', 'value' => '1.5'],
+            ['id' => 46, 'name_th' => 'VIP ชม.ผู้ป่วย Type 2', 'name' => 'vip_patient_type2', 'value' => '3.5'],
+            ['id' => 47, 'name_th' => 'VIP ชม.ผู้ป่วย Type 3', 'name' => 'vip_patient_type3', 'value' => '5.5'],
+            ['id' => 48, 'name_th' => 'VIP ชม.ผู้ป่วย Type 4', 'name' => 'vip_patient_type4', 'value' => '7.5'],
+            ['id' => 49, 'name_th' => 'VIP NotifyTelegram แจ้งเตือน', 'name' => 'vip_notifytelegram', 'value' => ''],
+            ['id' => 50, 'name_th' => 'VIP NotifyTelegram บันทึก', 'name' => 'vip_notifytelegram_save', 'value' => ''],
+
+            // LR Settings
+            ['id' => 51, 'name_th' => 'LR รหัส Ward (HOSxP)', 'name' => 'lr_ward', 'value' => ''],
+            ['id' => 52, 'name_th' => 'LR ชม.ทำงานพยาบาล', 'name' => 'lr_working_hours', 'value' => '7'],
+            ['id' => 53, 'name_th' => 'LR ชม.ผู้ป่วย Type 1', 'name' => 'lr_patient_type1', 'value' => '1.5'],
+            ['id' => 54, 'name_th' => 'LR ชม.ผู้ป่วย Type 2', 'name' => 'lr_patient_type2', 'value' => '3.5'],
+            ['id' => 55, 'name_th' => 'LR ชม.ผู้ป่วย Type 3', 'name' => 'lr_patient_type3', 'value' => '5.5'],
+            ['id' => 56, 'name_th' => 'LR ชม.ผู้ป่วย Type 4', 'name' => 'lr_patient_type4', 'value' => '7.5'],
+            ['id' => 57, 'name_th' => 'LR NotifyTelegram แจ้งเตือน', 'name' => 'lr_notifytelegram', 'value' => ''],
+            ['id' => 58, 'name_th' => 'LR NotifyTelegram บันทึก', 'name' => 'lr_notifytelegram_save', 'value' => ''],
         ];
         foreach ($main_setting as $row) {
             $check = MainSetting::where('id', $row['id'])->count();
@@ -127,17 +185,18 @@ class MainSettingController extends Controller
                 DB::table('main_setting')
                     ->where('id', $row['id'])
                     ->update([
-                        'name_th' => $row['name_th'],
-                        'name' => $row['name'],
-                    ]);
-            } else {
+                    'name_th' => $row['name_th'],
+                    'name' => $row['name'],
+                ]);
+            }
+            else {
                 DB::table('main_setting')
                     ->insert([
-                        'id' => $row['id'],
-                        'name_th' => $row['name_th'],
-                        'name' => $row['name'],
-                        'value' => $row['value'],
-                    ]);
+                    'id' => $row['id'],
+                    'name_th' => $row['name_th'],
+                    'name' => $row['name'],
+                    'value' => $row['value'],
+                ]);
             }
         }
 
@@ -154,6 +213,98 @@ class MainSettingController extends Controller
         // ];
 
         try {
+            // Create Productivity CKD Table if not exists
+            if (!Schema::hasTable('productivity_ckd')) {
+                Schema::create('productivity_ckd', function (Blueprint $table) {
+                    $table->id();
+                    $table->date('report_date');
+                    $table->string('shift_time', 20);
+                    $table->integer('nurse_fulltime')->nullable();
+                    $table->integer('nurse_partime')->nullable();
+                    $table->integer('nurse_oncall')->nullable();
+                    $table->string('recorder')->nullable();
+                    $table->string('note')->nullable();
+                    $table->integer('patient_all')->nullable();
+                    $table->double('nursing_hours', 5, 2)->nullable();
+                    $table->double('working_hours', 5, 2)->nullable();
+                    $table->double('nhppd', 5, 2)->nullable();
+                    $table->double('nurse_shift_time', 5, 2)->nullable();
+                    $table->double('productivity', 5, 2)->nullable();
+                    $table->timestamps();
+                });
+            }
+
+            // Create Productivity HD Table if not exists
+            if (!Schema::hasTable('productivity_hd')) {
+                Schema::create('productivity_hd', function (Blueprint $table) {
+                    $table->id();
+                    $table->date('report_date');
+                    $table->string('shift_time', 20);
+                    $table->integer('nurse_fulltime')->nullable();
+                    $table->integer('nurse_partime')->nullable();
+                    $table->integer('nurse_oncall')->nullable();
+                    $table->string('recorder')->nullable();
+                    $table->string('note')->nullable();
+                    $table->integer('patient_all')->nullable();
+                    $table->double('nursing_hours', 5, 2)->nullable();
+                    $table->double('working_hours', 5, 2)->nullable();
+                    $table->double('nhppd', 5, 2)->nullable();
+                    $table->double('nurse_shift_time', 5, 2)->nullable();
+                    $table->double('productivity', 5, 2)->nullable();
+                    $table->timestamps();
+                });
+            }
+
+            // Create Productivity VIP Table if not exists
+            if (!Schema::hasTable('productivity_vip')) {
+                Schema::create('productivity_vip', function (Blueprint $table) {
+                    $table->id();
+                    $table->date('report_date');
+                    $table->string('shift_time', 20);
+                    $table->integer('nurse_fulltime')->nullable();
+                    $table->integer('nurse_partime')->nullable();
+                    $table->integer('nurse_oncall')->nullable();
+                    $table->string('recorder')->nullable();
+                    $table->string('note')->nullable();
+                    $table->integer('patient_all')->nullable();
+                    $table->integer('patient_critical')->nullable();
+                    $table->integer('patient_semi_critical')->nullable();
+                    $table->integer('patient_moderate')->nullable();
+                    $table->integer('patient_convalescent')->nullable();
+                    $table->double('nursing_hours', 5, 2)->nullable();
+                    $table->double('working_hours', 5, 2)->nullable();
+                    $table->double('nhppd', 5, 2)->nullable();
+                    $table->double('nurse_shift_time', 5, 2)->nullable();
+                    $table->double('productivity', 5, 2)->nullable();
+                    $table->timestamps();
+                });
+            }
+
+            // Create Productivity LR Table if not exists
+            if (!Schema::hasTable('productivity_lr')) {
+                Schema::create('productivity_lr', function (Blueprint $table) {
+                    $table->id();
+                    $table->date('report_date');
+                    $table->string('shift_time', 20);
+                    $table->integer('nurse_fulltime')->nullable();
+                    $table->integer('nurse_partime')->nullable();
+                    $table->integer('nurse_oncall')->nullable();
+                    $table->string('recorder')->nullable();
+                    $table->string('note')->nullable();
+                    $table->integer('patient_all')->nullable();
+                    $table->integer('patient_critical')->nullable();
+                    $table->integer('patient_semi_critical')->nullable();
+                    $table->integer('patient_moderate')->nullable();
+                    $table->integer('patient_convalescent')->nullable();
+                    $table->double('nursing_hours', 5, 2)->nullable();
+                    $table->double('working_hours', 5, 2)->nullable();
+                    $table->double('nhppd', 5, 2)->nullable();
+                    $table->double('nurse_shift_time', 5, 2)->nullable();
+                    $table->double('productivity', 5, 2)->nullable();
+                    $table->timestamps();
+                });
+            }
+
             if (isset($tables) && is_array($tables)) {
                 foreach ($tables as $table => $columns) {
                     if (!Schema::hasTable($table)) {
@@ -165,12 +316,13 @@ class MainSettingController extends Controller
                                 ALTER TABLE `$table`
                                 MODIFY COLUMN `{$col['name']}` {$col['type']}
                             ");
-                        } else {
+                        }
+                        else {
                             $afterSql = '';
                             if (
-                                isset($col['after']) &&
-                                $col['after'] !== '' &&
-                                Schema::hasColumn($table, $col['after'])
+                            isset($col['after']) &&
+                            $col['after'] !== '' &&
+                            Schema::hasColumn($table, $col['after'])
                             ) {
                                 $afterSql = " AFTER `{$col['after']}`";
                             }
@@ -209,7 +361,8 @@ class MainSettingController extends Controller
             return redirect()->route('admin.main_setting')
                 ->with('success', 'Upgrade Structure สำเร็จ');
 
-        } catch (\Exception $e) {
+        }
+        catch (\Exception $e) {
             return back()->with('error', 'เกิดข้อผิดพลาด: ' . $e->getMessage());
         }
     }

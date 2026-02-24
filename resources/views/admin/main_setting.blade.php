@@ -57,12 +57,29 @@
                             <button class="nav-link" id="ari-tab" data-bs-toggle="tab" data-bs-target="#ari"
                                 type="button" role="tab" aria-controls="ari" aria-selected="false">ARI</button>
                         </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="ckd-tab" data-bs-toggle="tab" data-bs-target="#ckd"
+                                type="button" role="tab" aria-controls="ckd" aria-selected="false">CKD</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="hd-tab" data-bs-toggle="tab" data-bs-target="#hd"
+                                type="button" role="tab" aria-controls="hd" aria-selected="false">HD</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="vip-tab" data-bs-toggle="tab" data-bs-target="#vip"
+                                type="button" role="tab" aria-controls="vip" aria-selected="false">VIP</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="lr-tab" data-bs-toggle="tab" data-bs-target="#lr"
+                                type="button" role="tab" aria-controls="lr" aria-selected="false">LR</button>
+                        </li>
 
                     </ul>
 
                     <div class="tab-content pt-3" id="settingTabsContent">
                         <!-- General Tab -->
-                        <div class="tab-pane fade show active" id="general" role="tabpanel" aria-labelledby="general-tab">
+                        <div class="tab-pane fade show active" id="general" role="tabpanel"
+                            aria-labelledby="general-tab">
                             <div class="table-responsive">
                                 <table class="table table-bordered table-striped">
                                     <thead class="table-light">
@@ -78,8 +95,8 @@
                                                 <td>{{ $setting->id }}</td>
                                                 <td>{{ $setting->name_th }}</td>
                                                 <td>
-                                                    <input type="text" class="form-control" name="{{ $setting->name }}"
-                                                        value="{{ $setting->value }}">
+                                                    <input type="text" class="form-control"
+                                                        name="{{ $setting->name }}" value="{{ $setting->value }}">
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -223,6 +240,114 @@
                             </div>
                         </div>
 
+                        <!-- CKD Tab -->
+                        <div class="tab-pane fade" id="ckd" role="tabpanel" aria-labelledby="ckd-tab">
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th style="width: 5%">ID</th>
+                                            <th style="width: 45%">Name (TH)</th>
+                                            <th style="width: 50%">Value</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($ckd_settings as $setting)
+                                            <tr>
+                                                <td>{{ $setting->id }}</td>
+                                                <td>{{ $setting->name_th }}</td>
+                                                <td>
+                                                    <input type="text" class="form-control"
+                                                        name="{{ $setting->name }}" value="{{ $setting->value }}">
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- HD Tab -->
+                        <div class="tab-pane fade" id="hd" role="tabpanel" aria-labelledby="hd-tab">
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th style="width: 5%">ID</th>
+                                            <th style="width: 45%">Name (TH)</th>
+                                            <th style="width: 50%">Value</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($hd_settings as $setting)
+                                            <tr>
+                                                <td>{{ $setting->id }}</td>
+                                                <td>{{ $setting->name_th }}</td>
+                                                <td>
+                                                    <input type="text" class="form-control"
+                                                        name="{{ $setting->name }}" value="{{ $setting->value }}">
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- VIP Tab -->
+                        <div class="tab-pane fade" id="vip" role="tabpanel" aria-labelledby="vip-tab">
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th style="width: 5%">ID</th>
+                                            <th style="width: 45%">Name (TH)</th>
+                                            <th style="width: 50%">Value</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($vip_settings as $setting)
+                                            <tr>
+                                                <td>{{ $setting->id }}</td>
+                                                <td>{{ $setting->name_th }}</td>
+                                                <td>
+                                                    <input type="text" class="form-control"
+                                                        name="{{ $setting->name }}" value="{{ $setting->value }}">
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- LR Tab -->
+                        <div class="tab-pane fade" id="lr" role="tabpanel" aria-labelledby="lr-tab">
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th style="width: 5%">ID</th>
+                                            <th style="width: 45%">Name (TH)</th>
+                                            <th style="width: 50%">Value</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($lr_settings as $setting)
+                                            <tr>
+                                                <td>{{ $setting->id }}</td>
+                                                <td>{{ $setting->name_th }}</td>
+                                                <td>
+                                                    <input type="text" class="form-control"
+                                                        name="{{ $setting->name }}" value="{{ $setting->value }}">
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
 
 
                     </div>
@@ -283,12 +408,19 @@
                     <!-- HOSxP Departments Tab -->
                     <div class="tab-pane fade show active" id="reference-dept" role="tabpanel"
                         aria-labelledby="reference-dept-tab">
-                        <div class="alert alert-warning py-2 small">
+                        <div class="alert alert-warning py-2 small mb-2">
                             <i class="bi bi-info-circle-fill me-2"></i>ใช้ค่าจากคอลัมน์ <strong>"รหัสห้องตรวจ"</strong>
                             ไประบุในตั้งค่า OPD หรือ NCD
                         </div>
+                        <div class="mb-3 d-flex justify-content-end">
+                            <div class="input-group shadow-sm" style="max-width: 350px;">
+                                <span class="input-group-text bg-white border-end-0"><i class="bi bi-search"></i></span>
+                                <input type="text" id="deptSearch" class="form-control border-start-0"
+                                    placeholder="ค้นหา รหัส หรือ ชื่อห้องตรวจ...">
+                            </div>
+                        </div>
                         <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
-                            <table class="table table-sm table-bordered table-striped table-hover">
+                            <table class="table table-sm table-bordered table-striped table-hover" id="deptTable">
                                 <thead class="table-dark sticky-top">
                                     <tr>
                                         <th>รหัสห้องตรวจ</th>
@@ -319,12 +451,19 @@
 
                     <!-- HOSxP Wards Tab -->
                     <div class="tab-pane fade" id="reference-ward" role="tabpanel" aria-labelledby="reference-ward-tab">
-                        <div class="alert alert-warning py-2 small">
+                        <div class="alert alert-warning py-2 small mb-2">
                             <i class="bi bi-info-circle-fill me-2"></i>ใช้ค่าจากคอลัมน์ <strong>"รหัส Ward"</strong>
                             ไประบุในตั้งค่า IPD
                         </div>
+                        <div class="mb-3 d-flex justify-content-end">
+                            <div class="input-group shadow-sm" style="max-width: 350px;">
+                                <span class="input-group-text bg-white border-end-0"><i class="bi bi-search"></i></span>
+                                <input type="text" id="wardSearch" class="form-control border-start-0"
+                                    placeholder="ค้นหา รหัส หรือ ชื่อ Ward...">
+                            </div>
+                        </div>
                         <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
-                            <table class="table table-sm table-bordered table-striped table-hover">
+                            <table class="table table-sm table-bordered table-striped table-hover" id="wardTable">
                                 <thead class="table-dark sticky-top">
                                     <tr>
                                         <th>รหัส Ward</th>
@@ -396,6 +535,24 @@
                                             onclick="copyToClipboard(this)"><i class="bi bi-clipboard"></i></button>
                                     </div>
                                 </div>
+                                <div class="mt-3">
+                                    <label class="form-label small text-muted mb-1">VIP (หอผู้ป่วยพิเศษ)</label>
+                                    <div class="input-group input-group-sm shadow-sm">
+                                        <input type="text" class="form-control bg-light border-end-0"
+                                            value="{{ url('hnplus/product/vip_night_notify') }}" readonly>
+                                        <button class="btn btn-outline-secondary border-start-0" type="button"
+                                            onclick="copyToClipboard(this)"><i class="bi bi-clipboard"></i></button>
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <label class="form-label small text-muted mb-1">LR (ห้องคลอด)</label>
+                                    <div class="input-group input-group-sm shadow-sm">
+                                        <input type="text" class="form-control bg-light border-end-0"
+                                            value="{{ url('hnplus/product/lr_night_notify') }}" readonly>
+                                        <button class="btn btn-outline-secondary border-start-0" type="button"
+                                            onclick="copyToClipboard(this)"><i class="bi bi-clipboard"></i></button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -453,6 +610,42 @@
                                             onclick="copyToClipboard(this)"><i class="bi bi-clipboard"></i></button>
                                     </div>
                                 </div>
+                                <div class="mt-3">
+                                    <label class="form-label small text-muted mb-1">CKD (คลินิก CKD)</label>
+                                    <div class="input-group input-group-sm shadow-sm">
+                                        <input type="text" class="form-control bg-light border-end-0"
+                                            value="{{ url('hnplus/product/ckd_morning_notify') }}" readonly>
+                                        <button class="btn btn-outline-secondary border-start-0" type="button"
+                                            onclick="copyToClipboard(this)"><i class="bi bi-clipboard"></i></button>
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <label class="form-label small text-muted mb-1">HD (ฟอกเลือดด้วยเครื่องไตเทียม)</label>
+                                    <div class="input-group input-group-sm shadow-sm">
+                                        <input type="text" class="form-control bg-light border-end-0"
+                                            value="{{ url('hnplus/product/hd_morning_notify') }}" readonly>
+                                        <button class="btn btn-outline-secondary border-start-0" type="button"
+                                            onclick="copyToClipboard(this)"><i class="bi bi-clipboard"></i></button>
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <label class="form-label small text-muted mb-1">VIP (หอผู้ป่วยพิเศษ)</label>
+                                    <div class="input-group input-group-sm shadow-sm">
+                                        <input type="text" class="form-control bg-light border-end-0"
+                                            value="{{ url('hnplus/product/vip_morning_notify') }}" readonly>
+                                        <button class="btn btn-outline-secondary border-start-0" type="button"
+                                            onclick="copyToClipboard(this)"><i class="bi bi-clipboard"></i></button>
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <label class="form-label small text-muted mb-1">LR (ห้องคลอด)</label>
+                                    <div class="input-group input-group-sm shadow-sm">
+                                        <input type="text" class="form-control bg-light border-end-0"
+                                            value="{{ url('hnplus/product/lr_morning_notify') }}" readonly>
+                                        <button class="btn btn-outline-secondary border-start-0" type="button"
+                                            onclick="copyToClipboard(this)"><i class="bi bi-clipboard"></i></button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -479,6 +672,24 @@
                                     <div class="input-group input-group-sm shadow-sm">
                                         <input type="text" class="form-control bg-light border-end-0"
                                             value="{{ url('hnplus/product/ipd_afternoon_notify') }}" readonly>
+                                        <button class="btn btn-outline-secondary border-start-0" type="button"
+                                            onclick="copyToClipboard(this)"><i class="bi bi-clipboard"></i></button>
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <label class="form-label small text-muted mb-1">VIP (หอผู้ป่วยพิเศษ)</label>
+                                    <div class="input-group input-group-sm shadow-sm">
+                                        <input type="text" class="form-control bg-light border-end-0"
+                                            value="{{ url('hnplus/product/vip_afternoon_notify') }}" readonly>
+                                        <button class="btn btn-outline-secondary border-start-0" type="button"
+                                            onclick="copyToClipboard(this)"><i class="bi bi-clipboard"></i></button>
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <label class="form-label small text-muted mb-1">LR (ห้องคลอด)</label>
+                                    <div class="input-group input-group-sm shadow-sm">
+                                        <input type="text" class="form-control bg-light border-end-0"
+                                            value="{{ url('hnplus/product/lr_afternoon_notify') }}" readonly>
                                         <button class="btn btn-outline-secondary border-start-0" type="button"
                                             onclick="copyToClipboard(this)"><i class="bi bi-clipboard"></i></button>
                                     </div>
@@ -578,6 +789,35 @@
                             .catch(err => {
                                 outputBox.textContent = 'เกิดข้อผิดพลาด: ' + err;
                             });
+                    });
+                });
+            }
+
+            /* =====================================================
+               HOSxP Reference Search
+            ===================================================== */
+            const deptSearch = document.getElementById('deptSearch');
+            const deptTable = document.getElementById('deptTable');
+            if (deptSearch && deptTable) {
+                deptSearch.addEventListener('keyup', function() {
+                    const value = this.value.toLowerCase();
+                    const rows = deptTable.querySelectorAll('tbody tr');
+                    rows.forEach(row => {
+                        const text = row.textContent.toLowerCase();
+                        row.style.display = text.includes(value) ? '' : 'none';
+                    });
+                });
+            }
+
+            const wardSearch = document.getElementById('wardSearch');
+            const wardTable = document.getElementById('wardTable');
+            if (wardSearch && wardTable) {
+                wardSearch.addEventListener('keyup', function() {
+                    const value = this.value.toLowerCase();
+                    const rows = wardTable.querySelectorAll('tbody tr');
+                    rows.forEach(row => {
+                        const text = row.textContent.toLowerCase();
+                        row.style.display = text.includes(value) ? '' : 'none';
                     });
                 });
             }

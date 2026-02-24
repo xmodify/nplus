@@ -1,12 +1,24 @@
 @extends('layouts.hnplus')
 
 @section('content')
+    <style>
+        .table-premium thead th {
+            background-color: #ebf5ff !important;
+            color: #0065ff !important;
+            border-bottom: 2px solid #dbeafe !important;
+        }
+
+        .bg-soft-blue {
+            background-color: #ebf5ff !important;
+            color: #0065ff !important;
+        }
+    </style>
     <div class="container-fluid mb-4">
         <div class="card-premium p-3 shadow-sm border-0 bg-white">
             <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
                 <div class="d-flex align-items-center">
-                    <div class="bg-soft-warning p-2 rounded-3 me-3">
-                        <i class="bi bi-thermometer-half fs-4 text-warning"></i>
+                    <div class="bg-soft-blue p-2 rounded-3 me-3">
+                        <i class="bi bi-thermometer-half fs-4 text-primary"></i>
                     </div>
                     <div>
                         <h5 class="fw-bold text-dark mb-0">รายงานผลิตภาพทางการพยาบาลแผนก ARI</h5>
@@ -51,8 +63,8 @@
             </div>
             <div class="card-body p-0">
                 <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0">
-                        <thead class="bg-light">
+                    <table class="table table-hover align-middle mb-0 table-premium">
+                        <thead class="bg-soft-blue">
                             <tr>
                                 <th class="text-center">เวร</th>
                                 <th class="text-center">ผู้ป่วยในเวร</th>
@@ -107,8 +119,8 @@
                 </div>
 
                 <div class="table-responsive">
-                    <table id="productivity_ari" class="table table-hover align-middle">
-                        <thead class="bg-light">
+                    <table id="productivity_ari" class="table table-hover align-middle table-premium">
+                        <thead class="bg-soft-blue">
                             <tr>
                                 - <th class="text-center">ลำดับ</th>
                                 <th class="text-center">วันที่</th>

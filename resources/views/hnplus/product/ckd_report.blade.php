@@ -17,11 +17,11 @@
         <div class="card-premium p-3 shadow-sm border-0 bg-white">
             <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
                 <div class="d-flex align-items-center">
-                    <div class="bg-soft-primary p-2 rounded-3 me-3">
-                        <i class="bi bi-person-lines-fill fs-4 text-primary"></i>
+                    <div class="bg-soft-info p-2 rounded-3 me-3">
+                        <i class="bi bi-heart-pulse fs-4 text-info"></i>
                     </div>
                     <div>
-                        <h5 class="fw-bold text-dark mb-0">รายงานผลิตภาพทางการพยาบาลแผนกผู้ป่วยนอก (OPD)</h5>
+                        <h5 class="fw-bold text-dark mb-0">รายงานผลิตภาพทางการพยาบาลแผนกผู้ป่วย CKD</h5>
                         <small class="text-muted">ข้อมูลสรุปช่วงเวลา {{ DateThai($start_date) }} -
                             {{ DateThai($end_date) }}</small>
                     </div>
@@ -48,8 +48,6 @@
         </div>
     </div>
 
-    <!-- Section Summary Card -->
-
     <!-- Summary Table -->
     <div class="container-fluid mb-5">
         <div class="card-premium shadow-lg">
@@ -68,7 +66,6 @@
                             <tr>
                                 <th class="text-center">เวร</th>
                                 <th class="text-center">ผู้ป่วยในเวร</th>
-
                                 <th class="text-center">ชม.การพยาบาล</th>
                                 <th class="text-center">อัตรากำลัง Oncall</th>
                                 <th class="text-center">อัตรากำลังเสริม</th>
@@ -79,12 +76,10 @@
                                 <th class="text-center">พยาบาลที่ต้องการ</th>
                             </tr>
                         </thead>
-                        <?php $count = 1; ?>
                         @foreach ($product_summary as $row)
                             <tr>
                                 <td align="right">{{ $row->shift_time }} {{ $row->shift_time_sum }} เวร</td>
                                 <td align="right">{{ $row->patient_all }}</td>
-
                                 <td align="right">{{ number_format($row->patient_hr, 2) }}</td>
                                 <td align="right">{{ $row->nurse_oncall }}</td>
                                 <td align="right">{{ $row->nurse_partime }}</td>
@@ -94,7 +89,6 @@
                                 <td align="right">{{ number_format($row->nhppd, 2) }}</td>
                                 <td align="right">{{ number_format($row->nurse_shift_time, 2) }}</td>
                             </tr>
-                            <?php $count++; ?>
                         @endforeach
                     </table>
                 </div>
@@ -121,14 +115,13 @@
                 </div>
 
                 <div class="table-responsive">
-                    <table id="productivity_opd" class="table table-hover align-middle table-premium">
+                    <table id="productivity_ckd" class="table table-hover align-middle table-premium">
                         <thead class="bg-soft-blue">
                             <tr>
                                 <th class="text-center">ลำดับ</th>
                                 <th class="text-center">วันที่</th>
                                 <th class="text-center">เวร</th>
                                 <th class="text-center">ผู้ป่วยในเวร</th>
-
                                 <th class="text-center">ชม.การพยาบาล</th>
                                 <th class="text-center">อัตรากำลัง Oncall</th>
                                 <th class="text-center">อัตรากำลังเสริม</th>
@@ -151,7 +144,6 @@
                                 <td align="right">{{ DateThai($row->report_date) }}</td>
                                 <td align="right">{{ $row->shift_time }}</td>
                                 <td align="right">{{ $row->patient_all }}</td>
-
                                 <td align="right">{{ number_format($row->patient_hr, 2) }}</td>
                                 <td align="right">{{ $row->nurse_oncall }}</td>
                                 <td align="right">{{ $row->nurse_partime }}</td>
@@ -164,7 +156,7 @@
                                 <td align="right">{{ $row->note }}</td>
                                 @if ($del_product)
                                     <td class="text-center">
-                                        <form action="{{ url('hnplus/product/opd_product_delete/' . $row->id) }}"
+                                        <form action="{{ url('hnplus/product/ckd_product_delete/' . $row->id) }}"
                                             method="POST"
                                             onsubmit="return confirm('ต้องการลบข้อมูล {{ DateThai($row->report_date) }} {{ $row->shift_time }} Product {{ number_format($row->productivity, 2) }}?')">
                                             @csrf
@@ -212,7 +204,7 @@
 
     <script>
         $(document).ready(function() {
-            var table = $('#productivity_opd').DataTable({
+            var table = $('#productivity_ckd').DataTable({
                 dom: "<'row mb-3'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'fB>>" +
                     "<'row'<'col-sm-12'tr>>" +
                     "<'row mt-3'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
@@ -220,7 +212,7 @@
                     extend: 'excelHtml5',
                     text: '<i class="bi bi-file-earmark-excel me-1"></i> Excel',
                     className: 'btn btn-success btn-sm ms-2 shadow-sm fw-bold',
-                    title: 'รายงานผลิตภาพทางการพยาบาล_OPD_{{ $start_date }}_{{ $end_date }}'
+                    title: 'รายงานผลิตภาพทางการพยาบาล_CKD_{{ $start_date }}_{{ $end_date }}'
                 }],
                 language: {
                     search: "ค้นหา: ",
@@ -245,22 +237,13 @@
                     data: {
                         labels: <?php echo json_encode($report_date); ?>,
                         datasets: [{
-                                label: 'เวรเช้า',
-                                data: <?php echo json_encode($morning); ?>,
-                                backgroundColor: 'rgba(35, 167, 167, 0.7)',
-                                borderColor: 'rgb(35, 167, 167)',
-                                borderRadius: 6,
-                                borderWidth: 1
-                            },
-                            {
-                                label: 'เวร BD',
-                                data: <?php echo json_encode($bd); ?>,
-                                backgroundColor: 'rgba(255, 159, 64, 0.7)',
-                                borderColor: 'rgb(255, 159, 64)',
-                                borderRadius: 6,
-                                borderWidth: 1
-                            }
-                        ]
+                            label: 'เวรเช้า',
+                            data: <?php echo json_encode($morning); ?>,
+                            backgroundColor: 'rgba(35, 167, 167, 0.7)',
+                            borderColor: 'rgb(35, 167, 167)',
+                            borderRadius: 6,
+                            borderWidth: 1
+                        }]
                     },
                     options: {
                         responsive: true,
