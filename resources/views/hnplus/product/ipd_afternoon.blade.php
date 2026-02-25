@@ -51,7 +51,7 @@
                     </div>
                 </div>
 
-                <form id="productForm" action="{{ url('hnplus/product/ipd_afternoon_save') }}" method="POST">
+                <form id="productForm" action="{{ url('product/ipd_afternoon_save') }}" method="POST">
                     @csrf
                     <input type="hidden" name="report_date" value="{{ date('Y-m-d', strtotime('-1 day')) }}">
                     <input type="hidden" name="shift_time" value="เวรบ่าย">

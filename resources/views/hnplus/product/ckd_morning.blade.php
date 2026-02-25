@@ -55,7 +55,7 @@
                     </div>
                 </div>
 
-                <form id="ckdForm" action="{{ url('hnplus/product/ckd_morning_save') }}" method="POST">
+                <form id="ckdForm" action="{{ url('product/ckd_morning_save') }}" method="POST">
                     @csrf
                     <input type="hidden" name="report_date" value="{{ date('Y-m-d') }}">
                     <input type="hidden" name="shift_time" value="เวรเช้า">

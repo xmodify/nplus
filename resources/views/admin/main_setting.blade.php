@@ -620,7 +620,7 @@
                                     <label class="form-label small text-muted mb-1">ER (อุบัติเหตุ-ฉุกเฉิน)</label>
                                     <div class="input-group input-group-sm shadow-sm">
                                         <input type="text" class="form-control bg-light border-end-0"
-                                            value="{{ url('hnplus/product/er_night_notify') }}" readonly>
+                                            value="{{ url('product/er_night_notify') }}" readonly>
                                         <button class="btn btn-outline-secondary border-start-0" type="button"
                                             onclick="copyToClipboard(this)"><i class="bi bi-clipboard"></i></button>
                                     </div>
@@ -629,7 +629,7 @@
                                     <label class="form-label small text-muted mb-1">IPD (ผู้ป่วยใน)</label>
                                     <div class="input-group input-group-sm shadow-sm">
                                         <input type="text" class="form-control bg-light border-end-0"
-                                            value="{{ url('hnplus/product/ipd_night_notify') }}" readonly>
+                                            value="{{ url('product/ipd_night_notify') }}" readonly>
                                         <button class="btn btn-outline-secondary border-start-0" type="button"
                                             onclick="copyToClipboard(this)"><i class="bi bi-clipboard"></i></button>
                                     </div>
@@ -638,7 +638,7 @@
                                     <label class="form-label small text-muted mb-1">VIP (หอผู้ป่วยพิเศษ)</label>
                                     <div class="input-group input-group-sm shadow-sm">
                                         <input type="text" class="form-control bg-light border-end-0"
-                                            value="{{ url('hnplus/product/vip_night_notify') }}" readonly>
+                                            value="{{ url('product/vip_night_notify') }}" readonly>
                                         <button class="btn btn-outline-secondary border-start-0" type="button"
                                             onclick="copyToClipboard(this)"><i class="bi bi-clipboard"></i></button>
                                     </div>
@@ -647,7 +647,7 @@
                                     <label class="form-label small text-muted mb-1">LR (ห้องคลอด)</label>
                                     <div class="input-group input-group-sm shadow-sm">
                                         <input type="text" class="form-control bg-light border-end-0"
-                                            value="{{ url('hnplus/product/lr_night_notify') }}" readonly>
+                                            value="{{ url('product/lr_night_notify') }}" readonly>
                                         <button class="btn btn-outline-secondary border-start-0" type="button"
                                             onclick="copyToClipboard(this)"><i class="bi bi-clipboard"></i></button>
                                     </div>
@@ -668,7 +668,7 @@
                                     <label class="form-label small text-muted mb-1">ER (อุบัติเหตุ-ฉุกเฉิน)</label>
                                     <div class="input-group input-group-sm shadow-sm">
                                         <input type="text" class="form-control bg-light border-end-0"
-                                            value="{{ url('hnplus/product/er_morning_notify') }}" readonly>
+                                            value="{{ url('product/er_morning_notify') }}" readonly>
                                         <button class="btn btn-outline-secondary border-start-0" type="button"
                                             onclick="copyToClipboard(this)"><i class="bi bi-clipboard"></i></button>
                                     </div>
@@ -677,7 +677,7 @@
                                     <label class="form-label small text-muted mb-1">IPD (ผู้ป่วยใน)</label>
                                     <div class="input-group input-group-sm shadow-sm">
                                         <input type="text" class="form-control bg-light border-end-0"
-                                            value="{{ url('hnplus/product/ipd_morning_notify') }}" readonly>
+                                            value="{{ url('product/ipd_morning_notify') }}" readonly>
                                         <button class="btn btn-outline-secondary border-start-0" type="button"
                                             onclick="copyToClipboard(this)"><i class="bi bi-clipboard"></i></button>
                                     </div>
@@ -686,7 +686,7 @@
                                     <label class="form-label small text-muted mb-1">OPD (ผู้ป่วยนอก)</label>
                                     <div class="input-group input-group-sm shadow-sm">
                                         <input type="text" class="form-control bg-light border-end-0"
-                                            value="{{ url('hnplus/product/opd_morning_notify') }}" readonly>
+                                            value="{{ url('product/opd_morning_notify') }}" readonly>
                                         <button class="btn btn-outline-secondary border-start-0" type="button"
                                             onclick="copyToClipboard(this)"><i class="bi bi-clipboard"></i></button>
                                     </div>
@@ -695,7 +695,7 @@
                                     <label class="form-label small text-muted mb-1">NCD (คลินิก NCD)</label>
                                     <div class="input-group input-group-sm shadow-sm">
                                         <input type="text" class="form-control bg-light border-end-0"
-                                            value="{{ url('hnplus/product/ncd_morning_notify') }}" readonly>
+                                            value="{{ url('product/ncd_morning_notify') }}" readonly>
                                         <button class="btn btn-outline-secondary border-start-0" type="button"
                                             onclick="copyToClipboard(this)"><i class="bi bi-clipboard"></i></button>
                                     </div>
@@ -704,7 +704,7 @@
                                     <label class="form-label small text-muted mb-1">ARI (คลินิก ARI)</label>
                                     <div class="input-group input-group-sm shadow-sm">
                                         <input type="text" class="form-control bg-light border-end-0"
-                                            value="{{ url('hnplus/product/ari_morning_notify') }}" readonly>
+                                            value="{{ url('product/ari_morning_notify') }}" readonly>
                                         <button class="btn btn-outline-secondary border-start-0" type="button"
                                             onclick="copyToClipboard(this)"><i class="bi bi-clipboard"></i></button>
                                     </div>
@@ -713,7 +713,7 @@
                                     <label class="form-label small text-muted mb-1">CKD (คลินิก CKD)</label>
                                     <div class="input-group input-group-sm shadow-sm">
                                         <input type="text" class="form-control bg-light border-end-0"
-                                            value="{{ url('hnplus/product/ckd_morning_notify') }}" readonly>
+                                            value="{{ url('product/ckd_morning_notify') }}" readonly>
                                         <button class="btn btn-outline-secondary border-start-0" type="button"
                                             onclick="copyToClipboard(this)"><i class="bi bi-clipboard"></i></button>
                                     </div>
@@ -722,7 +722,7 @@
                                     <label class="form-label small text-muted mb-1">HD (ฟอกเลือดด้วยเครื่องไตเทียม)</label>
                                     <div class="input-group input-group-sm shadow-sm">
                                         <input type="text" class="form-control bg-light border-end-0"
-                                            value="{{ url('hnplus/product/hd_morning_notify') }}" readonly>
+                                            value="{{ url('product/hd_morning_notify') }}" readonly>
                                         <button class="btn btn-outline-secondary border-start-0" type="button"
                                             onclick="copyToClipboard(this)"><i class="bi bi-clipboard"></i></button>
                                     </div>
@@ -731,7 +731,7 @@
                                     <label class="form-label small text-muted mb-1">VIP (หอผู้ป่วยพิเศษ)</label>
                                     <div class="input-group input-group-sm shadow-sm">
                                         <input type="text" class="form-control bg-light border-end-0"
-                                            value="{{ url('hnplus/product/vip_morning_notify') }}" readonly>
+                                            value="{{ url('product/vip_morning_notify') }}" readonly>
                                         <button class="btn btn-outline-secondary border-start-0" type="button"
                                             onclick="copyToClipboard(this)"><i class="bi bi-clipboard"></i></button>
                                     </div>
@@ -740,7 +740,7 @@
                                     <label class="form-label small text-muted mb-1">LR (ห้องคลอด)</label>
                                     <div class="input-group input-group-sm shadow-sm">
                                         <input type="text" class="form-control bg-light border-end-0"
-                                            value="{{ url('hnplus/product/lr_morning_notify') }}" readonly>
+                                            value="{{ url('product/lr_morning_notify') }}" readonly>
                                         <button class="btn btn-outline-secondary border-start-0" type="button"
                                             onclick="copyToClipboard(this)"><i class="bi bi-clipboard"></i></button>
                                     </div>
@@ -761,7 +761,7 @@
                                     <label class="form-label small text-muted mb-1">ER (อุบัติเหตุ-ฉุกเฉิน)</label>
                                     <div class="input-group input-group-sm shadow-sm">
                                         <input type="text" class="form-control bg-light border-end-0"
-                                            value="{{ url('hnplus/product/er_afternoon_notify') }}" readonly>
+                                            value="{{ url('product/er_afternoon_notify') }}" readonly>
                                         <button class="btn btn-outline-secondary border-start-0" type="button"
                                             onclick="copyToClipboard(this)"><i class="bi bi-clipboard"></i></button>
                                     </div>
@@ -770,7 +770,7 @@
                                     <label class="form-label small text-muted mb-1">IPD (ผู้ป่วยใน)</label>
                                     <div class="input-group input-group-sm shadow-sm">
                                         <input type="text" class="form-control bg-light border-end-0"
-                                            value="{{ url('hnplus/product/ipd_afternoon_notify') }}" readonly>
+                                            value="{{ url('product/ipd_afternoon_notify') }}" readonly>
                                         <button class="btn btn-outline-secondary border-start-0" type="button"
                                             onclick="copyToClipboard(this)"><i class="bi bi-clipboard"></i></button>
                                     </div>
@@ -779,7 +779,7 @@
                                     <label class="form-label small text-muted mb-1">VIP (หอผู้ป่วยพิเศษ)</label>
                                     <div class="input-group input-group-sm shadow-sm">
                                         <input type="text" class="form-control bg-light border-end-0"
-                                            value="{{ url('hnplus/product/vip_afternoon_notify') }}" readonly>
+                                            value="{{ url('product/vip_afternoon_notify') }}" readonly>
                                         <button class="btn btn-outline-secondary border-start-0" type="button"
                                             onclick="copyToClipboard(this)"><i class="bi bi-clipboard"></i></button>
                                     </div>
@@ -788,7 +788,7 @@
                                     <label class="form-label small text-muted mb-1">LR (ห้องคลอด)</label>
                                     <div class="input-group input-group-sm shadow-sm">
                                         <input type="text" class="form-control bg-light border-end-0"
-                                            value="{{ url('hnplus/product/lr_afternoon_notify') }}" readonly>
+                                            value="{{ url('product/lr_afternoon_notify') }}" readonly>
                                         <button class="btn btn-outline-secondary border-start-0" type="button"
                                             onclick="copyToClipboard(this)"><i class="bi bi-clipboard"></i></button>
                                     </div>
@@ -809,7 +809,7 @@
                                     <label class="form-label small text-muted mb-1">OPD (ผู้ป่วยนอก - เวร BD)</label>
                                     <div class="input-group input-group-sm shadow-sm">
                                         <input type="text" class="form-control bg-light border-end-0"
-                                            value="{{ url('hnplus/product/opd_bd_notify') }}" readonly>
+                                            value="{{ url('product/opd_bd_notify') }}" readonly>
                                         <button class="btn btn-outline-secondary border-start-0" type="button"
                                             onclick="copyToClipboard(this)"><i class="bi bi-clipboard"></i></button>
                                     </div>

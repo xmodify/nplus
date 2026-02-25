@@ -125,7 +125,7 @@ class ProductVIPController extends Controller
         ", [$date, $start_time, $end_time]);
 
         $row = $notify[0];
-        $url = url("hnplus/product/$route");
+        $url = url("product/$route");
         $message = "$dep_name\n" . "วันที่ " . DateThai($date) . "\n" . "เวลา $start_time-$end_time $shift_name\n" . "ผู้ป่วยในเวร {$row->patient_all} ราย\n" . " -Convalescent {$row->convalescent} ราย\n" . " -Moderate {$row->Moderate} ราย\n" . " -Semi critical {$row->Semi_critical} ราย\n" . " -Critical {$row->Critical} ราย\n" . " -ไม่ระบุความรุนแรง {$row->severe_type_null} ราย\n\n" . "บันทึก Productivity \n" . "$url\n";
 
         $token = MainSetting::where('name', 'telegram_token')->value('value');

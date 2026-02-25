@@ -119,7 +119,7 @@ class ProductIPDController extends Controller
             $Semi_critical = $row->Semi_critical;
             $Critical = $row->Critical;
             $severe_type_null = $row->severe_type_null;
-            $url = url('hnplus/product/ipd_night');
+            $url = url('product/ipd_night');
         }
 
         //แจ้งเตือน Telegram
@@ -330,7 +330,7 @@ class ProductIPDController extends Controller
             $Semi_critical = $row->Semi_critical;
             $Critical = $row->Critical;
             $severe_type_null = $row->severe_type_null;
-            $url = url('hnplus/product/ipd_morning');
+            $url = url('product/ipd_morning');
         }
 
         //แจ้งเตือน Telegram
@@ -541,7 +541,7 @@ class ProductIPDController extends Controller
             $Semi_critical = $row->Semi_critical;
             $Critical = $row->Critical;
             $severe_type_null = $row->severe_type_null;
-            $url = url('hnplus/product/ipd_afternoon');
+            $url = url('product/ipd_afternoon');
         }
 
         //แจ้งเตือน Telegram

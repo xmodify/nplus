@@ -55,7 +55,7 @@
                     </div>
                 </div>
 
-                <form id="ncdForm" action="{{ url('hnplus/product/ncd_morning_save') }}" method="POST">
+                <form id="ncdForm" action="{{ url('product/ncd_morning_save') }}" method="POST">
                     @csrf
                     <input type="hidden" name="report_date" value="{{ date('Y-m-d') }}">
                     <input type="hidden" name="shift_time" value="เวรเช้า">

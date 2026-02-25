@@ -130,21 +130,21 @@
                                 <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0">
                                     @if (isset($app_settings['er_active']) && $app_settings['er_active'] == 'Y')
                                         <li>
-                                            <a class="dropdown-item py-2" href="{{ url('hnplus/product/er_report') }}">
+                                            <a class="dropdown-item py-2" href="{{ url('product/er_report') }}">
                                                 <i class="bi bi-hospital text-danger me-2"></i>งานอุบัติเหตุ-ฉุกเฉิน ER
                                             </a>
                                         </li>
                                     @endif
                                     @if (isset($app_settings['ipd_active']) && $app_settings['ipd_active'] == 'Y')
                                         <li>
-                                            <a class="dropdown-item py-2" href="{{ url('hnplus/product/ipd_report') }}">
+                                            <a class="dropdown-item py-2" href="{{ url('product/ipd_report') }}">
                                                 <i class="fa-solid fa-bed text-success me-2 ms-1"></i>งานผู้ป่วยในสามัญ IPD
                                             </a>
                                         </li>
                                     @endif
                                     @if (isset($app_settings['vip_active']) && $app_settings['vip_active'] == 'Y')
                                         <li>
-                                            <a class="dropdown-item py-2" href="{{ url('hnplus/product/vip_report') }}">
+                                            <a class="dropdown-item py-2" href="{{ url('product/vip_report') }}">
                                                 <i class="fa-solid fa-couch text-warning me-2 ms-1"></i>งานผู้ป่วยห้องพิเศษ
                                                 VIP
                                             </a>
@@ -152,7 +152,7 @@
                                     @endif
                                     @if (isset($app_settings['lr_active']) && $app_settings['lr_active'] == 'Y')
                                         <li>
-                                            <a class="dropdown-item py-2" href="{{ url('hnplus/product/lr_report') }}">
+                                            <a class="dropdown-item py-2" href="{{ url('product/lr_report') }}">
                                                 <i
                                                     class="fa-solid fa-person-breastfeeding text-danger me-2 ms-1"></i>งานห้องคลอด
                                                 LR
@@ -161,35 +161,35 @@
                                     @endif
                                     @if (isset($app_settings['opd_active']) && $app_settings['opd_active'] == 'Y')
                                         <li>
-                                            <a class="dropdown-item py-2" href="{{ url('hnplus/product/opd_report') }}">
+                                            <a class="dropdown-item py-2" href="{{ url('product/opd_report') }}">
                                                 <i class="bi bi-person-lines-fill text-primary me-2"></i>งานผู้ป่วยนอก OPD
                                             </a>
                                         </li>
                                     @endif
                                     @if (isset($app_settings['ncd_active']) && $app_settings['ncd_active'] == 'Y')
                                         <li>
-                                            <a class="dropdown-item py-2" href="{{ url('hnplus/product/ncd_report') }}">
+                                            <a class="dropdown-item py-2" href="{{ url('product/ncd_report') }}">
                                                 <i class="bi bi-heart-pulse text-info me-2"></i>งานผู้ป่วย NCD
                                             </a>
                                         </li>
                                     @endif
                                     @if (isset($app_settings['ari_active']) && $app_settings['ari_active'] == 'Y')
                                         <li>
-                                            <a class="dropdown-item py-2" href="{{ url('hnplus/product/ari_report') }}">
+                                            <a class="dropdown-item py-2" href="{{ url('product/ari_report') }}">
                                                 <i class="bi bi-thermometer-half text-warning me-2"></i>งานผู้ป่วย ARI
                                             </a>
                                         </li>
                                     @endif
                                     @if (isset($app_settings['ckd_active']) && $app_settings['ckd_active'] == 'Y')
                                         <li>
-                                            <a class="dropdown-item py-2" href="{{ url('hnplus/product/ckd_report') }}">
+                                            <a class="dropdown-item py-2" href="{{ url('product/ckd_report') }}">
                                                 <i class="bi bi-heart-pulse text-dark me-2"></i>งานผู้ป่วย CKD
                                             </a>
                                         </li>
                                     @endif
                                     @if (isset($app_settings['hd_active']) && $app_settings['hd_active'] == 'Y')
                                         <li>
-                                            <a class="dropdown-item py-2" href="{{ url('hnplus/product/hd_report') }}">
+                                            <a class="dropdown-item py-2" href="{{ url('product/hd_report') }}">
                                                 <i class="bi bi-droplet-fill text-primary me-2"></i>งานฟอกเลือดไตเทียม HD
                                             </a>
                                         </li>

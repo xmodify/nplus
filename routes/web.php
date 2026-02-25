@@ -46,7 +46,7 @@ Route::prefix('admin')->middleware(['auth', 'is_admin'])->name('admin.')->group(
 
 //HN-Plus ################################################################################################################################
 // ✅ กลุ่มที่ต้องล็อกอิน
-Route::prefix('hnplus')->middleware(['auth', 'hnplus'])->name('hnplus.')->group(function () {
+Route::middleware(['auth', 'hnplus'])->name('hnplus.')->group(function () {
     Route::match (['get', 'post'], 'product/er_report', [ProductERController::class , 'er_report'])->name('product.er_report');
     Route::delete('product/er_product_delete/{id}', [ProductERController::class , 'er_product_delete']);
     Route::match (['get', 'post'], 'product/ipd_report', [ProductIPDController::class , 'ipd_report'])->name('product.ipd_report');
@@ -68,7 +68,7 @@ Route::prefix('hnplus')->middleware(['auth', 'hnplus'])->name('hnplus.')->group(
 });
 
 // ✅ กลุ่มที่ไม่ต้องล็อกอิน (public)
-Route::prefix('hnplus')->name('hnplus.')->group(function () {
+Route::name('hnplus.')->group(function () {
     //product ER-----------------------------------------------------------------------------------------------------------
     Route::get('product/er_night_notify', [ProductERController::class , 'er_night_notify']);
     Route::get('product/er_night', [ProductERController::class , 'er_night']);

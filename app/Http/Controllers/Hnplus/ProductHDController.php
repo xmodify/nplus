@@ -78,7 +78,7 @@ class ProductHDController extends Controller
 
         foreach ($notify as $row) {
             $patient_all = $row->patient_all;
-            $url = url('hnplus/product/hd_morning');
+            $url = url('product/hd_morning');
         }
 
         $message = "🧑‍⚕️งานฟอกเลือดด้วยเครื่องไตเทียม HD" . "\n"

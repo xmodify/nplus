@@ -85,7 +85,7 @@ class ProductNCDController extends Controller
 
         foreach ($notify as $row) {
             $patient_all = $row->patient_all;
-            $url = url('hnplus/product/ncd_morning');
+            $url = url('product/ncd_morning');
         }
 
         //แจ้งเตือน Telegram

@@ -137,7 +137,7 @@
             @if (isset($app_settings['er_active']) && $app_settings['er_active'] == 'Y')
                 <!-- ER Report -->
                 <div class="col-12 col-xl-6">
-                    <a href="{{ url('hnplus/product/er_report') }}" class="text-decoration-none">
+                    <a href="{{ url('product/er_report') }}" class="text-decoration-none">
                         <div class="stat-card h-100 position-relative overflow-hidden">
                             <div class="card-status-bar bg-danger"></div>
                             <div class="d-flex justify-content-between align-items-start mb-4">
@@ -215,7 +215,7 @@
             @if (isset($app_settings['ipd_active']) && $app_settings['ipd_active'] == 'Y')
                 <!-- IPD Report -->
                 <div class="col-12 col-xl-6">
-                    <a href="{{ url('hnplus/product/ipd_report') }}" class="text-decoration-none">
+                    <a href="{{ url('product/ipd_report') }}" class="text-decoration-none">
                         <div class="stat-card h-100 position-relative overflow-hidden">
                             <div class="card-status-bar bg-primary"></div>
                             <div class="d-flex justify-content-between align-items-start mb-4">
@@ -285,7 +285,7 @@
             @if (isset($app_settings['vip_active']) && $app_settings['vip_active'] == 'Y')
                 <!-- VIP Report -->
                 <div class="col-12 col-xl-6">
-                    <a href="{{ url('hnplus/product/vip_report') }}" class="text-decoration-none">
+                    <a href="{{ url('product/vip_report') }}" class="text-decoration-none">
                         <div class="stat-card h-100 position-relative overflow-hidden">
                             <div class="card-status-bar bg-warning"></div>
                             <div class="d-flex justify-content-between align-items-start mb-4">
@@ -357,7 +357,7 @@
             @if (isset($app_settings['lr_active']) && $app_settings['lr_active'] == 'Y')
                 <!-- LR Report -->
                 <div class="col-12 col-xl-6">
-                    <a href="{{ url('hnplus/product/lr_report') }}" class="text-decoration-none">
+                    <a href="{{ url('product/lr_report') }}" class="text-decoration-none">
                         <div class="stat-card h-100 position-relative overflow-hidden">
                             <div class="card-status-bar bg-danger"></div>
                             <div class="d-flex justify-content-between align-items-start mb-4">
@@ -429,7 +429,7 @@
             @if (isset($app_settings['opd_active']) && $app_settings['opd_active'] == 'Y')
                 <!-- OPD Report -->
                 <div class="col-12 col-md-6 col-xl-4">
-                    <a href="{{ url('hnplus/product/opd_report') }}" class="text-decoration-none">
+                    <a href="{{ url('product/opd_report') }}" class="text-decoration-none">
                         <div class="stat-card h-100 position-relative overflow-hidden">
                             <div class="card-status-bar bg-success"></div>
                             <div class="d-flex justify-content-between align-items-center mb-4">
@@ -467,7 +467,7 @@
             @if (isset($app_settings['ncd_active']) && $app_settings['ncd_active'] == 'Y')
                 <!-- NCD Report -->
                 <div class="col-12 col-md-6 col-xl-4">
-                    <a href="{{ url('hnplus/product/ncd_report') }}" class="text-decoration-none">
+                    <a href="{{ url('product/ncd_report') }}" class="text-decoration-none">
                         <div class="stat-card h-100 position-relative overflow-hidden">
                             <div class="card-status-bar bg-warning"></div>
                             <div class="d-flex justify-content-between align-items-center mb-4">
@@ -505,7 +505,7 @@
             @if (isset($app_settings['ari_active']) && $app_settings['ari_active'] == 'Y')
                 <!-- ARI Report -->
                 <div class="col-12 col-md-6 col-xl-4">
-                    <a href="{{ url('hnplus/product/ari_report') }}" class="text-decoration-none">
+                    <a href="{{ url('product/ari_report') }}" class="text-decoration-none">
                         <div class="stat-card h-100 position-relative overflow-hidden">
                             <div class="card-status-bar bg-secondary"></div>
                             <div class="d-flex justify-content-between align-items-center mb-4">
@@ -543,7 +543,7 @@
             @if (isset($app_settings['ckd_active']) && $app_settings['ckd_active'] == 'Y')
                 <!-- CKD Report -->
                 <div class="col-12 col-md-6 col-xl-4">
-                    <a href="{{ url('hnplus/product/ckd_report') }}" class="text-decoration-none">
+                    <a href="{{ url('product/ckd_report') }}" class="text-decoration-none">
                         <div class="stat-card h-100 position-relative overflow-hidden">
                             <div class="card-status-bar bg-info"></div>
                             <div class="d-flex justify-content-between align-items-center mb-4">
@@ -580,7 +580,7 @@
             @if (isset($app_settings['hd_active']) && $app_settings['hd_active'] == 'Y')
                 <!-- HD Report -->
                 <div class="col-12 col-md-6 col-xl-4">
-                    <a href="{{ url('hnplus/product/hd_report') }}" class="text-decoration-none">
+                    <a href="{{ url('product/hd_report') }}" class="text-decoration-none">
                         <div class="stat-card h-100 position-relative overflow-hidden">
                             <div class="card-status-bar bg-secondary"></div>
                             <div class="d-flex justify-content-between align-items-center mb-4">

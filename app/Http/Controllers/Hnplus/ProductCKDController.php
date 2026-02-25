@@ -78,7 +78,7 @@ class ProductCKDController extends Controller
 
         foreach ($notify as $row) {
             $patient_all = $row->patient_all;
-            $url = url('hnplus/product/ckd_morning');
+            $url = url('product/ckd_morning');
         }
 
         $message = "🧑‍⚕️งานผู้ป่วย CKD" . "\n"

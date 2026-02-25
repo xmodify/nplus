@@ -95,7 +95,7 @@ class ProductOPDController extends Controller
 
         foreach ($notify as $row) {
             $patient_all = $row->patient_all;
-            $url = url('hnplus/product/opd_morning');
+            $url = url('product/opd_morning');
         }
 
         //แจ้งเตือน Telegram
@@ -270,7 +270,7 @@ class ProductOPDController extends Controller
 
         foreach ($notify as $row) {
             $patient_all = $row->patient_all;
-            $url = url('hnplus/product/opd_bd');
+            $url = url('product/opd_bd');
         }
 
         //แจ้งเตือน Telegram

@@ -156,7 +156,7 @@
                                 <td align="right">{{ $row->note }}</td>
                                 @if ($del_product)
                                     <td class="text-center">
-                                        <form action="{{ url('hnplus/product/hd_product_delete/' . $row->id) }}"
+                                        <form action="{{ url('product/hd_product_delete/' . $row->id) }}"
                                             method="POST"
                                             onsubmit="return confirm('ต้องการลบข้อมูล {{ DateThai($row->report_date) }} {{ $row->shift_time }} Product {{ number_format($row->productivity, 2) }}?')">
                                             @csrf

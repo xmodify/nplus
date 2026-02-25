@@ -115,7 +115,7 @@ class ProductERController extends Controller
             $urgent = $row->urgent;
             $semi_urgent = $row->semi_urgent;
             $non_urgent = $row->non_urgent;
-            $url = url('hnplus/product/er_night');
+            $url = url('product/er_night');
         }
 
         //แจ้งเตือน Telegram
@@ -305,7 +305,7 @@ class ProductERController extends Controller
             $urgent = $row->urgent;
             $semi_urgent = $row->semi_urgent;
             $non_urgent = $row->non_urgent;
-            $url = url('hnplus/product/er_morning');
+            $url = url('product/er_morning');
         }
 
         //แจ้งเตือน Telegram
@@ -495,7 +495,7 @@ class ProductERController extends Controller
             $urgent = $row->urgent;
             $semi_urgent = $row->semi_urgent;
             $non_urgent = $row->non_urgent;
-            $url = url('hnplus/product/er_afternoon');
+            $url = url('product/er_afternoon');
         }
 
         //แจ้งเตือน Telegram 

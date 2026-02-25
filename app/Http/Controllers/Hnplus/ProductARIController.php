@@ -74,7 +74,7 @@ class ProductARIController extends Controller
 
         foreach ($notify as $row) {
             $patient_all = $row->patient_all;
-            $url = url('hnplus/product/ari_morning');
+            $url = url('product/ari_morning');
         }
 
         $message = "🧑‍⚕️งาน ARI" . "\n"
