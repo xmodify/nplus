@@ -98,7 +98,7 @@ class DashboardController extends Controller
                  ORDER BY n.note_date DESC, n.note_time DESC 
                  LIMIT 1) as ipd_nurse_eval_range_code
                 FROM ipt i
-                WHERE i.ward IN ($ipd_ward) AND i.confirm_discharge = 'N'
+                WHERE i.ward IN ($ipd_ward)
             ) t
         ";
         $ipd_result = DB::connection('hosxp')->selectOne($ipd_query);

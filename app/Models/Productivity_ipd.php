@@ -24,6 +24,7 @@ class Productivity_ipd extends Model
         'patient_semi_critical',
         'patient_moderate',
         'patient_convalescent',
+        'patient_severe_type_null',
         'nursing_hours',
         'working_hours',
         'nhppd',

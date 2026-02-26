@@ -108,7 +108,7 @@ class ProductIPDController extends Controller
                     WHERE note_date = CURDATE() AND note_time BETWEEN '00:00:01' AND '07:59:59'
                     GROUP BY an, note_date
                 ) x ON x.an = n.an AND x.note_date = n.note_date AND x.last_time = n.note_time
-                WHERE i.ward IN ('$ipd_ward') AND i.confirm_discharge = 'N'
+                WHERE i.ward IN ($ipd_ward)
             ) t
         ");
 
@@ -182,7 +182,7 @@ class ProductIPDController extends Controller
                     WHERE note_date = CURDATE() AND note_time BETWEEN '00:00:01' AND '07:59:59'
                     GROUP BY an, note_date
                 ) x ON x.an = n.an AND x.note_date = n.note_date AND x.last_time = n.note_time
-                WHERE i.ward IN ('$ipd_ward') AND i.confirm_discharge = 'N'
+                WHERE i.ward IN ($ipd_ward)
             ) t
         ");
 
@@ -253,6 +253,7 @@ class ProductIPDController extends Controller
                 'patient_moderate' => $Moderate,
                 'patient_semi_critical' => $Semi_critical,
                 'patient_critical' => $Critical,
+'patient_severe_type_null' => $request->severe_type_null,
 
                 'nursing_hours' => $patient_hr,
                 'working_hours' => $nurse_hr,
@@ -270,7 +271,7 @@ class ProductIPDController extends Controller
             . " - Convalescent: {$convalescent} ราย" . "\n"
             . " - Moderate: {$Moderate} ราย" . "\n"
             . " - Semi critical: {$Semi_critical} ราย" . "\n"
-            . " - Critical: {$Critical} ราย" . "\n"
+            . " - Critical: {$Critical} ราย" . "\n" . " - ไม่ระบุความรุนแรง: {$request->severe_type_null} ราย" . "\n"
             . "👩‍⚕️ Oncall: {$request->nurse_oncall}" . "\n"
             . "👩‍⚕️ เสริม: {$request->nurse_partime}" . "\n"
             . "👩‍⚕️ ปกติ: {$request->nurse_fulltime}" . "\n"
@@ -319,7 +320,7 @@ class ProductIPDController extends Controller
                     WHERE note_date = CURDATE() AND note_time BETWEEN '08:00:00' AND '15:59:59'
                     GROUP BY an, note_date
                 ) x ON x.an = n.an AND x.note_date = n.note_date AND x.last_time = n.note_time
-                WHERE i.ward IN ('$ipd_ward') AND i.confirm_discharge = 'N'
+                WHERE i.ward IN ($ipd_ward)
             ) t
         ");
 
@@ -393,7 +394,7 @@ class ProductIPDController extends Controller
                     WHERE note_date = CURDATE() AND note_time BETWEEN '08:00:00' AND '15:59:59'
                     GROUP BY an, note_date
                 ) x ON x.an = n.an AND x.note_date = n.note_date AND x.last_time = n.note_time
-                WHERE i.ward IN ('$ipd_ward') AND i.confirm_discharge = 'N'
+                WHERE i.ward IN ($ipd_ward)
             ) t
         ");
 
@@ -464,6 +465,7 @@ class ProductIPDController extends Controller
                 'patient_moderate' => $Moderate,
                 'patient_semi_critical' => $Semi_critical,
                 'patient_critical' => $Critical,
+'patient_severe_type_null' => $request->severe_type_null,
 
                 'nursing_hours' => $patient_hr,
                 'working_hours' => $nurse_hr,
@@ -481,7 +483,7 @@ class ProductIPDController extends Controller
             . " - Convalescent: {$convalescent} ราย" . "\n"
             . " - Moderate: {$Moderate} ราย" . "\n"
             . " - Semi critical: {$Semi_critical} ราย" . "\n"
-            . " - Critical: {$Critical} ราย" . "\n"
+            . " - Critical: {$Critical} ราย" . "\n" . " - ไม่ระบุความรุนแรง: {$request->severe_type_null} ราย" . "\n"
             . "👩‍⚕️ Oncall: {$request->nurse_oncall}" . "\n"
             . "👩‍⚕️ เสริม: {$request->nurse_partime}" . "\n"
             . "👩‍⚕️ ปกติ: {$request->nurse_fulltime}" . "\n"
@@ -527,10 +529,10 @@ class ProductIPDController extends Controller
                 JOIN (
                     SELECT an, note_date, MAX(note_time) AS last_time
                     FROM ipd_nurse_note
-                    WHERE note_date = CURDATE() - INTERVAL 1 DAY AND note_time BETWEEN '16:00:00' AND '23:59:59'
+                    WHERE note_date = date(DATE_ADD(now(), INTERVAL -1 DAY )) AND note_time BETWEEN '16:00:00' AND '23:59:59'
                     GROUP BY an, note_date
                 ) x ON x.an = n.an AND x.note_date = n.note_date AND x.last_time = n.note_time
-                WHERE i.ward IN ('$ipd_ward') AND i.confirm_discharge = 'N'
+                WHERE i.ward IN ($ipd_ward)
             ) t
         ");
 
@@ -601,10 +603,10 @@ class ProductIPDController extends Controller
                 JOIN (
                     SELECT an, note_date, MAX(note_time) AS last_time
                     FROM ipd_nurse_note
-                    WHERE note_date = CURDATE() AND note_time BETWEEN '16:00:00' AND '23:59:59'
+                    WHERE note_date = date(DATE_ADD(now(), INTERVAL -1 DAY )) AND note_time BETWEEN '16:00:00' AND '23:59:59'
                     GROUP BY an, note_date
                 ) x ON x.an = n.an AND x.note_date = n.note_date AND x.last_time = n.note_time
-                WHERE i.ward IN ('$ipd_ward') AND i.confirm_discharge = 'N'
+                WHERE i.ward IN ($ipd_ward)
             ) t
         ");
 
@@ -675,6 +677,7 @@ class ProductIPDController extends Controller
                 'patient_moderate' => $Moderate,
                 'patient_semi_critical' => $Semi_critical,
                 'patient_critical' => $Critical,
+'patient_severe_type_null' => $request->severe_type_null,
 
                 'nursing_hours' => $patient_hr,
                 'working_hours' => $nurse_hr,
@@ -692,7 +695,7 @@ class ProductIPDController extends Controller
             . " - Convalescent: {$convalescent} ราย" . "\n"
             . " - Moderate: {$Moderate} ราย" . "\n"
             . " - Semi critical: {$Semi_critical} ราย" . "\n"
-            . " - Critical: {$Critical} ราย" . "\n"
+            . " - Critical: {$Critical} ราย" . "\n" . " - ไม่ระบุความรุนแรง: {$request->severe_type_null} ราย" . "\n"
             . "👩‍⚕️ Oncall: {$request->nurse_oncall}" . "\n"
             . "👩‍⚕️ เสริม: {$request->nurse_partime}" . "\n"
             . "👩‍⚕️ ปกติ: {$request->nurse_fulltime}" . "\n"

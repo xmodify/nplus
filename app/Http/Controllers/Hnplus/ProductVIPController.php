@@ -95,7 +95,7 @@ class ProductVIPController extends Controller
     public function vip_afternoon_notify()
     {
         $vip_ward = MainSetting::where('name', 'vip_ward')->value('value') ?? '08';
-        $target_date = date('Y-m-d');
+        $target_date = date('Y-m-d', strtotime('-1 day'));
         return $this->notify('เวรบ่าย', '16:00:00', '23:59:59', $vip_ward, 'vip_afternoon', '🛏️ งานห้องผู้ป่วยพิเศษ VIP', 'vip_notifytelegram', $target_date);
     }
 
@@ -120,7 +120,7 @@ class ProductVIPController extends Controller
                     WHERE note_date = ? AND note_time BETWEEN ? AND ?
                     GROUP BY an, note_date
                 ) x ON x.an = n.an AND x.note_date = n.note_date AND x.last_time = n.note_time
-                WHERE i.ward IN ($wards) AND i.confirm_discharge = 'N'
+                WHERE i.ward IN ($wards)
             ) t
         ", [$date, $start_time, $end_time]);
 
@@ -160,12 +160,12 @@ class ProductVIPController extends Controller
                 JOIN (
                     SELECT an, note_date, MAX(note_time) AS last_time
                     FROM ipd_nurse_note
-                    WHERE note_date = CURDATE() AND note_time BETWEEN ? AND ?
+                    WHERE note_date = (CASE WHEN ? = '16:00:00' THEN date(DATE_ADD(now(), INTERVAL -1 DAY )) ELSE CURDATE() END) AND note_time BETWEEN ? AND ?
                     GROUP BY an, note_date
                 ) x ON x.an = n.an AND x.note_date = n.note_date AND x.last_time = n.note_time
-                WHERE i.ward IN ($wards) AND i.confirm_discharge = 'N'
+                WHERE i.ward IN ($wards)
             ) t
-        ", [$start_time, $end_time]);
+        ", [$start_time, $start_time, $end_time]);
         return view("hnplus.product.$view", compact('shift'));
     }
 
@@ -200,11 +200,12 @@ class ProductVIPController extends Controller
                 'recorder' => $request->recorder, 'note' => $request->note, 'patient_all' => $p_all,
                 'patient_convalescent' => $request->convalescent, 'patient_moderate' => $request->Moderate,
                 'patient_semi_critical' => $request->Semi_critical, 'patient_critical' => $request->Critical,
+'patient_severe_type_null' => $request->severe_type_null,
                 'nursing_hours' => $p_hr, 'working_hours' => $n_total * $hours, 'nurse_shift_time' => $n_shift, 'nhppd' => $nhppd, 'productivity' => $prod,
             ]
         );
 
-        $msg = "🛏️ งานห้องผู้ป่วยพิเศษ VIP\n" . "วันที่ " . DateThai(date('Y-m-d')) . "\n" . "เวลา $time_range $shift_name\n" . "ผู้ป่วยในเวร: $p_all ราย\n" . " - Convalescent: {$request->convalescent} ราย\n" . " - Moderate: {$request->Moderate} ราย\n" . " - Semi critical: {$request->Semi_critical} ราย\n" . " - Critical: {$request->Critical} ราย\n" . "พยาบาล Oncall: {$request->nurse_oncall}\n" . "พยาบาล Part time: {$request->nurse_partime}\n" . "พยาบาล Full time: {$request->nurse_fulltime}\n" . "ค่า Productivity: " . number_format($prod, 2) . "\n" . "ผู้บันทึก: {$request->recorder}";
+        $msg = "🛏️ งานห้องผู้ป่วยพิเศษ VIP\n" . "วันที่ " . DateThai(date('Y-m-d')) . "\n" . "เวลา $time_range $shift_name\n" . "ผู้ป่วยในเวร: $p_all ราย\n" . " - Convalescent: {$request->convalescent} ราย\n" . " - Moderate: {$request->Moderate} ราย\n" . " - Semi critical: {$request->Semi_critical} ราย\n" . " - Critical: {$request->Critical} ราย\n" . " - ไม่ระบุความรุนแรง: {$request->severe_type_null} ราย\n" . "พยาบาล Oncall: {$request->nurse_oncall}\n" . "พยาบาล Part time: {$request->nurse_partime}\n" . "พยาบาล Full time: {$request->nurse_fulltime}\n" . "ค่า Productivity: " . number_format($prod, 2) . "\n" . "ผู้บันทึก: {$request->recorder}";
 
         $token = MainSetting::where('name', 'telegram_token')->value('value');
         $chat_ids = explode(',', MainSetting::where('name', 'vip_notifytelegram_save')->value('value'));

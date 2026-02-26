@@ -90,6 +90,13 @@
                                     </div>
                                     <input type="hidden" name="Critical" value="{{ $row->Critical }}">
                                 </div>
+                                <div class="col-6 col-md-4">
+                                    <div class="p-2 border rounded bg-white text-center">
+                                        <div class="small text-muted mb-1">ไม่ระบุ</div>
+                                        <div class="fw-bold text-secondary">{{ $row->severe_type_null }}</div>
+                                    </div>
+                                    <input type="hidden" name="severe_type_null" value="{{ $row->severe_type_null }}">
+                                </div>
                             </div>
                         @endforeach
                     </div>
@@ -112,7 +119,8 @@
                         </label>
                         <div class="input-group shadow-sm">
                             <input type="number" id="nurse_partime" name="nurse_partime"
-                                class="form-control border-end-0 py-2" placeholder="0" step="any" min="0">
+                                class="form-control border-end-0 py-2" placeholder="0" step="any"
+                                min="0">
                             <span class="input-group-text bg-white text-muted small">คน</span>
                         </div>
                     </div>
