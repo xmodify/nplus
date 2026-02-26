@@ -461,6 +461,9 @@
                             </div>
                         </div>
 
+
+
+
                         <!-- ANC Tab -->
                         <div class="tab-pane fade" id="anc" role="tabpanel" aria-labelledby="anc-tab">
                             <div class="table-responsive">
@@ -498,9 +501,6 @@
                                 </table>
                             </div>
                         </div>
-
-
-
                     </div>
 
                     <div class="mt-4 text-end">

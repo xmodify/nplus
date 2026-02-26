@@ -45,7 +45,8 @@ class MainSettingController extends Controller
             !str_starts_with($item->name, 'ckd_') &&
             !str_starts_with($item->name, 'hd_') &&
             !str_starts_with($item->name, 'vip_') &&
-            !str_starts_with($item->name, 'lr_');
+            !str_starts_with($item->name, 'lr_') &&
+            !str_starts_with($item->name, 'anc_');
         });
 
         $er_settings = $settings->filter(function ($item) {
@@ -87,6 +88,7 @@ class MainSettingController extends Controller
         $anc_settings = $settings->filter(function ($item) {
             return str_starts_with($item->name, 'anc_');
         });
+
 
         $hosxp_departments = DB::connection('hosxp')
             ->select("
