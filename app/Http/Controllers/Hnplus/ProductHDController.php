@@ -74,7 +74,7 @@ class ProductHDController extends Controller
             SELECT IFNULL(COUNT(DISTINCT o1.vn),0) AS patient_all
             FROM opd_dep_queue o1, ovst o2 WHERE o1.depcode IN ($hd_dep)
             AND o1.vn = o2.vn AND o2.vstdate = DATE(NOW())
-            AND o2.vsttime BETWEEN '00:00:00' AND '15:59:59' ");
+            AND o2.vsttime BETWEEN '00:00:00' AND '19:59:59' ");
 
         foreach ($notify as $row) {
             $patient_all = $row->patient_all;
@@ -116,7 +116,7 @@ class ProductHDController extends Controller
             SELECT IFNULL(COUNT(DISTINCT o1.vn),0) AS patient_all
             FROM opd_dep_queue o1, ovst o2 WHERE o1.depcode IN ($hd_dep)
             AND o1.vn = o2.vn AND o2.vstdate = DATE(NOW())
-            AND o2.vsttime BETWEEN '00:00:00' AND '15:59:59' ");
+            AND o2.vsttime BETWEEN '00:00:00' AND '19:59:59' ");
 
         return view('hnplus.product.hd_morning', compact('shift'));
     }

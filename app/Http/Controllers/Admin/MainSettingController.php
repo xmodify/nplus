@@ -245,9 +245,15 @@ class MainSettingController extends Controller
 
         //After Table-----------------------------------------------------------------------------------------------------------
         $productivity_tables = [
-            'productivity_ari', 'productivity_ckd', 'productivity_er',
-            'productivity_hd', 'productivity_ipd', 'productivity_lr',
-            'productivity_ncd', 'productivity_opd', 'productivity_vip',
+            'productivity_ari',
+            'productivity_ckd',
+            'productivity_er',
+            'productivity_hd',
+            'productivity_ipd',
+            'productivity_lr',
+            'productivity_ncd',
+            'productivity_opd',
+            'productivity_vip',
             'productivity_anc'
         ];
 
@@ -260,6 +266,34 @@ class MainSettingController extends Controller
                 }
             }
         }
+
+        $tables = [
+            'productivity_opd' => [
+                ['name' => 'opd', 'type' => 'INT(11)', 'after' => 'patient_all'],
+                ['name' => 'ari', 'type' => 'INT(11)', 'after' => 'opd'],
+            ],
+            'productivity_ipd' => [
+                ['name' => 'patient_convalescent', 'type' => 'INT(11)', 'after' => 'patient_all'],
+                ['name' => 'patient_moderate', 'type' => 'INT(11)', 'after' => 'patient_convalescent'],
+                ['name' => 'patient_semi_critical', 'type' => 'INT(11)', 'after' => 'patient_moderate'],
+                ['name' => 'patient_critical', 'type' => 'INT(11)', 'after' => 'patient_semi_critical'],
+                ['name' => 'patient_severe_type_null', 'type' => 'INT(11)', 'after' => 'patient_critical'],
+            ],
+            'productivity_vip' => [
+                ['name' => 'patient_convalescent', 'type' => 'INT(11)', 'after' => 'patient_all'],
+                ['name' => 'patient_moderate', 'type' => 'INT(11)', 'after' => 'patient_convalescent'],
+                ['name' => 'patient_semi_critical', 'type' => 'INT(11)', 'after' => 'patient_moderate'],
+                ['name' => 'patient_critical', 'type' => 'INT(11)', 'after' => 'patient_semi_critical'],
+                ['name' => 'patient_severe_type_null', 'type' => 'INT(11)', 'after' => 'patient_critical'],
+            ],
+            'productivity_lr' => [
+                ['name' => 'patient_convalescent', 'type' => 'INT(11)', 'after' => 'patient_all'],
+                ['name' => 'patient_moderate', 'type' => 'INT(11)', 'after' => 'patient_convalescent'],
+                ['name' => 'patient_semi_critical', 'type' => 'INT(11)', 'after' => 'patient_moderate'],
+                ['name' => 'patient_critical', 'type' => 'INT(11)', 'after' => 'patient_semi_critical'],
+                ['name' => 'patient_severe_type_null', 'type' => 'INT(11)', 'after' => 'patient_critical'],
+            ],
+        ];
 
         try {
             // Create Productivity CKD Table if not exists

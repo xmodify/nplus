@@ -271,7 +271,8 @@ class ProductIPDController extends Controller
             . " - Convalescent: {$convalescent} ราย" . "\n"
             . " - Moderate: {$Moderate} ราย" . "\n"
             . " - Semi critical: {$Semi_critical} ราย" . "\n"
-            . " - Critical: {$Critical} ราย" . "\n" . " - ไม่ระบุความรุนแรง: {$request->severe_type_null} ราย" . "\n"
+            . " - Critical: {$Critical} ราย" . "\n" 
+            . " - ไม่ระบุความรุนแรง: {$request->severe_type_null} ราย" . "\n"
             . "👩‍⚕️ Oncall: {$request->nurse_oncall}" . "\n"
             . "👩‍⚕️ เสริม: {$request->nurse_partime}" . "\n"
             . "👩‍⚕️ ปกติ: {$request->nurse_fulltime}" . "\n"
@@ -296,7 +297,6 @@ class ProductIPDController extends Controller
         return redirect()->back()->with('success', '✅ ส่งข้อมูลเวรดึกเรียบร้อยแล้ว');
     }
 
-    //แจ้งเตือนสถานะการณ์สรุปเวรเช้า รัน 16.00 น.---------------------------------------------------------------------------------------------
     //แจ้งเตือนสถานะการณ์สรุปเวรเช้า รัน 16.00 น.---------------------------------------------------------------------------------------------
     public function ipd_morning_notify()
     {
@@ -483,7 +483,8 @@ class ProductIPDController extends Controller
             . " - Convalescent: {$convalescent} ราย" . "\n"
             . " - Moderate: {$Moderate} ราย" . "\n"
             . " - Semi critical: {$Semi_critical} ราย" . "\n"
-            . " - Critical: {$Critical} ราย" . "\n" . " - ไม่ระบุความรุนแรง: {$request->severe_type_null} ราย" . "\n"
+            . " - Critical: {$Critical} ราย" . "\n" 
+            . " - ไม่ระบุความรุนแรง: {$request->severe_type_null} ราย" . "\n"
             . "👩‍⚕️ Oncall: {$request->nurse_oncall}" . "\n"
             . "👩‍⚕️ เสริม: {$request->nurse_partime}" . "\n"
             . "👩‍⚕️ ปกติ: {$request->nurse_fulltime}" . "\n"
