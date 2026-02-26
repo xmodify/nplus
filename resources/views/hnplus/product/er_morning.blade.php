@@ -63,66 +63,60 @@
                     <input type="hidden" name="shift_time" value="เวรเช้า">
 
                     <div class="bg-light rounded-4 p-4 mb-4 border border-white shadow-sm">
-                        <h6 class="fw-bold mb-3 text-dark border-bottom pb-2">
-                            <i class="bi bi-people-fill me-2 text-primary"></i>รายละเอียดผู้ป่วย
+                        <h6 class="fw-bold text-dark mb-3 border-bottom pb-2">
+                            <i class="bi bi-people-fill me-2 text-primary"></i>รายละเอียดจำนวนผู้ป่วย
                         </h6>
                         @foreach ($shift as $row)
-                            <div
-                                class="d-flex justify-content-between align-items-center mb-2 px-2 py-1 bg-white rounded-3 shadow-sm border border-light">
-                                <span class="text-secondary small">จำนวนผู้ป่วยทั้งหมด</span>
-                                <span class="fw-bold text-primary fs-5">{{ $row->visit }} <small
-                                        class="fw-normal text-muted fs-6">ราย</small></span>
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="text-secondary">จำนวนผู้ป่วยทั้งหมด</span>
+                                <span class="fw-bold text-dark fs-5">{{ $row->visit }} <small
+                                        class="fw-normal text-muted">ราย</small></span>
                             </div>
                             <input type="hidden" name="patient_all" value="{{ $row->visit }}">
 
-                            <div class="row g-2 mt-1">
-                                <div class="col-6">
-                                    <div class="p-2 bg-white rounded-3 shadow-sm border border-light text-center">
-                                        <div class="text-danger small mb-1">Resuscitation</div>
-                                        <div class="fw-bold text-dark">{{ $row->resuscitation }}</div>
+                            <div class="row g-2 mt-2">
+                                <div class="col-6 col-md-4">
+                                    <div class="p-2 border rounded bg-white text-center">
+                                        <div class="small text-muted mb-1">Resuscitation</div>
+                                        <div class="fw-bold text-danger">{{ $row->resuscitation }}</div>
                                     </div>
+                                    <input type="hidden" name="resuscitation" value="{{ $row->resuscitation }}">
                                 </div>
-                                <input type="hidden" name="resuscitation" value="{{ $row->resuscitation }}">
-
-                                <div class="col-6">
-                                    <div class="p-2 bg-white rounded-3 shadow-sm border border-light text-center">
-                                        <div class="text-warning small mb-1">Emergent</div>
-                                        <div class="fw-bold text-dark">{{ $row->emergent }}</div>
+                                <div class="col-6 col-md-4">
+                                    <div class="p-2 border rounded bg-white text-center">
+                                        <div class="small text-muted mb-1">Emergent</div>
+                                        <div class="fw-bold text-warning">{{ $row->emergent }}</div>
                                     </div>
+                                    <input type="hidden" name="emergent" value="{{ $row->emergent }}">
                                 </div>
-                                <input type="hidden" name="emergent" value="{{ $row->emergent }}">
-
-                                <div class="col-4">
-                                    <div class="p-2 bg-white rounded-3 shadow-sm border border-light text-center">
-                                        <div class="text-info small mb-1">Urgent</div>
-                                        <div class="fw-bold text-dark">{{ $row->urgent }}</div>
+                                <div class="col-6 col-md-4">
+                                    <div class="p-2 border rounded bg-white text-center">
+                                        <div class="small text-muted mb-1">Urgent</div>
+                                        <div class="fw-bold text-primary">{{ $row->urgent }}</div>
                                     </div>
+                                    <input type="hidden" name="urgent" value="{{ $row->urgent }}">
                                 </div>
-                                <input type="hidden" name="urgent" value="{{ $row->urgent }}">
-
-                                <div class="col-4">
-                                    <div class="p-2 bg-white rounded-3 shadow-sm border border-light text-center">
-                                        <div class="text-success small mb-1">Semi Urgent</div>
-                                        <div class="fw-bold text-dark">{{ $row->semi_urgent }}</div>
+                                <div class="col-6 col-md-4">
+                                    <div class="p-2 border rounded bg-white text-center">
+                                        <div class="small text-muted mb-1">Semi Urgent</div>
+                                        <div class="fw-bold text-info">{{ $row->semi_urgent }}</div>
                                     </div>
+                                    <input type="hidden" name="semi_urgent" value="{{ $row->semi_urgent }}">
                                 </div>
-                                <input type="hidden" name="semi_urgent" value="{{ $row->semi_urgent }}">
-
-                                <div class="col-4">
-                                    <div class="p-2 bg-white rounded-3 shadow-sm border border-light text-center">
-                                        <div class="text-secondary small mb-1">Non Urgent</div>
-                                        <div class="fw-bold text-dark">{{ $row->non_urgent }}</div>
+                                <div class="col-6 col-md-4">
+                                    <div class="p-2 border rounded bg-white text-center">
+                                        <div class="small text-muted mb-1">Non Urgent</div>
+                                        <div class="fw-bold text-success">{{ $row->non_urgent }}</div>
                                     </div>
+                                    <input type="hidden" name="non_urgent" value="{{ $row->non_urgent }}">
                                 </div>
-                                <input type="hidden" name="non_urgent" value="{{ $row->non_urgent }}">
-
-                                <div class="col-4">
-                                    <div class="p-2 bg-white rounded-3 shadow-sm border border-light text-center">
-                                        <div class="text-muted small mb-1">ไม่ระบุ</div>
-                                        <div class="fw-bold text-dark">{{ $row->severe_type_null }}</div>
+                                <div class="col-6 col-md-4">
+                                    <div class="p-2 border rounded bg-white text-center">
+                                        <div class="small text-muted mb-1">ไม่ระบุ</div>
+                                        <div class="fw-bold text-secondary">{{ $row->severe_type_null }}</div>
                                     </div>
+                                    <input type="hidden" name="severe_type_null" value="{{ $row->severe_type_null }}">
                                 </div>
-                                <input type="hidden" name="severe_type_null" value="{{ $row->severe_type_null }}">
                             </div>
                         @endforeach
                     </div>
