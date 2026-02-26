@@ -577,6 +577,40 @@
                     </div>
                 </div>
             @endif
+
+            @if (isset($app_settings['anc_active']) && $app_settings['anc_active'] == 'Y')
+                <!-- ANC Report -->
+                <div class="col-12 col-md-6 col-xl-4">
+                    <div class="stat-card h-100 position-relative overflow-hidden">
+                        <div class="card-status-bar bg-success"></div>
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="icon-circle bg-success bg-opacity-10 text-success">
+                                    <i class="fa-solid fa-person-breastfeeding"></i>
+                                </div>
+                                <div>
+                                    <h5 class="fw-bold text-dark mb-1">งานฝากครรภ์ ANC</h5>
+                                    <div class="d-flex align-items-center text-muted small">
+                                        <i class="bi bi-clock-history me-1"></i> {{ $anc_stats['shift'] }}
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="badge bg-success rounded-pill px-3 py-2">ANC</span>
+                        </div>
+
+                        <div class="d-flex align-items-center justify-content-between bg-light rounded-4 p-4 border">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center"
+                                    style="width: 48px; height: 48px;">
+                                    <i class="bi bi-people fs-4"></i>
+                                </div>
+                                <span class="text-muted fw-medium">ผู้ป่วยทั้งหมดในเวร</span>
+                            </div>
+                            <div class="display-4 fw-bold text-success">{{ $anc_stats['patient_all'] }}</div>
+                        </div>
+                    </div>
+                </div>
+            @endif
         </div>
     </div>
     @push('scripts')

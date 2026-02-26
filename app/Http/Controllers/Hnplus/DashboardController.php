@@ -27,6 +27,7 @@ class DashboardController extends Controller
         $lr_ward = MainSetting::where('name', 'lr_ward')->value('value') ?? "''";
         $ckd_dep = MainSetting::where('name', 'ckd_department')->value('value') ?? "''";
         $hd_dep = MainSetting::where('name', 'hd_department')->value('value') ?? "''";
+        $anc_dep = MainSetting::where('name', 'anc_department')->value('value') ?? "''";
 
         // Determine Current Shift for ER & IPD
         // - เวรดึก 00:00:01 - 07:59:59
@@ -216,7 +217,6 @@ class DashboardController extends Controller
         // 7. HD Data
         $hd_stats = ['shift' => 'เวรเช้า', 'patient_all' => 0];
         if ($hd_dep != "''" && $hd_dep != "") {
-            $hd_query = str_replace('$ncd_dep', $hd_dep, $hd_dep); // Wait, mapping should be depcode IN ($hd_dep)
             // Actually the query used $ncd_dep variable name in string, let's fix that.
             $hd_query = "
                 SELECT IFNULL(COUNT(DISTINCT o1.vn),0) AS patient_all
@@ -231,10 +231,21 @@ class DashboardController extends Controller
             ];
         }
 
-        if (\Illuminate\Support\Facades\Auth::check()) {
-            return view('hnplus.dashboard', compact('er_stats', 'ipd_stats', 'opd_stats', 'ncd_stats', 'ari_stats', 'vip_stats', 'lr_stats', 'ckd_stats', 'hd_stats', 'today', 'shift_name'));
+        // 8. ANC Data
+        $anc_stats = ['shift' => 'เวรเช้า', 'patient_all' => 0];
+        if ($anc_dep != "''" && $anc_dep != "") {
+            $anc_query = str_replace($opd_dep, $anc_dep, $opd_query);
+            $anc_result = DB::connection('hosxp')->selectOne($anc_query, [$opd_st, $opd_et]); // Use opd_st, opd_et as ANC is an OPD type service
+            $anc_stats = [
+                'shift' => 'เวรเช้า',
+                'patient_all' => $anc_result->patient_all ?? 0,
+            ];
         }
 
-        return view('welcome', compact('er_stats', 'ipd_stats', 'opd_stats', 'ncd_stats', 'ari_stats', 'vip_stats', 'lr_stats', 'ckd_stats', 'hd_stats', 'today', 'shift_name'));
+        if (\Illuminate\Support\Facades\Auth::check()) {
+            return view('hnplus.dashboard', compact('er_stats', 'ipd_stats', 'opd_stats', 'ncd_stats', 'ari_stats', 'vip_stats', 'lr_stats', 'ckd_stats', 'hd_stats', 'anc_stats', 'today', 'shift_name'));
+        }
+
+        return view('welcome', compact('er_stats', 'ipd_stats', 'opd_stats', 'ncd_stats', 'ari_stats', 'vip_stats', 'lr_stats', 'ckd_stats', 'hd_stats', 'anc_stats', 'today', 'shift_name'));
     }
 }

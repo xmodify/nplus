@@ -194,6 +194,15 @@
                                             </a>
                                         </li>
                                     @endif
+                                    @if (isset($app_settings['anc_active']) && $app_settings['anc_active'] == 'Y')
+                                        <li>
+                                            <a class="dropdown-item py-2" href="{{ url('product/anc_report') }}">
+                                                <i
+                                                    class="fa-solid fa-person-breastfeeding text-success me-2 ms-1"></i>งานฝากครรภ์
+                                                ANC
+                                            </a>
+                                        </li>
+                                    @endif
                                 </ul>
                             </li>
                         @endauth

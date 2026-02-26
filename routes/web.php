@@ -12,6 +12,7 @@ use App\Http\Controllers\Hnplus\ProductCKDController;
 use App\Http\Controllers\Hnplus\ProductHDController;
 use App\Http\Controllers\Hnplus\ProductVIPController;
 use App\Http\Controllers\Hnplus\ProductLRController;
+use App\Http\Controllers\Hnplus\ProductANCController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\BudgetYearController;
 
@@ -65,6 +66,8 @@ Route::middleware(['auth', 'hnplus'])->name('hnplus.')->group(function () {
     Route::delete('product/vip_product_delete/{id}', [ProductVIPController::class , 'vip_product_delete']);
     Route::match (['get', 'post'], 'product/lr_report', [ProductLRController::class , 'lr_report'])->name('product.lr_report');
     Route::delete('product/lr_product_delete/{id}', [ProductLRController::class , 'lr_product_delete']);
+    Route::match (['get', 'post'], 'product/anc_report', [ProductANCController::class , 'anc_report'])->name('product.anc_report');
+    Route::delete('product/anc_product_delete/{id}', [ProductANCController::class , 'anc_product_delete']);
 });
 
 // ✅ กลุ่มที่ไม่ต้องล็อกอิน (public)
@@ -132,4 +135,8 @@ Route::name('hnplus.')->group(function () {
     Route::get('product/lr_afternoon_notify', [ProductLRController::class , 'lr_afternoon_notify']);
     Route::get('product/lr_afternoon', [ProductLRController::class , 'lr_afternoon']);
     Route::post('product/lr_afternoon_save', [ProductLRController::class , 'lr_afternoon_save']);
+    //product ANC-----------------------------------------------------------------------------------------------------------
+    Route::get('product/anc_morning_notify', [ProductANCController::class , 'anc_morning_notify']);
+    Route::get('product/anc_morning', [ProductANCController::class , 'anc_morning']);
+    Route::post('product/anc_morning_save', [ProductANCController::class , 'anc_morning_save']);
 });

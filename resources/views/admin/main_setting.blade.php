@@ -73,6 +73,10 @@
                             <button class="nav-link" id="hd-tab" data-bs-toggle="tab" data-bs-target="#hd"
                                 type="button" role="tab" aria-controls="hd" aria-selected="false">HD</button>
                         </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="anc-tab" data-bs-toggle="tab" data-bs-target="#anc"
+                                type="button" role="tab" aria-controls="anc" aria-selected="false">ANC</button>
+                        </li>
                     </ul>
 
                     <div class="tab-content pt-3" id="settingTabsContent">
@@ -97,7 +101,8 @@
                                                             name="{{ $setting->name }}">
                                                             <option value="Y"
                                                                 {{ $setting->value == 'Y' ? 'selected' : '' }}>เปิดใช้งาน
-                                                                (Y)</option>
+                                                                (Y)
+                                                            </option>
                                                             <option value="N"
                                                                 {{ $setting->value == 'N' ? 'selected' : '' }}>ปิดใช้งาน (N)
                                                             </option>
@@ -134,7 +139,8 @@
                                                             name="{{ $setting->name }}">
                                                             <option value="Y"
                                                                 {{ $setting->value == 'Y' ? 'selected' : '' }}>เปิดใช้งาน
-                                                                (Y)</option>
+                                                                (Y)
+                                                            </option>
                                                             <option value="N"
                                                                 {{ $setting->value == 'N' ? 'selected' : '' }}>ปิดใช้งาน
                                                                 (N)</option>
@@ -171,7 +177,8 @@
                                                             name="{{ $setting->name }}">
                                                             <option value="Y"
                                                                 {{ $setting->value == 'Y' ? 'selected' : '' }}>เปิดใช้งาน
-                                                                (Y)</option>
+                                                                (Y)
+                                                            </option>
                                                             <option value="N"
                                                                 {{ $setting->value == 'N' ? 'selected' : '' }}>ปิดใช้งาน
                                                                 (N)</option>
@@ -208,7 +215,8 @@
                                                             name="{{ $setting->name }}">
                                                             <option value="Y"
                                                                 {{ $setting->value == 'Y' ? 'selected' : '' }}>เปิดใช้งาน
-                                                                (Y)</option>
+                                                                (Y)
+                                                            </option>
                                                             <option value="N"
                                                                 {{ $setting->value == 'N' ? 'selected' : '' }}>ปิดใช้งาน
                                                                 (N)</option>
@@ -245,7 +253,8 @@
                                                             name="{{ $setting->name }}">
                                                             <option value="Y"
                                                                 {{ $setting->value == 'Y' ? 'selected' : '' }}>เปิดใช้งาน
-                                                                (Y)</option>
+                                                                (Y)
+                                                            </option>
                                                             <option value="N"
                                                                 {{ $setting->value == 'N' ? 'selected' : '' }}>ปิดใช้งาน
                                                                 (N)</option>
@@ -282,7 +291,8 @@
                                                             name="{{ $setting->name }}">
                                                             <option value="Y"
                                                                 {{ $setting->value == 'Y' ? 'selected' : '' }}>เปิดใช้งาน
-                                                                (Y)</option>
+                                                                (Y)
+                                                            </option>
                                                             <option value="N"
                                                                 {{ $setting->value == 'N' ? 'selected' : '' }}>ปิดใช้งาน
                                                                 (N)</option>
@@ -319,7 +329,8 @@
                                                             name="{{ $setting->name }}">
                                                             <option value="Y"
                                                                 {{ $setting->value == 'Y' ? 'selected' : '' }}>เปิดใช้งาน
-                                                                (Y)</option>
+                                                                (Y)
+                                                            </option>
                                                             <option value="N"
                                                                 {{ $setting->value == 'N' ? 'selected' : '' }}>ปิดใช้งาน
                                                                 (N)</option>
@@ -356,7 +367,8 @@
                                                             name="{{ $setting->name }}">
                                                             <option value="Y"
                                                                 {{ $setting->value == 'Y' ? 'selected' : '' }}>เปิดใช้งาน
-                                                                (Y)</option>
+                                                                (Y)
+                                                            </option>
                                                             <option value="N"
                                                                 {{ $setting->value == 'N' ? 'selected' : '' }}>ปิดใช้งาน
                                                                 (N)</option>
@@ -393,7 +405,8 @@
                                                             name="{{ $setting->name }}">
                                                             <option value="Y"
                                                                 {{ $setting->value == 'Y' ? 'selected' : '' }}>เปิดใช้งาน
-                                                                (Y)</option>
+                                                                (Y)
+                                                            </option>
                                                             <option value="N"
                                                                 {{ $setting->value == 'N' ? 'selected' : '' }}>ปิดใช้งาน
                                                                 (N)</option>
@@ -430,7 +443,46 @@
                                                             name="{{ $setting->name }}">
                                                             <option value="Y"
                                                                 {{ $setting->value == 'Y' ? 'selected' : '' }}>เปิดใช้งาน
-                                                                (Y)</option>
+                                                                (Y)
+                                                            </option>
+                                                            <option value="N"
+                                                                {{ $setting->value == 'N' ? 'selected' : '' }}>ปิดใช้งาน
+                                                                (N)</option>
+                                                        </select>
+                                                    @else
+                                                        <input type="text" class="form-control"
+                                                            name="{{ $setting->name }}" value="{{ $setting->value }}">
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- ANC Tab -->
+                        <div class="tab-pane fade" id="anc" role="tabpanel" aria-labelledby="anc-tab">
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th style="width: 50%">Name (TH)</th>
+                                            <th style="width: 50%">Value</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($anc_settings as $setting)
+                                            <tr>
+                                                <td>{{ $setting->name_th }}</td>
+                                                <td>
+                                                    @if (str_ends_with($setting->name, '_active'))
+                                                        <select class="form-select border-primary"
+                                                            name="{{ $setting->name }}">
+                                                            <option value="Y"
+                                                                {{ $setting->value == 'Y' ? 'selected' : '' }}>เปิดใช้งาน
+                                                                (Y)
+                                                            </option>
                                                             <option value="N"
                                                                 {{ $setting->value == 'N' ? 'selected' : '' }}>ปิดใช้งาน
                                                                 (N)</option>
@@ -741,6 +793,15 @@
                                     <div class="input-group input-group-sm shadow-sm">
                                         <input type="text" class="form-control bg-light border-end-0"
                                             value="{{ url('product/lr_morning_notify') }}" readonly>
+                                        <button class="btn btn-outline-secondary border-start-0" type="button"
+                                            onclick="copyToClipboard(this)"><i class="bi bi-clipboard"></i></button>
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <label class="form-label small text-muted mb-1">ANC (งานฝากครรภ์)</label>
+                                    <div class="input-group input-group-sm shadow-sm">
+                                        <input type="text" class="form-control bg-light border-end-0"
+                                            value="{{ url('product/anc_morning_notify') }}" readonly>
                                         <button class="btn btn-outline-secondary border-start-0" type="button"
                                             onclick="copyToClipboard(this)"><i class="bi bi-clipboard"></i></button>
                                     </div>

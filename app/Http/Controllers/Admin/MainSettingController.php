@@ -84,6 +84,10 @@ class MainSettingController extends Controller
             return str_starts_with($item->name, 'lr_');
         });
 
+        $anc_settings = $settings->filter(function ($item) {
+            return str_starts_with($item->name, 'anc_');
+        });
+
         $hosxp_departments = DB::connection('hosxp')
             ->select("
                 SELECT k.depcode, k.department, s.name AS spclty, k.depcode_active 
@@ -114,7 +118,8 @@ class MainSettingController extends Controller
             'ckd_settings',
             'hd_settings',
             'vip_settings',
-            'lr_settings'
+            'lr_settings',
+            'anc_settings'
         ));
     }
 
@@ -210,6 +215,12 @@ class MainSettingController extends Controller
             ['name_th' => 'LR NotifyTelegram แจ้งเตือน', 'name' => 'lr_notifytelegram', 'value' => ''],
             ['name_th' => 'LR NotifyTelegram บันทึก', 'name' => 'lr_notifytelegram_save', 'value' => ''],
             ['name_th' => 'LR สถานะ', 'name' => 'lr_active', 'value' => 'Y'],
+            ['name_th' => 'ANC รหัสห้องตรวจ (HOSxP)', 'name' => 'anc_department', 'value' => ''],
+            ['name_th' => 'ANC ชม.การทำงานพยาบาล', 'name' => 'anc_working_hours', 'value' => '7'],
+            ['name_th' => 'ANC ชม.ผู้ป่วยทั่วไป', 'name' => 'anc_patient_type', 'value' => '0.24'],
+            ['name_th' => 'ANC NotifyTelegram แจ้งเตือน', 'name' => 'anc_notifytelegram', 'value' => ''],
+            ['name_th' => 'ANC NotifyTelegram บันทึก', 'name' => 'anc_notifytelegram_save', 'value' => ''],
+            ['name_th' => 'ANC สถานะ', 'name' => 'anc_active', 'value' => 'Y'],
         ];
         foreach ($main_setting as $row) {
             $check = MainSetting::where('name', $row['name'])->count();
@@ -234,7 +245,8 @@ class MainSettingController extends Controller
         $productivity_tables = [
             'productivity_ari', 'productivity_ckd', 'productivity_er',
             'productivity_hd', 'productivity_ipd', 'productivity_lr',
-            'productivity_ncd', 'productivity_opd', 'productivity_vip'
+            'productivity_ncd', 'productivity_opd', 'productivity_vip',
+            'productivity_anc'
         ];
 
         foreach ($productivity_tables as $ptable) {
@@ -331,6 +343,27 @@ class MainSettingController extends Controller
                     $table->integer('patient_semi_critical')->nullable();
                     $table->integer('patient_moderate')->nullable();
                     $table->integer('patient_convalescent')->nullable();
+                    $table->double('nursing_hours', 5, 2)->nullable();
+                    $table->double('working_hours', 5, 2)->nullable();
+                    $table->double('nhppd', 5, 2)->nullable();
+                    $table->double('nurse_shift_time', 5, 2)->nullable();
+                    $table->double('productivity', 5, 2)->nullable();
+                    $table->timestamps();
+                });
+            }
+
+            // Create Productivity ANC Table if not exists
+            if (!Schema::hasTable('productivity_anc')) {
+                Schema::create('productivity_anc', function (Blueprint $table) {
+                    $table->id();
+                    $table->date('report_date');
+                    $table->string('shift_time', 20);
+                    $table->integer('nurse_fulltime')->nullable();
+                    $table->integer('nurse_partime')->nullable();
+                    $table->integer('nurse_oncall')->nullable();
+                    $table->string('recorder')->nullable();
+                    $table->string('note')->nullable();
+                    $table->integer('patient_all')->nullable();
                     $table->double('nursing_hours', 5, 2)->nullable();
                     $table->double('working_hours', 5, 2)->nullable();
                     $table->double('nhppd', 5, 2)->nullable();

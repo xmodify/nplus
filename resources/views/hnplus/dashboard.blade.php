@@ -613,6 +613,43 @@
                     </a>
                 </div>
             @endif
+
+            @if (isset($app_settings['anc_active']) && $app_settings['anc_active'] == 'Y')
+                <!-- ANC Report -->
+                <div class="col-12 col-md-6 col-xl-4">
+                    <a href="{{ url('product/anc_report') }}" class="text-decoration-none">
+                        <div class="stat-card h-100 position-relative overflow-hidden">
+                            <div class="card-status-bar bg-success"></div>
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="icon-circle bg-success bg-opacity-10 text-success">
+                                        <i class="fa-solid fa-person-breastfeeding"></i>
+                                    </div>
+                                    <div>
+                                        <h5 class="fw-bold text-dark mb-1">งานฝากครรภ์ ANC</h5>
+                                        <div class="d-flex align-items-center text-muted small flex-wrap">
+                                            <i class="bi bi-clock-history me-1"></i> {{ $anc_stats['shift'] }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <span class="badge bg-success rounded-pill px-3 py-2">ANC</span>
+                            </div>
+
+                            <div
+                                class="d-flex align-items-center justify-content-between bg-light rounded-4 p-3 p-sm-4 border">
+                                <div class="d-flex align-items-center gap-2 gap-sm-3">
+                                    <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center flex-shrink-0"
+                                        style="width: 40px; height: 40px;">
+                                        <i class="bi bi-people fs-5"></i>
+                                    </div>
+                                    <span class="text-muted fw-medium small">ผู้ป่วยทั้งหมดในเวร</span>
+                                </div>
+                                <div class="display-6 fw-bold text-success">{{ $anc_stats['patient_all'] }}</div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            @endif
         </div>
 
 
