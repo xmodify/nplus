@@ -37,7 +37,7 @@
             <div class="card-body p-4 p-md-5">
                 <div class="text-center mb-4">
                     <span class="badge bg-soft-primary text-primary px-3 py-2 rounded-pill">
-                        <i class="bi bi-calendar3 me-2"></i>วันที่ {{ DateThai(date('Y-m-d')) }}
+                        <i class="bi bi-calendar3 me-2"></i>วันที่ {{ DateThai(date('Y-m-d', strtotime('-1 day'))) }}
                     </span>
                     <div class="text-secondary small mt-2">
                         <i class="bi bi-cloud-sun me-1"></i> ช่วงเวลา 16.00-24.00 น.
@@ -46,7 +46,7 @@
 
                 <form id="productForm" action="{{ url('product/lr_afternoon_save') }}" method="POST">
                     @csrf
-                    <input type="hidden" name="report_date" value="{{ date('Y-m-d') }}">
+                    <input type="hidden" name="report_date" value="{{ date('Y-m-d', strtotime('-1 day')) }}">
                     <input type="hidden" name="shift_time" value="เวรบ่าย">
 
                     <div class="bg-light rounded-4 p-4 mb-4 border border-white shadow-sm">
