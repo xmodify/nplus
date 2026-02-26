@@ -279,6 +279,9 @@ class MainSettingController extends Controller
                 ['name' => 'patient_critical', 'type' => 'INT(11)', 'after' => 'patient_semi_critical'],
                 ['name' => 'patient_severe_type_null', 'type' => 'INT(11)', 'after' => 'patient_critical'],
             ],
+            'productivity_er' => [
+                ['name' => 'patient_severe_type_null', 'type' => 'INT(11)', 'after' => 'patient_non_urgent'],
+            ],
             'productivity_vip' => [
                 ['name' => 'patient_convalescent', 'type' => 'INT(11)', 'after' => 'patient_all'],
                 ['name' => 'patient_moderate', 'type' => 'INT(11)', 'after' => 'patient_convalescent'],

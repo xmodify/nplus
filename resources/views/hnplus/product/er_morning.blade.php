@@ -115,6 +115,14 @@
                                     </div>
                                 </div>
                                 <input type="hidden" name="non_urgent" value="{{ $row->non_urgent }}">
+
+                                <div class="col-4">
+                                    <div class="p-2 bg-white rounded-3 shadow-sm border border-light text-center">
+                                        <div class="text-muted small mb-1">ไม่ระบุ</div>
+                                        <div class="fw-bold text-dark">{{ $row->severe_type_null }}</div>
+                                    </div>
+                                </div>
+                                <input type="hidden" name="severe_type_null" value="{{ $row->severe_type_null }}">
                             </div>
                         @endforeach
                     </div>
@@ -250,6 +258,22 @@
                 text: '{{ session('success') }}',
                 icon: 'success',
                 confirmButtonText: 'ตกลง'
+            });
+        </script>
+    @endif
+    <!-- ✅ SweetAlert ตรวจสอบข้อมูลไม่ครบจาก Backend -->
+    @if ($errors->any())
+        <script>
+            let errorMessages = '';
+            @foreach ($errors->all() as $error)
+                errorMessages += '{{ $error }}\n';
+            @endforeach
+            Swal.fire({
+                icon: 'error',
+                title: 'ข้อมูลไม่ถูกต้อง',
+                text: errorMessages,
+                confirmButtonText: 'ตกลง',
+                confirmButtonColor: '#d33'
             });
         </script>
     @endif

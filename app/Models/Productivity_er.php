@@ -25,6 +25,7 @@ class Productivity_er extends Model
         'patient_urgent',
         'patient_semi_urgent',
         'patient_non_urgent',
+        'patient_severe_type_null',
         'nursing_hours',
         'working_hours',
         'nhppd',

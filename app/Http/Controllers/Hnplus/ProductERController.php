@@ -100,7 +100,8 @@ class ProductERController extends Controller
                 COALESCE(SUM(CASE WHEN et.export_code IN ('2') THEN 1 ELSE 0 END), 0) AS emergent,
                 COALESCE(SUM(CASE WHEN et.export_code IN ('3') THEN 1 ELSE 0 END), 0) AS urgent,
                 COALESCE(SUM(CASE WHEN et.export_code IN ('4') THEN 1 ELSE 0 END), 0) AS semi_urgent,
-                COALESCE(SUM(CASE WHEN et.export_code IN ('5') THEN 1 ELSE 0 END), 0) AS non_urgent
+                COALESCE(SUM(CASE WHEN et.export_code IN ('5') THEN 1 ELSE 0 END), 0) AS non_urgent,
+                COALESCE(SUM(CASE WHEN et.export_code IS NULL OR et.export_code NOT IN ('1','2','3','4','5') THEN 1 ELSE 0 END), 0) AS severe_type_null
             FROM er_regist e
             LEFT JOIN er_emergency_type et 
                 ON et.er_emergency_type = e.er_emergency_type
@@ -168,7 +169,8 @@ class ProductERController extends Controller
                 COALESCE(SUM(CASE WHEN et.export_code IN ('2') THEN 1 ELSE 0 END), 0) AS emergent,
                 COALESCE(SUM(CASE WHEN et.export_code IN ('3') THEN 1 ELSE 0 END), 0) AS urgent,
                 COALESCE(SUM(CASE WHEN et.export_code IN ('4') THEN 1 ELSE 0 END), 0) AS semi_urgent,
-                COALESCE(SUM(CASE WHEN et.export_code IN ('5') THEN 1 ELSE 0 END), 0) AS non_urgent
+                COALESCE(SUM(CASE WHEN et.export_code IN ('5') THEN 1 ELSE 0 END), 0) AS non_urgent,
+                COALESCE(SUM(CASE WHEN et.export_code IS NULL OR et.export_code NOT IN ('1','2','3','4','5') THEN 1 ELSE 0 END), 0) AS severe_type_null
             FROM er_regist e
             LEFT JOIN er_emergency_type et 
                 ON et.er_emergency_type = e.er_emergency_type
@@ -290,7 +292,8 @@ class ProductERController extends Controller
                 COALESCE(SUM(CASE WHEN et.export_code IN ('2') THEN 1 ELSE 0 END), 0) AS emergent,
                 COALESCE(SUM(CASE WHEN et.export_code IN ('3') THEN 1 ELSE 0 END), 0) AS urgent,
                 COALESCE(SUM(CASE WHEN et.export_code IN ('4') THEN 1 ELSE 0 END), 0) AS semi_urgent,
-                COALESCE(SUM(CASE WHEN et.export_code IN ('5') THEN 1 ELSE 0 END), 0) AS non_urgent
+                COALESCE(SUM(CASE WHEN et.export_code IN ('5') THEN 1 ELSE 0 END), 0) AS non_urgent,
+                COALESCE(SUM(CASE WHEN et.export_code IS NULL OR et.export_code NOT IN ('1','2','3','4','5') THEN 1 ELSE 0 END), 0) AS severe_type_null
             FROM er_regist e
             LEFT JOIN er_emergency_type et 
                 ON et.er_emergency_type = e.er_emergency_type
@@ -358,7 +361,8 @@ class ProductERController extends Controller
                 COALESCE(SUM(CASE WHEN et.export_code IN ('2') THEN 1 ELSE 0 END), 0) AS emergent,
                 COALESCE(SUM(CASE WHEN et.export_code IN ('3') THEN 1 ELSE 0 END), 0) AS urgent,
                 COALESCE(SUM(CASE WHEN et.export_code IN ('4') THEN 1 ELSE 0 END), 0) AS semi_urgent,
-                COALESCE(SUM(CASE WHEN et.export_code IN ('5') THEN 1 ELSE 0 END), 0) AS non_urgent
+                COALESCE(SUM(CASE WHEN et.export_code IN ('5') THEN 1 ELSE 0 END), 0) AS non_urgent,
+                COALESCE(SUM(CASE WHEN et.export_code IS NULL OR et.export_code NOT IN ('1','2','3','4','5') THEN 1 ELSE 0 END), 0) AS severe_type_null
             FROM er_regist e
             LEFT JOIN er_emergency_type et 
                 ON et.er_emergency_type = e.er_emergency_type
@@ -480,7 +484,8 @@ class ProductERController extends Controller
                 COALESCE(SUM(CASE WHEN et.export_code IN ('2') THEN 1 ELSE 0 END), 0) AS emergent,
                 COALESCE(SUM(CASE WHEN et.export_code IN ('3') THEN 1 ELSE 0 END), 0) AS urgent,
                 COALESCE(SUM(CASE WHEN et.export_code IN ('4') THEN 1 ELSE 0 END), 0) AS semi_urgent,
-                COALESCE(SUM(CASE WHEN et.export_code IN ('5') THEN 1 ELSE 0 END), 0) AS non_urgent
+                COALESCE(SUM(CASE WHEN et.export_code IN ('5') THEN 1 ELSE 0 END), 0) AS non_urgent,
+                COALESCE(SUM(CASE WHEN et.export_code IS NULL OR et.export_code NOT IN ('1','2','3','4','5') THEN 1 ELSE 0 END), 0) AS severe_type_null
             FROM er_regist e
             LEFT JOIN er_emergency_type et 
                 ON et.er_emergency_type = e.er_emergency_type
@@ -548,7 +553,8 @@ class ProductERController extends Controller
                 COALESCE(SUM(CASE WHEN et.export_code IN ('2') THEN 1 ELSE 0 END), 0) AS emergent,
                 COALESCE(SUM(CASE WHEN et.export_code IN ('3') THEN 1 ELSE 0 END), 0) AS urgent,
                 COALESCE(SUM(CASE WHEN et.export_code IN ('4') THEN 1 ELSE 0 END), 0) AS semi_urgent,
-                COALESCE(SUM(CASE WHEN et.export_code IN ('5') THEN 1 ELSE 0 END), 0) AS non_urgent
+                COALESCE(SUM(CASE WHEN et.export_code IN ('5') THEN 1 ELSE 0 END), 0) AS non_urgent,
+                COALESCE(SUM(CASE WHEN et.export_code IS NULL OR et.export_code NOT IN ('1','2','3','4','5') THEN 1 ELSE 0 END), 0) AS severe_type_null
             FROM er_regist e
             LEFT JOIN er_emergency_type et 
                 ON et.er_emergency_type = e.er_emergency_type
@@ -662,3 +668,5 @@ class ProductERController extends Controller
 
 
 }
+// test change
+

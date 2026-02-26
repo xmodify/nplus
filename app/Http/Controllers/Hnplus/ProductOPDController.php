@@ -78,18 +78,11 @@ class ProductOPDController extends Controller
     public function opd_morning_notify()
     {
         $opd_dep = MainSetting::where('name', 'opd_department')->value('value');
-
-
-        // Check format of settings, handle if null or empty. Assuming comma separated strings.
-        // For SQL IN clause, if using simple variable interpolation:
-        // '002','050' stored as value.
-        // But code uses bindings usually or trusted values. Here we insert directly.
-
         $opd_dep = $opd_dep ?: "'002'";
 
-
         $notify = DB::connection('hosxp')->select("
-            SELECT COUNT(DISTINCT vn) as patient_all
+            SELECT COUNT(DISTINCT vn) as patient_all,
+            COALESCE(SUM(CASE WHEN main_dep IN ($opd_dep) THEN 1 ELSE 0 END), 0) AS opd
             FROM ovst WHERE vstdate = DATE(NOW()) AND (main_dep IN ($opd_dep))
             AND vsttime BETWEEN '00:00:00' AND '15:59:59' ");
 
@@ -135,13 +128,11 @@ class ProductOPDController extends Controller
     public function opd_morning()
     {
         $opd_dep = MainSetting::where('name', 'opd_department')->value('value');
-
-
         $opd_dep = $opd_dep ?: "'002'";
 
-
         $shift = DB::connection('hosxp')->select("
-            SELECT COUNT(DISTINCT vn) as patient_all
+            SELECT COUNT(DISTINCT vn) as patient_all,
+            COALESCE(SUM(CASE WHEN main_dep IN ($opd_dep) THEN 1 ELSE 0 END), 0) AS opd
             FROM ovst WHERE vstdate = DATE(NOW()) AND (main_dep IN ($opd_dep))
             AND vsttime BETWEEN '00:00:00' AND '15:59:59' ");
 
@@ -258,13 +249,11 @@ class ProductOPDController extends Controller
     public function opd_bd_notify()
     {
         $opd_dep = MainSetting::where('name', 'opd_department')->value('value');
-
-
         $opd_dep = $opd_dep ?: "'002'";
 
-
         $notify = DB::connection('hosxp')->select("
-            SELECT COUNT(DISTINCT vn) as patient_all
+            SELECT COUNT(DISTINCT vn) as patient_all,
+            COALESCE(SUM(CASE WHEN main_dep IN ($opd_dep) THEN 1 ELSE 0 END), 0) AS opd
             FROM ovst WHERE vstdate = DATE(NOW()) AND (main_dep IN ($opd_dep))
             AND vsttime BETWEEN '16:00:00' AND '20:00:00' ");
 
@@ -310,13 +299,11 @@ class ProductOPDController extends Controller
     public function opd_bd()
     {
         $opd_dep = MainSetting::where('name', 'opd_department')->value('value');
-
-
         $opd_dep = $opd_dep ?: "'002'";
 
-
         $shift = DB::connection('hosxp')->select("
-            SELECT COUNT(DISTINCT vn) as patient_all
+            SELECT COUNT(DISTINCT vn) as patient_all,
+            COALESCE(SUM(CASE WHEN main_dep IN ($opd_dep) THEN 1 ELSE 0 END), 0) AS opd
             FROM ovst WHERE vstdate = DATE(NOW()) AND (main_dep IN ($opd_dep))
             AND vsttime BETWEEN '16:00:00' AND '20:00:00' ");
 

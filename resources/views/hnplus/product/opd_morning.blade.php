@@ -71,25 +71,11 @@
                                 <div class="text-secondary">
                                     <i class="bi bi-people-fill me-2 text-primary"></i>จำนวนผู้ป่วยทั้งหมดในเวร
                                 </div>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="text-secondary ps-3 small">
-                                        <i class="bi bi-circle-fill me-2 text-info opacity-50"
-                                            style="font-size: 0.5rem;"></i>ผู้ป่วยนอก (OPD)
-                                    </div>
-                                    <span class="fw-bold text-secondary">{{ $row->opd }} <small
-                                            class="fw-normal text-muted small">ราย</small></span>
-                                </div>
-                                <div class="d-flex justify-content-between align-items-center mt-1">
-                                    <div class="text-secondary ps-3 small">
-                                        <i class="bi bi-circle-fill me-2 text-warning opacity-50"
-                                            style="font-size: 0.5rem;"></i>ผู้ป่วย ARI
-                                    </div>
-                                    <span class="fw-bold text-secondary">{{ $row->ari }} <small
-                                            class="fw-normal text-muted small">ราย</small></span>
-                                </div>
-                                <input type="hidden" name="patient_all" value="{{ $row->patient_all }}">
-                                <input type="hidden" name="opd" value="{{ $row->opd }}">
-                                <input type="hidden" name="ari" value="{{ $row->ari }}">
+                                <span class="fw-bold text-dark fs-4">{{ $row->patient_all }} <small
+                                        class="fw-normal text-muted fs-6">ราย</small></span>
+                            </div>
+                            <input type="hidden" name="patient_all" value="{{ $row->patient_all }}">
+                            <input type="hidden" name="opd" value="{{ $row->opd }}">
                         @endforeach
                     </div>
 
@@ -125,8 +111,7 @@
                         </label>
                         <div class="input-group shadow-sm">
                             <input type="number" id="nurse_oncall" name="nurse_oncall"
-                                class="form-control border-end-0 py-2" placeholder="0" step="any"
-                                min="0">
+                                class="form-control border-end-0 py-2" placeholder="0" step="any" min="0">
                             <span class="input-group-text bg-white text-muted small">คน</span>
                         </div>
                     </div>
