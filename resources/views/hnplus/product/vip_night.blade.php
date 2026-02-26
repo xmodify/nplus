@@ -167,6 +167,44 @@
     <script>
         document.getElementById('productForm').addEventListener('submit', function(e) {
             e.preventDefault();
+
+            const fields = [{
+                    id: 'nurse_fulltime',
+                    label: 'อัตรากำลังปกติ'
+                },
+                {
+                    id: 'nurse_partime',
+                    label: 'อัตรากำลังเสริม'
+                },
+                {
+                    id: 'nurse_oncall',
+                    label: 'อัตรากำลัง Oncall'
+                },
+                {
+                    id: 'recorder',
+                    label: 'ผู้บันทึก'
+                }
+            ];
+
+            let missingFields = [];
+            fields.forEach(field => {
+                const element = document.getElementById(field.id);
+                if (!element.value.trim()) {
+                    missingFields.push(field.label);
+                }
+            });
+
+            if (missingFields.length > 0) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'กรอกข้อมูลไม่ครบ',
+                    html: `กรุณากรอก: <b>${missingFields.join(', ')}</b>`,
+                    confirmButtonText: 'ตกลง',
+                    confirmButtonColor: '#23A7A7'
+                });
+                return;
+            }
+
             Swal.fire({
                 title: 'ยืนยันการบันทึก?',
                 text: "ตรวจสอบข้อมูลให้ถูกต้องก่อนส่ง (VIP)",
@@ -189,6 +227,17 @@
                 title: 'บันทึกสำเร็จ!',
                 text: '{{ session('success') }}',
                 icon: 'success',
+                confirmButtonText: 'ตกลง'
+            });
+        </script>
+    @endif
+
+    @if ($errors->any())
+        <script>
+            Swal.fire({
+                title: 'ข้อมูลไม่ถูกต้อง!',
+                text: 'กรุณาตรวจสอบข้อมูลที่กรอกอีกครั้ง',
+                icon: 'error',
                 confirmButtonText: 'ตกลง'
             });
         </script>
