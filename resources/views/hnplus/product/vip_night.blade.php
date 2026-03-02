@@ -5,12 +5,19 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>บันทึกผลิตภาพทางการพยาบาล VIP</title>
+    <title>ระบบบันทึกผลิตภาพทางการพยาบาล</title>
 
+    <!-- ✅ Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- ✅ SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- ✅ Google Fonts: Prompt -->
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- ✅ Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- ✅ Custom Premium CSS -->
     <link rel="stylesheet" href="{{ asset('css/beautiful_admin.css') }}">
 
     <style>
@@ -28,10 +35,10 @@
             style="max-width: 650px; border: none; border-radius: 20px; overflow: hidden;">
             <div class="header-gradient text-white text-center py-4">
                 <div class="mb-2">
-                    <i class="bi bi-couch fs-1"></i>
+                    <i class="bi bi-hospital-fill fs-1"></i>
                 </div>
                 <h4 class="mb-0 fw-bold">ระบบบันทึกผลิตภาพทางการพยาบาล</h4>
-                <p class="mb-0 opacity-75">แผนกผู้ป่วยใน VIP | เวรดึก</p>
+                <p class="mb-0 opacity-75">แผนกผู้ป่วย VIP | เวรดึก</p>
             </div>
 
             <div class="card-body p-4 p-md-5">
@@ -51,7 +58,7 @@
 
                     <div class="bg-light rounded-4 p-4 mb-4 border border-white shadow-sm">
                         <h6 class="fw-bold text-dark mb-3 border-bottom pb-2">
-                            <i class="bi bi-people-fill me-2 text-primary"></i>รายละเอียดจำนวนผู้ป่วย (VIP)
+                            <i class="bi bi-people-fill me-2 text-primary"></i>รายละเอียดจำนวนผู้ป่วย
                         </h6>
                         @foreach ($shift as $row)
                             <div class="d-flex justify-content-between align-items-center mb-2">
@@ -158,12 +165,16 @@
                             class="btn btn-primary btn-lg fw-bold py-3 shadow border-0 rounded-pill">
                             <i class="bi bi-send-fill me-2"></i>ส่งข้อมูล
                         </button>
+                        <button type="reset" class="btn btn-link text-muted btn-sm mt-2 text-decoration-none">
+                            ล้างข้อมูลทั้งหมด
+                        </button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 
+    <!-- ✅ SweetAlert ตรวจสอบก่อนส่ง -->
     <script>
         document.getElementById('productForm').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -207,7 +218,7 @@
 
             Swal.fire({
                 title: 'ยืนยันการบันทึก?',
-                text: "ตรวจสอบข้อมูลให้ถูกต้องก่อนส่ง (VIP)",
+                text: "ตรวจสอบข้อมูลให้ถูกต้องก่อนส่ง",
                 icon: 'question',
                 showCancelButton: true,
                 confirmButtonText: 'บันทึกข้อมูล',
@@ -221,6 +232,7 @@
         });
     </script>
 
+    <!-- ✅ SweetAlert หลังบันทึกสำเร็จ -->
     @if (session('success'))
         <script>
             Swal.fire({
@@ -232,16 +244,6 @@
         </script>
     @endif
 
-    @if ($errors->any())
-        <script>
-            Swal.fire({
-                title: 'ข้อมูลไม่ถูกต้อง!',
-                text: 'กรุณาตรวจสอบข้อมูลที่กรอกอีกครั้ง',
-                icon: 'error',
-                confirmButtonText: 'ตกลง'
-            });
-        </script>
-    @endif
 </body>
 
 </html>

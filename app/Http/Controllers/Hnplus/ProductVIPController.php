@@ -79,29 +79,11 @@ class ProductVIPController extends Controller
         return redirect()->route('hnplus.product.vip_report')->with('danger', 'ลบข้อมูลเรียบร้อยแล้ว');
     }
 
-    // Notify Functions
+    //แจ้งเตือนสถานะการณ์สรุปเวรดึก รัน 08.00 น.---------------------------------------------------------------------------------------------
     public function vip_night_notify()
     {
         $vip_ward = MainSetting::where('name', 'vip_ward')->value('value') ?? '08';
-        return $this->notify('🌙เวรดึก', '00:00:01', '07:59:59', $vip_ward, 'vip_night', '🛏️ งานห้องผู้ป่วยพิเศษ VIP', 'vip_notifytelegram');
-    }
 
-    public function vip_morning_notify()
-    {
-        $vip_ward = MainSetting::where('name', 'vip_ward')->value('value') ?? '08';
-        return $this->notify('เวรเช้า', '08:00:00', '15:59:59', $vip_ward, 'vip_morning', '🛏️ งานห้องผู้ป่วยพิเศษ VIP', 'vip_notifytelegram');
-    }
-
-    public function vip_afternoon_notify()
-    {
-        $vip_ward = MainSetting::where('name', 'vip_ward')->value('value') ?? '08';
-        $target_date = date('Y-m-d', strtotime('-1 day'));
-        return $this->notify('เวรบ่าย', '16:00:00', '23:59:59', $vip_ward, 'vip_afternoon', '🛏️ งานห้องผู้ป่วยพิเศษ VIP', 'vip_notifytelegram', $target_date);
-    }
-
-    private function notify($shift_name, $start_time, $end_time, $wards, $route, $dep_name, $telegram_key, $date = null)
-    {
-        $date = $date ?: date('Y-m-d');
         $notify = DB::connection('hosxp')->select("
             SELECT
                 SUM(CASE WHEN ipd_nurse_eval_range_code LIKE '1%' THEN 1 ELSE 0 END) AS convalescent,
@@ -117,34 +99,65 @@ class ProductVIPController extends Controller
                 JOIN (
                     SELECT an, note_date, MAX(note_time) AS last_time
                     FROM ipd_nurse_note
-                    WHERE note_date = ? AND note_time BETWEEN ? AND ?
+                    WHERE note_date = CURDATE() AND note_time BETWEEN '00:00:01' AND '07:59:59'
                     GROUP BY an, note_date
                 ) x ON x.an = n.an AND x.note_date = n.note_date AND x.last_time = n.note_time
-                WHERE i.ward IN ($wards)
+                WHERE i.ward IN ($vip_ward)
             ) t
-        ", [$date, $start_time, $end_time]);
+        ");
 
-        $row = $notify[0];
-        $url = url("product/$route");
-        $message = "$dep_name\n" . "วันที่ " . DateThai($date) . "\n" . "เวลา $start_time-$end_time $shift_name\n" . "ผู้ป่วยในเวร {$row->patient_all} ราย\n" . " -Convalescent {$row->convalescent} ราย\n" . " -Moderate {$row->Moderate} ราย\n" . " -Semi critical {$row->Semi_critical} ราย\n" . " -Critical {$row->Critical} ราย\n" . " -ไม่ระบุความรุนแรง {$row->severe_type_null} ราย\n\n" . "บันทึก Productivity \n" . "$url\n";
+        foreach ($notify as $row) {
+            $patient_all = $row->patient_all;
+            $convalescent = ($row->convalescent ?? 0);
+            $Moderate = ($row->Moderate ?? 0);
+            $Semi_critical = ($row->Semi_critical ?? 0);
+            $Critical = ($row->Critical ?? 0);
+            $severe_type_null = ($row->severe_type_null ?? 0);
+            $url = url('product/vip_night');
+        }
 
+        //แจ้งเตือน Telegram
+
+        $message = "🛏️ งานห้องผู้ป่วยพิเศษ VIP" . "\n"
+            . "วันที่ " . DateThai(date('Y-m-d')) . "\n"
+            . "เวลา 00.00-08.00 น. 🌙เวรดึก" . "\n"
+            . "ผู้ป่วยในเวร " . $patient_all . " ราย" . "\n"
+            . " -Convalescent " . $convalescent . " ราย" . "\n"
+            . " -Moderate " . $Moderate . " ราย" . "\n"
+            . " -Semi critical " . $Semi_critical . " ราย" . "\n"
+            . " -Critical " . $Critical . " ราย" . "\n"
+            . " -ไม่ระบุความรุนแรง " . $severe_type_null . " ราย" . "\n" . "\n"
+            . "บันทึก Productivity " . "\n"
+            . $url . "\n";
+
+        // ✅ ส่งข้อความ Telegram
         $token = MainSetting::where('name', 'telegram_token')->value('value');
-        $chat_ids = explode(',', MainSetting::where('name', $telegram_key)->value('value'));
+        $chat_ids = explode(',', MainSetting::where('name', 'vip_notifytelegram')->value('value'));
 
         foreach ($chat_ids as $chat_id) {
-            Http::asForm()->post("https://api.telegram.org/bot$token/sendMessage", ['chat_id' => trim($chat_id), 'text' => $message]);
+            $url = "https://api.telegram.org/bot$token/sendMessage";
+            $data = [
+                'chat_id' => $chat_id,
+                'text' => $message
+            ];
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_exec($ch);
+            curl_close($ch);
+            sleep(1);
         }
+
         return response()->json(['success' => 'success'], 200);
     }
 
-    // Views
-    public function vip_night() { return $this->view_shift('vip_night', 'vip_ward', '00:00:01', '07:59:59'); }
-    public function vip_morning() { return $this->view_shift('vip_morning', 'vip_ward', '08:00:00', '15:59:59'); }
-    public function vip_afternoon() { return $this->view_shift('vip_afternoon', 'vip_ward', '16:00:00', '23:59:59'); }
-
-    private function view_shift($view, $ward_key, $start_time, $end_time)
+    //vip_night------------------------------------------------------------------------------------------------------------------------
+    public function vip_night()
     {
-        $wards = MainSetting::where('name', $ward_key)->value('value') ?? '12';
+        $vip_ward = MainSetting::where('name', 'vip_ward')->value('value') ?? '08';
+
         $shift = DB::connection('hosxp')->select("
             SELECT
                 SUM(CASE WHEN ipd_nurse_eval_range_code LIKE '1%' THEN 1 ELSE 0 END) AS convalescent,
@@ -160,58 +173,546 @@ class ProductVIPController extends Controller
                 JOIN (
                     SELECT an, note_date, MAX(note_time) AS last_time
                     FROM ipd_nurse_note
-                    WHERE note_date = (CASE WHEN ? = '16:00:00' THEN date(DATE_ADD(now(), INTERVAL -1 DAY )) ELSE CURDATE() END) AND note_time BETWEEN ? AND ?
+                    WHERE note_date = CURDATE() AND note_time BETWEEN '00:00:01' AND '07:59:59'
                     GROUP BY an, note_date
                 ) x ON x.an = n.an AND x.note_date = n.note_date AND x.last_time = n.note_time
-                WHERE i.ward IN ($wards)
+                WHERE i.ward IN ($vip_ward)
             ) t
-        ", [$start_time, $start_time, $end_time]);
-        return view("hnplus.product.$view", compact('shift'));
+        ");
+
+        return view('hnplus.product.vip_night', compact('shift'));
     }
 
-    // Save Functions
-    public function vip_night_save(Request $request) { return $this->save_shift($request, '🌙เวรดึก', '00.00-08.00 น.'); }
-    public function vip_morning_save(Request $request) { return $this->save_shift($request, 'เวรเช้า', '08.00-16.00 น.'); }
-    public function vip_afternoon_save(Request $request) { return $this->save_shift($request, 'เวรบ่าย', '16.00-24.00 น.'); }
-
-    private function save_shift(Request $request, $shift_name, $time_range)
+    //vip_night_save--------------------------------------------------------------------------------------------------------------------
+    //vip_night_save--------------------------------------------------------------------------------------------------------------------
+    public function vip_night_save(Request $request)
     {
-        $request->validate(['nurse_oncall' => 'required|numeric', 'nurse_partime' => 'required|numeric', 'nurse_fulltime' => 'required|numeric', 'recorder' => 'required|string']);
+        // ✅ ตรวจสอบข้อมูลที่จำเป็น
+        $request->validate([
+            'nurse_oncall' => 'required|numeric',
+            'nurse_partime' => 'required|numeric',
+            'nurse_fulltime' => 'required|numeric',
+            'recorder' => 'required|string',
+        ]);
 
-        $hours = MainSetting::where('name', 'vip_working_hours')->value('value') ?? 7;
-        $t1 = MainSetting::where('name', 'vip_patient_type1')->value('value') ?? 1.5;
-        $t2 = MainSetting::where('name', 'vip_patient_type2')->value('value') ?? 3.5;
-        $t3 = MainSetting::where('name', 'vip_patient_type3')->value('value') ?? 5.5;
-        $t4 = MainSetting::where('name', 'vip_patient_type4')->value('value') ?? 7.5;
+        // ✅ Get Constants from MainSetting
+        $vip_working_hours = MainSetting::where('name', 'vip_working_hours')->value('value') ?? 7;
+        $type1_c = MainSetting::where('name', 'vip_patient_type1')->value('value') ?? 1.5;
+        $type2_c = MainSetting::where('name', 'vip_patient_type2')->value('value') ?? 3.5;
+        $type3_c = MainSetting::where('name', 'vip_patient_type3')->value('value') ?? 5.5;
+        $type4_c = MainSetting::where('name', 'vip_patient_type4')->value('value') ?? 7.5;
 
-        $p_all = max(1, $request->patient_all);
-        $n_total = $request->nurse_oncall + $request->nurse_partime + $request->nurse_fulltime;
-        $n_hr = max(1, $n_total * $hours);
+        // ✅ เตรียมค่าที่ใช้ซ้ำ
+        $convalescent = $request->convalescent;
+        $Moderate = $request->Moderate;
+        $Semi_critical = $request->Semi_critical;
+        $Critical = $request->Critical;
+        $patient_all = max(1, $request->patient_all); // ป้องกันหาร 0
+        $nurse_total = $request->nurse_oncall + $request->nurse_partime + $request->nurse_fulltime;
+        // $nurse_total_hr = max(1, $nurse_total * 7); // ป้องกันหาร 0
+        $nurse_total_hr = max(1, $nurse_total * $vip_working_hours);
 
-        $p_hr = ($request->convalescent * $t1) + ($request->Moderate * $t2) + ($request->Semi_critical * $t3) + ($request->Critical * $t4);
-        $prod = ($p_hr * 100) / $n_hr;
-        $nhppd = $p_hr / $p_all;
-        $n_shift = $p_all * $nhppd * (1.4 / $hours);
+        // ✅ คำนวณค่าทางสถิติ
+        // $patient_hr = ($convalescent * 0.45)
+        //     + ($moderate_ill * 1.17)
+        //     + ($semi_critical_ill * 1.71)
+        //     + ($critical_ill * 1.99);
+        $patient_hr = ($convalescent * $type1_c)
+            + ($Moderate * $type2_c)
+            + ($Semi_critical * $type3_c)
+            + ($Critical * $type4_c);
 
+        $nurse_hr = $nurse_total * $vip_working_hours;
+        $productivity = ($patient_hr * 100) / $nurse_total_hr;
+        $nhppd = $patient_hr / $patient_all;
+        $nurse_shift_time = $patient_all * $nhppd * (1.4 / $vip_working_hours);
+
+        // ✅ บันทึกข้อมูลลงฐานข้อมูล
         Productivity_vip::updateOrCreate(
-            ['report_date' => $request->report_date, 'shift_time' => $request->shift_time],
+            // 🔎 เงื่อนไขตรวจสอบข้อมูลซ้ำ
             [
-                'nurse_fulltime' => $request->nurse_fulltime, 'nurse_partime' => $request->nurse_partime, 'nurse_oncall' => $request->nurse_oncall,
-                'recorder' => $request->recorder, 'note' => $request->note, 'patient_all' => $p_all,
-                'patient_convalescent' => $request->convalescent, 'patient_moderate' => $request->Moderate,
-                'patient_semi_critical' => $request->Semi_critical, 'patient_critical' => $request->Critical,
+                'report_date' => $request->report_date,
+                'shift_time' => $request->shift_time,
+            ],
+            // 📝 ข้อมูลที่ insert / update
+            [
+                'nurse_fulltime' => $request->nurse_fulltime,
+                'nurse_partime' => $request->nurse_partime,
+                'nurse_oncall' => $request->nurse_oncall,
+                'recorder' => $request->recorder,
+                'note' => $request->note,
+
+                'patient_all' => $patient_all,
+                'patient_convalescent' => $convalescent,
+                'patient_moderate' => $Moderate,
+                'patient_semi_critical' => $Semi_critical,
+                'patient_critical' => $Critical,
 'patient_severe_type_null' => $request->severe_type_null,
-                'nursing_hours' => $p_hr, 'working_hours' => $n_total * $hours, 'nurse_shift_time' => $n_shift, 'nhppd' => $nhppd, 'productivity' => $prod,
+
+                'nursing_hours' => $patient_hr,
+                'working_hours' => $nurse_hr,
+                'nurse_shift_time' => $nurse_shift_time,
+                'nhppd' => $nhppd,
+                'productivity' => $productivity,
             ]
         );
 
-        $msg = "🛏️ งานห้องผู้ป่วยพิเศษ VIP\n" . "วันที่ " . DateThai(date('Y-m-d')) . "\n" . "เวลา $time_range $shift_name\n" . "ผู้ป่วยในเวร: $p_all ราย\n" . " - Convalescent: {$request->convalescent} ราย\n" . " - Moderate: {$request->Moderate} ราย\n" . " - Semi critical: {$request->Semi_critical} ราย\n" . " - Critical: {$request->Critical} ราย\n" . " - ไม่ระบุความรุนแรง: {$request->severe_type_null} ราย\n" . "พยาบาล Oncall: {$request->nurse_oncall}\n" . "พยาบาล Part time: {$request->nurse_partime}\n" . "พยาบาล Full time: {$request->nurse_fulltime}\n" . "ค่า Productivity: " . number_format($prod, 2) . "\n" . "ผู้บันทึก: {$request->recorder}";
+        // ✅ เตรียมข้อความแจ้ง Telegram
+        $message = "🛏️ งานห้องผู้ป่วยพิเศษ VIP" . "\n"
+            . "วันที่ " . DateThai(date('Y-m-d')) . "\n"
+            . "เวลา 00.00–08.00 น. 🌙เวรดึก" . "\n"
+            . "ผู้ป่วยในเวร: {$patient_all} ราย" . "\n"
+            . " - Convalescent: {$convalescent} ราย" . "\n"
+            . " - Moderate: {$Moderate} ราย" . "\n"
+            . " - Semi critical: {$Semi_critical} ราย" . "\n"
+            . " - Critical: {$Critical} ราย" . "\n" 
+            . " - ไม่ระบุความรุนแรง: {$request->severe_type_null} ราย" . "\n"
+            . "👩‍⚕️ Oncall: {$request->nurse_oncall}" . "\n"
+            . "👩‍⚕️ เสริม: {$request->nurse_partime}" . "\n"
+            . "👩‍⚕️ ปกติ: {$request->nurse_fulltime}" . "\n"
+            . "🕒 ชม.การพยาบาล: " . number_format($patient_hr, 2) . "\n"
+            . "🕒 ชม.การทำงาน: " . number_format($nurse_hr, 2) . "\n"
+            . "📊 Productivity: " . number_format($productivity, 2) . "\n"
+            . "🧮 NHPPD: " . number_format($nhppd, 2) . "\n"
+            . "ผู้บันทึก: {$request->recorder}";
 
+        // ✅ ส่งข้อความ Telegram
         $token = MainSetting::where('name', 'telegram_token')->value('value');
         $chat_ids = explode(',', MainSetting::where('name', 'vip_notifytelegram_save')->value('value'));
+
         foreach ($chat_ids as $chat_id) {
-            Http::asForm()->post("https://api.telegram.org/bot$token/sendMessage", ['chat_id' => trim($chat_id), 'text' => $msg]);
+            Http::asForm()->post("https://api.telegram.org/bot{$token}/sendMessage", [
+                'chat_id' => trim($chat_id),
+                'text' => $message,
+            ]);
+            usleep(500000); // พัก 0.5 วินาที
         }
-        return redirect()->back()->with('success', "บันทึกข้อมูล $shift_name เรียบร้อยแล้ว");
+
+        return redirect()->back()->with('success', '✅ ส่งข้อมูลเวรดึกเรียบร้อยแล้ว');
     }
+
+    //แจ้งเตือนสถานะการณ์สรุปเวรเช้า รัน 16.00 น.---------------------------------------------------------------------------------------------
+    public function vip_morning_notify()
+    {
+        $vip_ward = MainSetting::where('name', 'vip_ward')->value('value') ?? '08';
+
+        $notify = DB::connection('hosxp')->select("
+            SELECT
+                SUM(CASE WHEN ipd_nurse_eval_range_code LIKE '1%' THEN 1 ELSE 0 END) AS convalescent,
+                SUM(CASE WHEN ipd_nurse_eval_range_code LIKE '2%' THEN 1 ELSE 0 END) AS Moderate,
+                SUM(CASE WHEN ipd_nurse_eval_range_code LIKE '3%' THEN 1 ELSE 0 END) AS Semi_critical,
+                SUM(CASE WHEN ipd_nurse_eval_range_code LIKE '4%' THEN 1 ELSE 0 END) AS Critical,
+                SUM(CASE WHEN ipd_nurse_eval_range_code IS NULL OR ipd_nurse_eval_range_code = '' THEN 1 ELSE 0 END) AS severe_type_null,
+                COUNT(DISTINCT an) AS patient_all
+            FROM (
+                SELECT n.an, n.ipd_nurse_eval_range_code
+                FROM ipt i
+                JOIN ipd_nurse_note n ON n.an = i.an
+                JOIN (
+                    SELECT an, note_date, MAX(note_time) AS last_time
+                    FROM ipd_nurse_note
+                    WHERE note_date = CURDATE() AND note_time BETWEEN '08:00:00' AND '15:59:59'
+                    GROUP BY an, note_date
+                ) x ON x.an = n.an AND x.note_date = n.note_date AND x.last_time = n.note_time
+                WHERE i.ward IN ($vip_ward)
+            ) t
+        ");
+
+        foreach ($notify as $row) {
+            $patient_all = $row->patient_all;
+            $convalescent = ($row->convalescent ?? 0);
+            $Moderate = ($row->Moderate ?? 0);
+            $Semi_critical = ($row->Semi_critical ?? 0);
+            $Critical = ($row->Critical ?? 0);
+            $severe_type_null = ($row->severe_type_null ?? 0);
+            $url = url('product/vip_morning');
+        }
+
+        //แจ้งเตือน Telegram
+
+        $message = "🛏️ งานห้องผู้ป่วยพิเศษ VIP" . "\n"
+            . "วันที่ " . DateThai(date('Y-m-d')) . "\n"
+            . "เวลา 08.00-16.00 น. 🌅เวรเช้า" . "\n"
+            . "ผู้ป่วยในเวร " . $patient_all . " ราย" . "\n"
+            . " -Convalescent " . $convalescent . " ราย" . "\n"
+            . " -Moderate " . $Moderate . " ราย" . "\n"
+            . " -Semi critical " . $Semi_critical . " ราย" . "\n"
+            . " -Critical " . $Critical . " ราย" . "\n"
+            . " -ไม่ระบุความรุนแรง " . $severe_type_null . " ราย" . "\n" . "\n"
+            . "บันทึก Productivity " . "\n"
+            . $url . "\n";
+
+        // ✅ ส่งข้อความ Telegram
+        $token = MainSetting::where('name', 'telegram_token')->value('value');
+        $chat_ids = explode(',', MainSetting::where('name', 'vip_notifytelegram')->value('value'));
+
+        foreach ($chat_ids as $chat_id) {
+            $url = "https://api.telegram.org/bot$token/sendMessage";
+            $data = [
+                'chat_id' => $chat_id,
+                'text' => $message
+            ];
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_exec($ch);
+            curl_close($ch);
+            sleep(1);
+        }
+
+        return response()->json(['success' => 'success'], 200);
+    }
+
+    //vip_morning-------------------------------------------------------------------------------------------------------------
+    public function vip_morning()
+    {
+        $vip_ward = MainSetting::where('name', 'vip_ward')->value('value') ?? '08';
+
+        $shift = DB::connection('hosxp')->select("
+            SELECT
+                SUM(CASE WHEN ipd_nurse_eval_range_code LIKE '1%' THEN 1 ELSE 0 END) AS convalescent,
+                SUM(CASE WHEN ipd_nurse_eval_range_code LIKE '2%' THEN 1 ELSE 0 END) AS Moderate,
+                SUM(CASE WHEN ipd_nurse_eval_range_code LIKE '3%' THEN 1 ELSE 0 END) AS Semi_critical,
+                SUM(CASE WHEN ipd_nurse_eval_range_code LIKE '4%' THEN 1 ELSE 0 END) AS Critical,
+                SUM(CASE WHEN ipd_nurse_eval_range_code IS NULL OR ipd_nurse_eval_range_code = '' THEN 1 ELSE 0 END) AS severe_type_null,
+                COUNT(DISTINCT an) AS patient_all
+            FROM (
+                SELECT n.an, n.ipd_nurse_eval_range_code
+                FROM ipt i
+                JOIN ipd_nurse_note n ON n.an = i.an
+                JOIN (
+                    SELECT an, note_date, MAX(note_time) AS last_time
+                    FROM ipd_nurse_note
+                    WHERE note_date = CURDATE() AND note_time BETWEEN '08:00:00' AND '15:59:59'
+                    GROUP BY an, note_date
+                ) x ON x.an = n.an AND x.note_date = n.note_date AND x.last_time = n.note_time
+                WHERE i.ward IN ($vip_ward)
+            ) t
+        ");
+
+        return view('hnplus.product.vip_morning', compact('shift'));
+    }
+
+    //vip_morning_save------------------------------------------------------------------------------------------------------------------
+    //vip_morning_save------------------------------------------------------------------------------------------------------------------
+    public function vip_morning_save(Request $request)
+    {
+        // ✅ ตรวจสอบข้อมูลที่จำเป็น
+        $request->validate([
+            'nurse_oncall' => 'required|numeric',
+            'nurse_partime' => 'required|numeric',
+            'nurse_fulltime' => 'required|numeric',
+            'recorder' => 'required|string',
+        ]);
+
+        // ✅ Get Constants from MainSetting
+        $vip_working_hours = MainSetting::where('name', 'vip_working_hours')->value('value') ?? 7;
+        $type1_c = MainSetting::where('name', 'vip_patient_type1')->value('value') ?? 1.5;
+        $type2_c = MainSetting::where('name', 'vip_patient_type2')->value('value') ?? 3.5;
+        $type3_c = MainSetting::where('name', 'vip_patient_type3')->value('value') ?? 5.5;
+        $type4_c = MainSetting::where('name', 'vip_patient_type4')->value('value') ?? 7.5;
+
+        // ✅ เตรียมค่าที่ใช้ซ้ำ
+        $convalescent = $request->convalescent;
+        $Moderate = $request->Moderate;
+        $Semi_critical = $request->Semi_critical;
+        $Critical = $request->Critical;
+        $patient_all = max(1, $request->patient_all); // ป้องกันหาร 0
+        $nurse_total = $request->nurse_oncall + $request->nurse_partime + $request->nurse_fulltime;
+        // $nurse_total_hr = max(1, $nurse_total * 7); // ป้องกันหาร 0
+        $nurse_total_hr = max(1, $nurse_total * $vip_working_hours);
+
+        // ✅ คำนวณค่าทางสถิติ
+        // $patient_hr = ($convalescent * 0.45)
+        //     + ($moderate_ill * 1.17)
+        //     + ($semi_critical_ill * 1.71)
+        //     + ($critical_ill * 1.99);
+        $patient_hr = ($convalescent * $type1_c)
+            + ($Moderate * $type2_c)
+            + ($Semi_critical * $type3_c)
+            + ($Critical * $type4_c);
+
+        $nurse_hr = $nurse_total * $vip_working_hours;
+        $productivity = ($patient_hr * 100) / $nurse_total_hr;
+        $nhppd = $patient_hr / $patient_all;
+        $nurse_shift_time = $patient_all * $nhppd * (1.4 / $vip_working_hours);
+
+        // ✅ บันทึกข้อมูลลงฐานข้อมูล
+        Productivity_vip::updateOrCreate(
+            // 🔎 เงื่อนไขตรวจสอบข้อมูลซ้ำ
+            [
+                'report_date' => $request->report_date,
+                'shift_time' => $request->shift_time,
+            ],
+            // 📝 ข้อมูลที่ insert / update
+            [
+                'nurse_fulltime' => $request->nurse_fulltime,
+                'nurse_partime' => $request->nurse_partime,
+                'nurse_oncall' => $request->nurse_oncall,
+                'recorder' => $request->recorder,
+                'note' => $request->note,
+
+                'patient_all' => $patient_all,
+                'patient_convalescent' => $convalescent,
+                'patient_moderate' => $Moderate,
+                'patient_semi_critical' => $Semi_critical,
+                'patient_critical' => $Critical,
+'patient_severe_type_null' => $request->severe_type_null,
+
+                'nursing_hours' => $patient_hr,
+                'working_hours' => $nurse_hr,
+                'nurse_shift_time' => $nurse_shift_time,
+                'nhppd' => $nhppd,
+                'productivity' => $productivity,
+            ]
+        );
+
+        // ✅ เตรียมข้อความแจ้ง Telegram
+        $message = "🛏️ งานห้องผู้ป่วยพิเศษ VIP" . "\n"
+            . "วันที่ " . DateThai(date('Y-m-d')) . "\n"
+            . "เวลา 08.00–16.00 น. 🌅เวรเช้า" . "\n"
+            . "ผู้ป่วยในเวร: {$patient_all} ราย" . "\n"
+            . " - Convalescent: {$convalescent} ราย" . "\n"
+            . " - Moderate: {$Moderate} ราย" . "\n"
+            . " - Semi critical: {$Semi_critical} ราย" . "\n"
+            . " - Critical: {$Critical} ราย" . "\n" 
+            . " - ไม่ระบุความรุนแรง: {$request->severe_type_null} ราย" . "\n"
+            . "👩‍⚕️ Oncall: {$request->nurse_oncall}" . "\n"
+            . "👩‍⚕️ เสริม: {$request->nurse_partime}" . "\n"
+            . "👩‍⚕️ ปกติ: {$request->nurse_fulltime}" . "\n"
+            . "🕒 ชม.การพยาบาล: " . number_format($patient_hr, 2) . "\n"
+            . "🕒 ชม.การทำงาน: " . number_format($nurse_hr, 2) . "\n"
+            . "📊 Productivity: " . number_format($productivity, 2) . "\n"
+            . "🧮 NHPPD: " . number_format($nhppd, 2) . "\n"
+            . "ผู้บันทึก: {$request->recorder}";
+
+        // ✅ ส่งข้อความ Telegram
+        $token = MainSetting::where('name', 'telegram_token')->value('value');
+        $chat_ids = explode(',', MainSetting::where('name', 'vip_notifytelegram_save')->value('value'));
+
+        foreach ($chat_ids as $chat_id) {
+            Http::asForm()->post("https://api.telegram.org/bot{$token}/sendMessage", [
+                'chat_id' => trim($chat_id),
+                'text' => $message,
+            ]);
+            usleep(500000); // พัก 0.5 วินาที
+        }
+
+        return redirect()->back()->with('success', '✅ ส่งข้อมูลเวรเช้าเรียบร้อยแล้ว');
+    }
+
+    //แจ้งเตือนสถานะการณ์สรุปเวรบ่าย รัน 00.01 น.---------------------------------------------------------------------------------------------
+    //แจ้งเตือนสถานะการณ์สรุปเวรบ่าย รัน 00.01 น.---------------------------------------------------------------------------------------------
+    public function vip_afternoon_notify()
+    {
+        $vip_ward = MainSetting::where('name', 'vip_ward')->value('value') ?? '08';
+
+        $notify = DB::connection('hosxp')->select("
+            SELECT
+                SUM(CASE WHEN ipd_nurse_eval_range_code LIKE '1%' THEN 1 ELSE 0 END) AS convalescent,
+                SUM(CASE WHEN ipd_nurse_eval_range_code LIKE '2%' THEN 1 ELSE 0 END) AS Moderate,
+                SUM(CASE WHEN ipd_nurse_eval_range_code LIKE '3%' THEN 1 ELSE 0 END) AS Semi_critical,
+                SUM(CASE WHEN ipd_nurse_eval_range_code LIKE '4%' THEN 1 ELSE 0 END) AS Critical,
+                SUM(CASE WHEN ipd_nurse_eval_range_code IS NULL OR ipd_nurse_eval_range_code = '' THEN 1 ELSE 0 END) AS severe_type_null,
+                COUNT(DISTINCT an) AS patient_all
+            FROM (
+                SELECT n.an, n.ipd_nurse_eval_range_code
+                FROM ipt i
+                JOIN ipd_nurse_note n ON n.an = i.an
+                JOIN (
+                    SELECT an, note_date, MAX(note_time) AS last_time
+                    FROM ipd_nurse_note
+                    WHERE note_date = date(DATE_ADD(now(), INTERVAL -1 DAY )) AND note_time BETWEEN '16:00:00' AND '23:59:59'
+                    GROUP BY an, note_date
+                ) x ON x.an = n.an AND x.note_date = n.note_date AND x.last_time = n.note_time
+                WHERE i.ward IN ($vip_ward)
+            ) t
+        ");
+
+        foreach ($notify as $row) {
+            $patient_all = $row->patient_all;
+            $convalescent = ($row->convalescent ?? 0);
+            $Moderate = ($row->Moderate ?? 0);
+            $Semi_critical = ($row->Semi_critical ?? 0);
+            $Critical = ($row->Critical ?? 0);
+            $severe_type_null = ($row->severe_type_null ?? 0);
+            $url = url('product/vip_afternoon');
+        }
+
+        //แจ้งเตือน Telegram
+
+        $message = "🛏️ งานห้องผู้ป่วยพิเศษ VIP" . "\n"
+            . "วันที่ " . DateThai(date("Y-m-d", strtotime("-1 day"))) . "\n"
+            . "เวลา 16.00-24.00 น. 🌇เวรบ่าย" . "\n"
+            . "ผู้ป่วยในเวร " . $patient_all . " ราย" . "\n"
+            . " -Convalescent " . $convalescent . " ราย" . "\n"
+            . " -Moderate " . $Moderate . " ราย" . "\n"
+            . " -Semi critical " . $Semi_critical . " ราย" . "\n"
+            . " -Critical " . $Critical . " ราย" . "\n"
+            . " -ไม่ระบุความรุนแรง " . $severe_type_null . " ราย" . "\n" . "\n"
+            . "บันทึก Productivity " . "\n"
+            . $url . "\n";
+
+        // ✅ ส่งข้อความ Telegram
+        $token = MainSetting::where('name', 'telegram_token')->value('value');
+        $chat_ids = explode(',', MainSetting::where('name', 'vip_notifytelegram')->value('value'));
+
+        foreach ($chat_ids as $chat_id) {
+            $url = "https://api.telegram.org/bot$token/sendMessage";
+            $data = [
+                'chat_id' => $chat_id,
+                'text' => $message
+            ];
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_exec($ch);
+            curl_close($ch);
+            sleep(1);
+        }
+
+        return response()->json(['success' => 'success'], 200);
+    }
+
+    //vip_afternoon------------------------------------------------------------------------------------------------------------
+    public function vip_afternoon()
+    {
+        $vip_ward = MainSetting::where('name', 'vip_ward')->value('value') ?? '08';
+
+        $shift = DB::connection('hosxp')->select("
+            SELECT
+                SUM(CASE WHEN ipd_nurse_eval_range_code LIKE '1%' THEN 1 ELSE 0 END) AS convalescent,
+                SUM(CASE WHEN ipd_nurse_eval_range_code LIKE '2%' THEN 1 ELSE 0 END) AS Moderate,
+                SUM(CASE WHEN ipd_nurse_eval_range_code LIKE '3%' THEN 1 ELSE 0 END) AS Semi_critical,
+                SUM(CASE WHEN ipd_nurse_eval_range_code LIKE '4%' THEN 1 ELSE 0 END) AS Critical,
+                SUM(CASE WHEN ipd_nurse_eval_range_code IS NULL OR ipd_nurse_eval_range_code = '' THEN 1 ELSE 0 END) AS severe_type_null,
+                COUNT(DISTINCT an) AS patient_all
+            FROM (
+                SELECT n.an, n.ipd_nurse_eval_range_code
+                FROM ipt i
+                JOIN ipd_nurse_note n ON n.an = i.an
+                JOIN (
+                    SELECT an, note_date, MAX(note_time) AS last_time
+                    FROM ipd_nurse_note
+                    WHERE note_date = date(DATE_ADD(now(), INTERVAL -1 DAY )) AND note_time BETWEEN '16:00:00' AND '23:59:59'
+                    GROUP BY an, note_date
+                ) x ON x.an = n.an AND x.note_date = n.note_date AND x.last_time = n.note_time
+                WHERE i.ward IN ($vip_ward)
+            ) t
+        ");
+
+        return view('hnplus.product.vip_afternoon', compact('shift'));
+    }
+
+    //vip_afternoon_save---------------------------------------------------------------------------------------------------------------
+    //vip_afternoon_save---------------------------------------------------------------------------------------------------------------
+    public function vip_afternoon_save(Request $request)
+    {
+        // ✅ ตรวจสอบข้อมูลที่จำเป็น
+        $request->validate([
+            'nurse_oncall' => 'required|numeric',
+            'nurse_partime' => 'required|numeric',
+            'nurse_fulltime' => 'required|numeric',
+            'recorder' => 'required|string',
+        ]);
+
+        // ✅ Get Constants from MainSetting
+        $vip_working_hours = MainSetting::where('name', 'vip_working_hours')->value('value') ?? 7;
+        $type1_c = MainSetting::where('name', 'vip_patient_type1')->value('value') ?? 1.5;
+        $type2_c = MainSetting::where('name', 'vip_patient_type2')->value('value') ?? 3.5;
+        $type3_c = MainSetting::where('name', 'vip_patient_type3')->value('value') ?? 5.5;
+        $type4_c = MainSetting::where('name', 'vip_patient_type4')->value('value') ?? 7.5;
+
+        // ✅ เตรียมค่าที่ใช้ซ้ำ
+        $convalescent = $request->convalescent;
+        $Moderate = $request->Moderate;
+        $Semi_critical = $request->Semi_critical;
+        $Critical = $request->Critical;
+        $patient_all = max(1, $request->patient_all); // ป้องกันหาร 0
+        $nurse_total = $request->nurse_oncall + $request->nurse_partime + $request->nurse_fulltime;
+        // $nurse_total_hr = max(1, $nurse_total * 7); // ป้องกันหาร 0
+        $nurse_total_hr = max(1, $nurse_total * $vip_working_hours);
+
+        // ✅ คำนวณค่าทางสถิติ
+        // $patient_hr = ($convalescent * 0.45)
+        //     + ($moderate_ill * 1.17)
+        //     + ($semi_critical_ill * 1.71)
+        //     + ($critical_ill * 1.99);
+        $patient_hr = ($convalescent * $type1_c)
+            + ($Moderate * $type2_c)
+            + ($Semi_critical * $type3_c)
+            + ($Critical * $type4_c);
+
+        $nurse_hr = $nurse_total * $vip_working_hours;
+        $productivity = ($patient_hr * 100) / $nurse_total_hr;
+        $nhppd = $patient_hr / $patient_all;
+        $nurse_shift_time = $patient_all * $nhppd * (1.4 / $vip_working_hours);
+
+        // ✅ บันทึกข้อมูลลงฐานข้อมูล
+        Productivity_vip::updateOrCreate(
+            // 🔎 เงื่อนไขตรวจสอบข้อมูลซ้ำ
+            [
+                'report_date' => $request->report_date,
+                'shift_time' => $request->shift_time,
+            ],
+            // 📝 ข้อมูลที่ insert / update
+            [
+                'nurse_fulltime' => $request->nurse_fulltime,
+                'nurse_partime' => $request->nurse_partime,
+                'nurse_oncall' => $request->nurse_oncall,
+                'recorder' => $request->recorder,
+                'note' => $request->note,
+
+                'patient_all' => $patient_all,
+                'patient_convalescent' => $convalescent,
+                'patient_moderate' => $Moderate,
+                'patient_semi_critical' => $Semi_critical,
+                'patient_critical' => $Critical,
+'patient_severe_type_null' => $request->severe_type_null,
+
+                'nursing_hours' => $patient_hr,
+                'working_hours' => $nurse_hr,
+                'nurse_shift_time' => $nurse_shift_time,
+                'nhppd' => $nhppd,
+                'productivity' => $productivity,
+            ]
+        );
+
+        // ✅ เตรียมข้อความแจ้ง Telegram
+        $message = "🛏️ งานห้องผู้ป่วยพิเศษ VIP" . "\n"
+            . "วันที่ " . DateThai(date("Y-m-d", strtotime("-1 day"))) . "\n"
+            . "เวลา 16.00–24.00 น. 🌇เวรบ่าย" . "\n"
+            . "ผู้ป่วยในเวร: {$patient_all} ราย" . "\n"
+            . " - Convalescent: {$convalescent} ราย" . "\n"
+            . " - Moderate: {$Moderate} ราย" . "\n"
+            . " - Semi critical: {$Semi_critical} ราย" . "\n"
+            . " - Critical: {$Critical} ราย" . "\n" . " - ไม่ระบุความรุนแรง: {$request->severe_type_null} ราย" . "\n"
+            . "👩‍⚕️ Oncall: {$request->nurse_oncall}" . "\n"
+            . "👩‍⚕️ เสริม: {$request->nurse_partime}" . "\n"
+            . "👩‍⚕️ ปกติ: {$request->nurse_fulltime}" . "\n"
+            . "🕒 ชม.การพยาบาล: " . number_format($patient_hr, 2) . "\n"
+            . "🕒 ชม.การทำงาน: " . number_format($nurse_hr, 2) . "\n"
+            . "📊 Productivity: " . number_format($productivity, 2) . "\n"
+            . "🧮 NHPPD: " . number_format($nhppd, 2) . "\n"
+            . "ผู้บันทึก: {$request->recorder}";
+
+        // ✅ ส่งข้อความ Telegram
+        $token = MainSetting::where('name', 'telegram_token')->value('value');
+        $chat_ids = explode(',', MainSetting::where('name', 'vip_notifytelegram_save')->value('value'));
+
+        foreach ($chat_ids as $chat_id) {
+            Http::asForm()->post("https://api.telegram.org/bot{$token}/sendMessage", [
+                'chat_id' => trim($chat_id),
+                'text' => $message,
+            ]);
+            usleep(500000); // พัก 0.5 วินาที
+        }
+
+        return redirect()->back()->with('success', '✅ ส่งข้อมูลเวรบ่ายเรียบร้อยแล้ว');
+    }
+
 }
