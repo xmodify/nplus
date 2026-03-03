@@ -124,7 +124,7 @@ class ProductlrController extends Controller
 
         //แจ้งเตือน Telegram
 
-        $message = "🛏️ งานผู้ป่วยใน สามัญ" . "\n"
+        $message = "🛏️ งานผู้ป่วยห้องคลอด LR" . "\n"
             . "วันที่ " . DateThai(date('Y-m-d')) . "\n"
             . "เวลา 00.00-08.00 น. 🌙เวรดึก" . "\n"
             . "ผู้ป่วยในเวร " . $patient_all . " ราย" . "\n"
@@ -264,7 +264,7 @@ class ProductlrController extends Controller
         );
 
         // ✅ เตรียมข้อความแจ้ง Telegram
-        $message = "🛏️ งานผู้ป่วยใน สามัญ" . "\n"
+        $message = "🛏️ งานผู้ป่วยห้องคลอด LR" . "\n"
             . "วันที่ " . DateThai(date('Y-m-d')) . "\n"
             . "เวลา 00.00–08.00 น. 🌙เวรดึก" . "\n"
             . "ผู้ป่วยในเวร: {$patient_all} ราย" . "\n"
@@ -336,7 +336,7 @@ class ProductlrController extends Controller
 
         //แจ้งเตือน Telegram
 
-        $message = "🛏️ งานผู้ป่วยใน สามัญ" . "\n"
+        $message = "🛏️ งานผู้ป่วยห้องคลอด LR" . "\n"
             . "วันที่ " . DateThai(date('Y-m-d')) . "\n"
             . "เวลา 08.00-16.00 น. 🌅เวรเช้า" . "\n"
             . "ผู้ป่วยในเวร " . $patient_all . " ราย" . "\n"
@@ -476,7 +476,7 @@ class ProductlrController extends Controller
         );
 
         // ✅ เตรียมข้อความแจ้ง Telegram
-        $message = "🛏️ งานผู้ป่วยใน สามัญ" . "\n"
+        $message = "🛏️ งานผู้ป่วยห้องคลอด LR" . "\n"
             . "วันที่ " . DateThai(date('Y-m-d')) . "\n"
             . "เวลา 08.00–16.00 น. 🌅เวรเช้า" . "\n"
             . "ผู้ป่วยในเวร: {$patient_all} ราย" . "\n"
@@ -549,7 +549,7 @@ class ProductlrController extends Controller
 
         //แจ้งเตือน Telegram
 
-        $message = "🛏️ งานผู้ป่วยใน สามัญ" . "\n"
+        $message = "🛏️ งานผู้ป่วยห้องคลอด LR" . "\n"
             . "วันที่ " . DateThai(date("Y-m-d", strtotime("-1 day"))) . "\n"
             . "เวลา 16.00-24.00 น. 🌇เวรบ่าย" . "\n"
             . "ผู้ป่วยในเวร " . $patient_all . " ราย" . "\n"
@@ -689,14 +689,15 @@ class ProductlrController extends Controller
         );
 
         // ✅ เตรียมข้อความแจ้ง Telegram
-        $message = "🛏️ งานผู้ป่วยใน สามัญ" . "\n"
+        $message = "🛏️ งานผู้ป่วยห้องคลอด LR" . "\n"
             . "วันที่ " . DateThai(date("Y-m-d", strtotime("-1 day"))) . "\n"
             . "เวลา 16.00–24.00 น. 🌇เวรบ่าย" . "\n"
             . "ผู้ป่วยในเวร: {$patient_all} ราย" . "\n"
             . " - Convalescent: {$convalescent} ราย" . "\n"
             . " - Moderate: {$Moderate} ราย" . "\n"
             . " - Semi critical: {$Semi_critical} ราย" . "\n"
-            . " - Critical: {$Critical} ราย" . "\n" . " - ไม่ระบุความรุนแรง: {$request->severe_type_null} ราย" . "\n"
+            . " - Critical: {$Critical} ราย" . "\n" 
+            . " - ไม่ระบุความรุนแรง: {$request->severe_type_null} ราย" . "\n"
             . "👩‍⚕️ Oncall: {$request->nurse_oncall}" . "\n"
             . "👩‍⚕️ เสริม: {$request->nurse_partime}" . "\n"
             . "👩‍⚕️ ปกติ: {$request->nurse_fulltime}" . "\n"
