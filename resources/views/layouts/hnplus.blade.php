@@ -150,6 +150,13 @@
                                             </a>
                                         </li>
                                     @endif
+                                    @if (isset($app_settings['icu_active']) && $app_settings['icu_active'] == 'Y')
+                                        <li>
+                                            <a class="dropdown-item py-2" href="{{ url('product/icu_report') }}">
+                                                <i class="fa-solid fa-heart-pulse text-danger me-2 ms-1"></i>งานผู้ป่วย ICU
+                                            </a>
+                                        </li>
+                                    @endif
                                     @if (isset($app_settings['lr_active']) && $app_settings['lr_active'] == 'Y')
                                         <li>
                                             <a class="dropdown-item py-2" href="{{ url('product/lr_report') }}">
@@ -212,7 +219,7 @@
                     <ul class="navbar-nav ms-auto align-items-center">
                         <li>
                             <div class="badge bg-white text-primary rounded-pill px-3 py-2 shadow-sm fw-bold">
-                                <i class="bi bi-code-slash me-1"></i>V. 69-03-02 18:00
+                                <i class="bi bi-code-slash me-1"></i>V. 69-03-06 18:00
                             </div>
                         </li>
 

@@ -38,15 +38,16 @@ class MainSettingController extends Controller
 
         $general_settings = $settings->filter(function ($item) {
             return !str_starts_with($item->name, 'er_') &&
-            !str_starts_with($item->name, 'ipd_') &&
-            !str_starts_with($item->name, 'opd_') &&
-            !str_starts_with($item->name, 'ncd_') &&
-            !str_starts_with($item->name, 'ari_') &&
-            !str_starts_with($item->name, 'ckd_') &&
-            !str_starts_with($item->name, 'hd_') &&
-            !str_starts_with($item->name, 'vip_') &&
-            !str_starts_with($item->name, 'lr_') &&
-            !str_starts_with($item->name, 'anc_');
+                !str_starts_with($item->name, 'ipd_') &&
+                !str_starts_with($item->name, 'opd_') &&
+                !str_starts_with($item->name, 'ncd_') &&
+                !str_starts_with($item->name, 'ari_') &&
+                !str_starts_with($item->name, 'ckd_') &&
+                !str_starts_with($item->name, 'hd_') &&
+                !str_starts_with($item->name, 'vip_') &&
+                !str_starts_with($item->name, 'icu_') &&
+                !str_starts_with($item->name, 'lr_') &&
+                !str_starts_with($item->name, 'anc_');
         });
 
         $er_settings = $settings->filter(function ($item) {
@@ -79,6 +80,10 @@ class MainSettingController extends Controller
 
         $vip_settings = $settings->filter(function ($item) {
             return str_starts_with($item->name, 'vip_');
+        });
+
+        $icu_settings = $settings->filter(function ($item) {
+            return str_starts_with($item->name, 'icu_');
         });
 
         $lr_settings = $settings->filter(function ($item) {
@@ -120,6 +125,7 @@ class MainSettingController extends Controller
             'ckd_settings',
             'hd_settings',
             'vip_settings',
+            'icu_settings',
             'lr_settings',
             'anc_settings'
         ));
@@ -135,7 +141,7 @@ class MainSettingController extends Controller
     }
 
     #######################################################################################################################################    
-// UP Structure -----------------------------------------------------------------------------------------------------------------------    
+    // UP Structure -----------------------------------------------------------------------------------------------------------------------    
     public function up_structure(Request $request)
     {
         // Run Migrations
@@ -208,6 +214,15 @@ class MainSettingController extends Controller
             ['name_th' => 'VIP NotifyTelegram แจ้งเตือน', 'name' => 'vip_notifytelegram', 'value' => ''],
             ['name_th' => 'VIP NotifyTelegram บันทึก', 'name' => 'vip_notifytelegram_save', 'value' => ''],
             ['name_th' => 'VIP สถานะ', 'name' => 'vip_active', 'value' => 'Y'],
+            ['name_th' => 'ICU รหัส Ward (HOSxP)', 'name' => 'icu_ward', 'value' => ''],
+            ['name_th' => 'ICU ชม.ทำงานพยาบาล', 'name' => 'icu_working_hours', 'value' => '7'],
+            ['name_th' => 'ICU ชม.ผู้ป่วย Type 1', 'name' => 'icu_patient_type1', 'value' => '0.5'],
+            ['name_th' => 'ICU ชม.ผู้ป่วย Type 2', 'name' => 'icu_patient_type2', 'value' => '1.16'],
+            ['name_th' => 'ICU ชม.ผู้ป่วย Type 3', 'name' => 'icu_patient_type3', 'value' => '1.83'],
+            ['name_th' => 'ICU ชม.ผู้ป่วย Type 4', 'name' => 'icu_patient_type4', 'value' => '2.5'],
+            ['name_th' => 'ICU NotifyTelegram แจ้งเตือน', 'name' => 'icu_notifytelegram', 'value' => ''],
+            ['name_th' => 'ICU NotifyTelegram บันทึก', 'name' => 'icu_notifytelegram_save', 'value' => ''],
+            ['name_th' => 'ICU สถานะ', 'name' => 'icu_active', 'value' => 'Y'],
             ['name_th' => 'LR รหัส Ward (HOSxP)', 'name' => 'lr_ward', 'value' => ''],
             ['name_th' => 'LR ชม.ทำงานพยาบาล', 'name' => 'lr_working_hours', 'value' => '7'],
             ['name_th' => 'LR ชม.ผู้ป่วย Type 1', 'name' => 'lr_patient_type1', 'value' => '0.5'],
@@ -230,16 +245,15 @@ class MainSettingController extends Controller
                 DB::table('main_setting')
                     ->where('name', $row['name'])
                     ->update([
-                    'name_th' => $row['name_th'],
-                ]);
-            }
-            else {
+                        'name_th' => $row['name_th'],
+                    ]);
+            } else {
                 DB::table('main_setting')
                     ->insert([
-                    'name_th' => $row['name_th'],
-                    'name' => $row['name'],
-                    'value' => $row['value'],
-                ]);
+                        'name_th' => $row['name_th'],
+                        'name' => $row['name'],
+                        'value' => $row['value'],
+                    ]);
             }
         }
 
@@ -254,6 +268,7 @@ class MainSettingController extends Controller
             'productivity_ncd',
             'productivity_opd',
             'productivity_vip',
+            'productivity_icu',
             'productivity_anc'
         ];
 
@@ -283,6 +298,13 @@ class MainSettingController extends Controller
                 ['name' => 'patient_severe_type_null', 'type' => 'INT(11)', 'after' => 'patient_non_urgent'],
             ],
             'productivity_vip' => [
+                ['name' => 'patient_convalescent', 'type' => 'INT(11)', 'after' => 'patient_all'],
+                ['name' => 'patient_moderate', 'type' => 'INT(11)', 'after' => 'patient_convalescent'],
+                ['name' => 'patient_semi_critical', 'type' => 'INT(11)', 'after' => 'patient_moderate'],
+                ['name' => 'patient_critical', 'type' => 'INT(11)', 'after' => 'patient_semi_critical'],
+                ['name' => 'patient_severe_type_null', 'type' => 'INT(11)', 'after' => 'patient_critical'],
+            ],
+            'productivity_icu' => [
                 ['name' => 'patient_convalescent', 'type' => 'INT(11)', 'after' => 'patient_all'],
                 ['name' => 'patient_moderate', 'type' => 'INT(11)', 'after' => 'patient_convalescent'],
                 ['name' => 'patient_semi_critical', 'type' => 'INT(11)', 'after' => 'patient_moderate'],
@@ -366,6 +388,31 @@ class MainSettingController extends Controller
                 });
             }
 
+            // Create Productivity ICU Table if not exists
+            if (!Schema::hasTable('productivity_icu')) {
+                Schema::create('productivity_icu', function (Blueprint $table) {
+                    $table->id();
+                    $table->date('report_date');
+                    $table->string('shift_time', 20);
+                    $table->integer('nurse_fulltime')->nullable();
+                    $table->integer('nurse_partime')->nullable();
+                    $table->integer('nurse_oncall')->nullable();
+                    $table->string('recorder')->nullable();
+                    $table->string('note')->nullable();
+                    $table->integer('patient_all')->nullable();
+                    $table->integer('patient_critical')->nullable();
+                    $table->integer('patient_semi_critical')->nullable();
+                    $table->integer('patient_moderate')->nullable();
+                    $table->integer('patient_convalescent')->nullable();
+                    $table->double('nursing_hours', 5, 2)->nullable();
+                    $table->double('working_hours', 5, 2)->nullable();
+                    $table->double('nhppd', 5, 2)->nullable();
+                    $table->double('nurse_shift_time', 5, 2)->nullable();
+                    $table->double('productivity', 5, 2)->nullable();
+                    $table->timestamps();
+                });
+            }
+
             // Create Productivity LR Table if not exists
             if (!Schema::hasTable('productivity_lr')) {
                 Schema::create('productivity_lr', function (Blueprint $table) {
@@ -423,13 +470,12 @@ class MainSettingController extends Controller
                                 ALTER TABLE `$table`
                                 MODIFY COLUMN `{$col['name']}` {$col['type']}
                             ");
-                        }
-                        else {
+                        } else {
                             $afterSql = '';
                             if (
-                            isset($col['after']) &&
-                            $col['after'] !== '' &&
-                            Schema::hasColumn($table, $col['after'])
+                                isset($col['after']) &&
+                                $col['after'] !== '' &&
+                                Schema::hasColumn($table, $col['after'])
                             ) {
                                 $afterSql = " AFTER `{$col['after']}`";
                             }
@@ -467,11 +513,8 @@ class MainSettingController extends Controller
             // END --------------------------------------------------------------------------------------------------------
             return redirect()->route('admin.main_setting')
                 ->with('success', 'Upgrade Structure สำเร็จ');
-
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             return back()->with('error', 'เกิดข้อผิดพลาด: ' . $e->getMessage());
         }
     }
-
 }

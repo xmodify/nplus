@@ -24,6 +24,7 @@ class DashboardController extends Controller
         $opd_dep = MainSetting::where('name', 'opd_department')->value('value') ?? "'002','050'";
         $ari_dep = MainSetting::where('name', 'ari_department')->value('value') ?? "'ARI'";
         $vip_ward = MainSetting::where('name', 'vip_ward')->value('value') ?? "''";
+        $icu_ward = MainSetting::where('name', 'icu_ward')->value('value') ?? "''";
         $lr_ward = MainSetting::where('name', 'lr_ward')->value('value') ?? "''";
         $ckd_dep = MainSetting::where('name', 'ckd_department')->value('value') ?? "''";
         $hd_dep = MainSetting::where('name', 'hd_department')->value('value') ?? "''";
@@ -41,13 +42,11 @@ class DashboardController extends Controller
             $shift_name = 'เวรดึก';
             $start_time = '00:00:01';
             $end_time = '07:59:59';
-        }
-        elseif ($currentTime >= '08:00:00' && $currentTime <= '15:59:59') {
+        } elseif ($currentTime >= '08:00:00' && $currentTime <= '15:59:59') {
             $shift_name = 'เวรเช้า';
             $start_time = '08:00:00';
             $end_time = '15:59:59';
-        }
-        else {
+        } else {
             $shift_name = 'เวรบ่าย';
             $start_time = '16:00:00';
             $end_time = '23:59:59';
@@ -188,6 +187,21 @@ class DashboardController extends Controller
             ];
         }
 
+        // 4.5 ICU Data
+        $icu_stats = ['shift' => $shift_name, 'critical' => 0, 'semi_critical' => 0, 'moderate' => 0, 'convalescent' => 0, 'severe_type_null' => 0];
+        if ($icu_ward != "''" && $icu_ward != "") {
+            $icu_query = str_replace($ipd_ward, $icu_ward, $ipd_query);
+            $icu_result = DB::connection('hosxp')->selectOne($icu_query);
+            $icu_stats = [
+                'shift' => $shift_name,
+                'critical' => $icu_result->Critical ?? 0,
+                'semi_critical' => $icu_result->Semi_critical ?? 0,
+                'moderate' => $icu_result->Moderate ?? 0,
+                'convalescent' => $icu_result->convalescent ?? 0,
+                'severe_type_null' => $icu_result->severe_type_null ?? 0,
+            ];
+        }
+
         // 5. LR Data
         $lr_stats = ['shift' => $shift_name, 'critical' => 0, 'semi_critical' => 0, 'moderate' => 0, 'convalescent' => 0, 'severe_type_null' => 0];
         if ($lr_ward != "''" && $lr_ward != "") {
@@ -243,9 +257,9 @@ class DashboardController extends Controller
         }
 
         if (\Illuminate\Support\Facades\Auth::check()) {
-            return view('hnplus.dashboard', compact('er_stats', 'ipd_stats', 'opd_stats', 'ncd_stats', 'ari_stats', 'vip_stats', 'lr_stats', 'ckd_stats', 'hd_stats', 'anc_stats', 'today', 'shift_name'));
+            return view('hnplus.dashboard', compact('er_stats', 'ipd_stats', 'opd_stats', 'ncd_stats', 'ari_stats', 'vip_stats', 'icu_stats', 'lr_stats', 'ckd_stats', 'hd_stats', 'anc_stats', 'today', 'shift_name'));
         }
 
-        return view('welcome', compact('er_stats', 'ipd_stats', 'opd_stats', 'ncd_stats', 'ari_stats', 'vip_stats', 'lr_stats', 'ckd_stats', 'hd_stats', 'anc_stats', 'today', 'shift_name'));
+        return view('welcome', compact('er_stats', 'ipd_stats', 'opd_stats', 'ncd_stats', 'ari_stats', 'vip_stats', 'icu_stats', 'lr_stats', 'ckd_stats', 'hd_stats', 'anc_stats', 'today', 'shift_name'));
     }
 }

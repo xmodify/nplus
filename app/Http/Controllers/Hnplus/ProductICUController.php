@@ -7,26 +7,24 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
-use App\Models\Productivity_lr;
+use App\Models\Productivity_icu;
 use App\Models\MainSetting;
 use Illuminate\Routing\Controllers\Middleware;
 
-#[Middleware('auth', only: ['lr_report', 'lr_product_delete'])]
+#[Middleware('auth', only: ['icu_report', 'icu_product_delete'])]
 
-class ProductlrController extends Controller
+class ProductICUController extends Controller
 {
-    //lr_report--------------------------------------------------------------------------------------------------------------------------
-    public function lr_report(Request $request)
+    //icu_report-------------------------------
+    public function icu_report(Request $request)
     {
         $start_date = $request->start_date ? DateThaiToEn($request->start_date) : date('Y-m-d', strtotime("first day of this month"));
         $end_date = $request->end_date ? DateThaiToEn($request->end_date) : date('Y-m-d');
 
-        // $product=Nurse_Productivity_lr::whereBetween('report_date',[$start_date, $end_date])
-        //     ->orderBy('report_date', 'desc')->get(); 
-        $product = Productivity_lr::whereBetween('report_date', [$start_date, $end_date])
+        $product = Productivity_icu::whereBetween('report_date', [$start_date, $end_date])
             ->orderBy('report_date', 'desc')->get();
 
-        $lr_working_hours = MainSetting::where('name', 'lr_working_hours')->value('value') ?? 7;
+        $icu_working_hours = MainSetting::where('name', 'icu_working_hours')->value('value') ?? 7;
 
         $product_summary = DB::select('
             SELECT CASE WHEN shift_time = "เวรเช้า" THEN "1" WHEN shift_time = "เวรบ่าย" THEN "2"
@@ -42,12 +40,11 @@ class ProductlrController extends Controller
             ((SUM(nursing_hours)*100)/SUM(working_hours)) AS productivity,
             (SUM(nursing_hours)/SUM(patient_all)) AS nhppd,
             (SUM(patient_all)*(SUM(nursing_hours)/SUM(patient_all))*(1.4/?))/COUNT(shift_time) AS nurse_shift_time
-            FROM Productivity_lr
+            FROM productivity_icu
             WHERE report_date BETWEEN ? AND ?
-            GROUP BY shift_time ORDER BY id', [$lr_working_hours, $start_date, $end_date]);
+            GROUP BY shift_time ORDER BY id', [$icu_working_hours, $start_date, $end_date]);
 
-        // เตรียมข้อมูลสำหรับกราฟ
-        $product_asc = Productivity_lr::whereBetween('report_date', [$start_date, $end_date])
+        $product_asc = Productivity_icu::whereBetween('report_date', [$start_date, $end_date])
             ->orderBy('report_date', 'asc')->get();
         $grouped = $product_asc->groupBy('report_date');
         $report_date = [];
@@ -56,16 +53,14 @@ class ProductlrController extends Controller
         $afternoon = [];
         foreach ($grouped as $date => $rows) {
             $report_date[] = DateThai($date);
-            // ค้นหาค่า productivity ของแต่ละเวร
-            $night[] = optional($rows->firstWhere('shift_time', 'เวรดึก'))->productivity ?? 0;
+            $night[] = optional($rows->firstWhere('shift_time', '🌙เวรดึก'))->productivity ?? 0;
             $morning[] = optional($rows->firstWhere('shift_time', 'เวรเช้า'))->productivity ?? 0;
             $afternoon[] = optional($rows->firstWhere('shift_time', 'เวรบ่าย'))->productivity ?? 0;
         }
 
-        // ลบ Product ------------------
         $del_product = Auth::check() && Auth::user()->del_product === 'Y';
 
-        return view('hnplus.product.lr_report', compact(
+        return view('hnplus.product.icu_report', compact(
             'product_summary',
             'product',
             'start_date',
@@ -78,17 +73,16 @@ class ProductlrController extends Controller
         ));
     }
 
-    //product_delete----------------------------------------------------------------------------------------------------------------
-    public function lr_product_delete($id)
+    public function icu_product_delete($id)
     {
-        $product = Productivity_lr::find($id)->delete();
-        return redirect()->route('hnplus.product.lr_report')->with('danger', 'ลบข้อมูลเรียบร้อยแล้ว');
+        Productivity_icu::find($id)->delete();
+        return redirect()->route('hnplus.product.icu_report')->with('danger', 'ลบข้อมูลเรียบร้อยแล้ว');
     }
 
     //แจ้งเตือนสถานะการณ์สรุปเวรดึก รัน 08.00 น.---------------------------------------------------------------------------------------------
-    public function lr_night_notify()
+    public function icu_night_notify()
     {
-        $lr_ward = MainSetting::where('name', 'lr_ward')->value('value') ?? '01';
+        $icu_ward = MainSetting::where('name', 'icu_ward')->value('value') ?? '08';
 
         $notify = DB::connection('hosxp')->select("
             SELECT
@@ -108,7 +102,7 @@ class ProductlrController extends Controller
                     WHERE note_date = CURDATE() AND note_time BETWEEN '00:00:01' AND '07:59:59'
                     GROUP BY an, note_date
                 ) x ON x.an = n.an AND x.note_date = n.note_date AND x.last_time = n.note_time
-                WHERE i.ward IN ($lr_ward)
+                WHERE i.ward IN ($icu_ward)
             ) t
         ");
 
@@ -119,12 +113,12 @@ class ProductlrController extends Controller
             $Semi_critical = ($row->Semi_critical ?? 0);
             $Critical = ($row->Critical ?? 0);
             $severe_type_null = ($row->severe_type_null ?? 0);
-            $url = url('product/lr_night');
+            $url = url('product/icu_night');
         }
 
         //แจ้งเตือน Telegram
 
-        $message = "🛏️ งานผู้ป่วยห้องคลอด LR" . "\n"
+        $message = "🛏️ งานผู้ป่วย ICU" . "\n"
             . "วันที่ " . DateThai(date('Y-m-d')) . "\n"
             . "เวลา 00.00-08.00 น. 🌙เวรดึก" . "\n"
             . "ผู้ป่วยในเวร " . $patient_all . " ราย" . "\n"
@@ -138,7 +132,7 @@ class ProductlrController extends Controller
 
         // ✅ ส่งข้อความ Telegram
         $token = MainSetting::where('name', 'telegram_token')->value('value');
-        $chat_ids = explode(',', MainSetting::where('name', 'lr_notifytelegram')->value('value'));
+        $chat_ids = explode(',', MainSetting::where('name', 'icu_notifytelegram')->value('value'));
 
         foreach ($chat_ids as $chat_id) {
             $url = "https://api.telegram.org/bot$token/sendMessage";
@@ -159,10 +153,10 @@ class ProductlrController extends Controller
         return response()->json(['success' => 'success'], 200);
     }
 
-    //lr_night------------------------------------------------------------------------------------------------------------------------
-    public function lr_night()
+    //icu_night------------------------------------------------------------------------------------------------------------------------
+    public function icu_night()
     {
-        $lr_ward = MainSetting::where('name', 'lr_ward')->value('value') ?? '01';
+        $icu_ward = MainSetting::where('name', 'icu_ward')->value('value') ?? '08';
 
         $shift = DB::connection('hosxp')->select("
             SELECT
@@ -182,16 +176,16 @@ class ProductlrController extends Controller
                     WHERE note_date = CURDATE() AND note_time BETWEEN '00:00:01' AND '07:59:59'
                     GROUP BY an, note_date
                 ) x ON x.an = n.an AND x.note_date = n.note_date AND x.last_time = n.note_time
-                WHERE i.ward IN ($lr_ward)
+                WHERE i.ward IN ($icu_ward)
             ) t
         ");
 
-        return view('hnplus.product.lr_night', compact('shift'));
+        return view('hnplus.product.icu_night', compact('shift'));
     }
 
-    //lr_night_save--------------------------------------------------------------------------------------------------------------------
-    //lr_night_save--------------------------------------------------------------------------------------------------------------------
-    public function lr_night_save(Request $request)
+    //icu_night_save--------------------------------------------------------------------------------------------------------------------
+    //icu_night_save--------------------------------------------------------------------------------------------------------------------
+    public function icu_night_save(Request $request)
     {
         // ✅ ตรวจสอบข้อมูลที่จำเป็น
         $request->validate([
@@ -202,11 +196,11 @@ class ProductlrController extends Controller
         ]);
 
         // ✅ Get Constants from MainSetting
-        $lr_working_hours = MainSetting::where('name', 'lr_working_hours')->value('value') ?? 7;
-        $type1_c = MainSetting::where('name', 'lr_patient_type1')->value('value') ?? 1.5;
-        $type2_c = MainSetting::where('name', 'lr_patient_type2')->value('value') ?? 3.5;
-        $type3_c = MainSetting::where('name', 'lr_patient_type3')->value('value') ?? 5.5;
-        $type4_c = MainSetting::where('name', 'lr_patient_type4')->value('value') ?? 7.5;
+        $icu_working_hours = MainSetting::where('name', 'icu_working_hours')->value('value') ?? 7;
+        $type1_c = MainSetting::where('name', 'icu_patient_type1')->value('value') ?? 1.5;
+        $type2_c = MainSetting::where('name', 'icu_patient_type2')->value('value') ?? 3.5;
+        $type3_c = MainSetting::where('name', 'icu_patient_type3')->value('value') ?? 5.5;
+        $type4_c = MainSetting::where('name', 'icu_patient_type4')->value('value') ?? 7.5;
 
         // ✅ เตรียมค่าที่ใช้ซ้ำ
         $convalescent = $request->convalescent;
@@ -216,7 +210,7 @@ class ProductlrController extends Controller
         $patient_all = max(1, $request->patient_all); // ป้องกันหาร 0
         $nurse_total = $request->nurse_oncall + $request->nurse_partime + $request->nurse_fulltime;
         // $nurse_total_hr = max(1, $nurse_total * 7); // ป้องกันหาร 0
-        $nurse_total_hr = max(1, $nurse_total * $lr_working_hours);
+        $nurse_total_hr = max(1, $nurse_total * $icu_working_hours);
 
         // ✅ คำนวณค่าทางสถิติ
         // $patient_hr = ($convalescent * 0.45)
@@ -228,13 +222,13 @@ class ProductlrController extends Controller
             + ($Semi_critical * $type3_c)
             + ($Critical * $type4_c);
 
-        $nurse_hr = $nurse_total * $lr_working_hours;
+        $nurse_hr = $nurse_total * $icu_working_hours;
         $productivity = ($patient_hr * 100) / $nurse_total_hr;
         $nhppd = $patient_hr / $patient_all;
-        $nurse_shift_time = $patient_all * $nhppd * (1.4 / $lr_working_hours);
+        $nurse_shift_time = $patient_all * $nhppd * (1.4 / $icu_working_hours);
 
         // ✅ บันทึกข้อมูลลงฐานข้อมูล
-        Productivity_lr::updateOrCreate(
+        Productivity_icu::updateOrCreate(
             // 🔎 เงื่อนไขตรวจสอบข้อมูลซ้ำ
             [
                 'report_date' => $request->report_date,
@@ -264,7 +258,7 @@ class ProductlrController extends Controller
         );
 
         // ✅ เตรียมข้อความแจ้ง Telegram
-        $message = "🛏️ งานผู้ป่วยห้องคลอด LR" . "\n"
+        $message = "🛏️ งานผู้ป่วย ICU" . "\n"
             . "วันที่ " . DateThai(date('Y-m-d')) . "\n"
             . "เวลา 00.00–08.00 น. 🌙เวรดึก" . "\n"
             . "ผู้ป่วยในเวร: {$patient_all} ราย" . "\n"
@@ -284,7 +278,7 @@ class ProductlrController extends Controller
 
         // ✅ ส่งข้อความ Telegram
         $token = MainSetting::where('name', 'telegram_token')->value('value');
-        $chat_ids = explode(',', MainSetting::where('name', 'lr_notifytelegram_save')->value('value'));
+        $chat_ids = explode(',', MainSetting::where('name', 'icu_notifytelegram_save')->value('value'));
 
         foreach ($chat_ids as $chat_id) {
             Http::asForm()->post("https://api.telegram.org/bot{$token}/sendMessage", [
@@ -298,9 +292,9 @@ class ProductlrController extends Controller
     }
 
     //แจ้งเตือนสถานะการณ์สรุปเวรเช้า รัน 16.00 น.---------------------------------------------------------------------------------------------
-    public function lr_morning_notify()
+    public function icu_morning_notify()
     {
-        $lr_ward = MainSetting::where('name', 'lr_ward')->value('value') ?? '01';
+        $icu_ward = MainSetting::where('name', 'icu_ward')->value('value') ?? '08';
 
         $notify = DB::connection('hosxp')->select("
             SELECT
@@ -320,7 +314,7 @@ class ProductlrController extends Controller
                     WHERE note_date = CURDATE() AND note_time BETWEEN '08:00:00' AND '15:59:59'
                     GROUP BY an, note_date
                 ) x ON x.an = n.an AND x.note_date = n.note_date AND x.last_time = n.note_time
-                WHERE i.ward IN ($lr_ward)
+                WHERE i.ward IN ($icu_ward)
             ) t
         ");
 
@@ -331,12 +325,12 @@ class ProductlrController extends Controller
             $Semi_critical = ($row->Semi_critical ?? 0);
             $Critical = ($row->Critical ?? 0);
             $severe_type_null = ($row->severe_type_null ?? 0);
-            $url = url('product/lr_morning');
+            $url = url('product/icu_morning');
         }
 
         //แจ้งเตือน Telegram
 
-        $message = "🛏️ งานผู้ป่วยห้องคลอด LR" . "\n"
+        $message = "🛏️ งานผู้ป่วย ICU" . "\n"
             . "วันที่ " . DateThai(date('Y-m-d')) . "\n"
             . "เวลา 08.00-16.00 น. 🌅เวรเช้า" . "\n"
             . "ผู้ป่วยในเวร " . $patient_all . " ราย" . "\n"
@@ -350,7 +344,7 @@ class ProductlrController extends Controller
 
         // ✅ ส่งข้อความ Telegram
         $token = MainSetting::where('name', 'telegram_token')->value('value');
-        $chat_ids = explode(',', MainSetting::where('name', 'lr_notifytelegram')->value('value'));
+        $chat_ids = explode(',', MainSetting::where('name', 'icu_notifytelegram')->value('value'));
 
         foreach ($chat_ids as $chat_id) {
             $url = "https://api.telegram.org/bot$token/sendMessage";
@@ -371,10 +365,10 @@ class ProductlrController extends Controller
         return response()->json(['success' => 'success'], 200);
     }
 
-    //lr_morning-------------------------------------------------------------------------------------------------------------
-    public function lr_morning()
+    //icu_morning-------------------------------------------------------------------------------------------------------------
+    public function icu_morning()
     {
-        $lr_ward = MainSetting::where('name', 'lr_ward')->value('value') ?? '01';
+        $icu_ward = MainSetting::where('name', 'icu_ward')->value('value') ?? '08';
 
         $shift = DB::connection('hosxp')->select("
             SELECT
@@ -394,16 +388,16 @@ class ProductlrController extends Controller
                     WHERE note_date = CURDATE() AND note_time BETWEEN '08:00:00' AND '15:59:59'
                     GROUP BY an, note_date
                 ) x ON x.an = n.an AND x.note_date = n.note_date AND x.last_time = n.note_time
-                WHERE i.ward IN ($lr_ward)
+                WHERE i.ward IN ($icu_ward)
             ) t
         ");
 
-        return view('hnplus.product.lr_morning', compact('shift'));
+        return view('hnplus.product.icu_morning', compact('shift'));
     }
 
-    //lr_morning_save------------------------------------------------------------------------------------------------------------------
-    //lr_morning_save------------------------------------------------------------------------------------------------------------------
-    public function lr_morning_save(Request $request)
+    //icu_morning_save------------------------------------------------------------------------------------------------------------------
+    //icu_morning_save------------------------------------------------------------------------------------------------------------------
+    public function icu_morning_save(Request $request)
     {
         // ✅ ตรวจสอบข้อมูลที่จำเป็น
         $request->validate([
@@ -414,11 +408,11 @@ class ProductlrController extends Controller
         ]);
 
         // ✅ Get Constants from MainSetting
-        $lr_working_hours = MainSetting::where('name', 'lr_working_hours')->value('value') ?? 7;
-        $type1_c = MainSetting::where('name', 'lr_patient_type1')->value('value') ?? 1.5;
-        $type2_c = MainSetting::where('name', 'lr_patient_type2')->value('value') ?? 3.5;
-        $type3_c = MainSetting::where('name', 'lr_patient_type3')->value('value') ?? 5.5;
-        $type4_c = MainSetting::where('name', 'lr_patient_type4')->value('value') ?? 7.5;
+        $icu_working_hours = MainSetting::where('name', 'icu_working_hours')->value('value') ?? 7;
+        $type1_c = MainSetting::where('name', 'icu_patient_type1')->value('value') ?? 1.5;
+        $type2_c = MainSetting::where('name', 'icu_patient_type2')->value('value') ?? 3.5;
+        $type3_c = MainSetting::where('name', 'icu_patient_type3')->value('value') ?? 5.5;
+        $type4_c = MainSetting::where('name', 'icu_patient_type4')->value('value') ?? 7.5;
 
         // ✅ เตรียมค่าที่ใช้ซ้ำ
         $convalescent = $request->convalescent;
@@ -428,7 +422,7 @@ class ProductlrController extends Controller
         $patient_all = max(1, $request->patient_all); // ป้องกันหาร 0
         $nurse_total = $request->nurse_oncall + $request->nurse_partime + $request->nurse_fulltime;
         // $nurse_total_hr = max(1, $nurse_total * 7); // ป้องกันหาร 0
-        $nurse_total_hr = max(1, $nurse_total * $lr_working_hours);
+        $nurse_total_hr = max(1, $nurse_total * $icu_working_hours);
 
         // ✅ คำนวณค่าทางสถิติ
         // $patient_hr = ($convalescent * 0.45)
@@ -440,13 +434,13 @@ class ProductlrController extends Controller
             + ($Semi_critical * $type3_c)
             + ($Critical * $type4_c);
 
-        $nurse_hr = $nurse_total * $lr_working_hours;
+        $nurse_hr = $nurse_total * $icu_working_hours;
         $productivity = ($patient_hr * 100) / $nurse_total_hr;
         $nhppd = $patient_hr / $patient_all;
-        $nurse_shift_time = $patient_all * $nhppd * (1.4 / $lr_working_hours);
+        $nurse_shift_time = $patient_all * $nhppd * (1.4 / $icu_working_hours);
 
         // ✅ บันทึกข้อมูลลงฐานข้อมูล
-        Productivity_lr::updateOrCreate(
+        Productivity_icu::updateOrCreate(
             // 🔎 เงื่อนไขตรวจสอบข้อมูลซ้ำ
             [
                 'report_date' => $request->report_date,
@@ -476,7 +470,7 @@ class ProductlrController extends Controller
         );
 
         // ✅ เตรียมข้อความแจ้ง Telegram
-        $message = "🛏️ งานผู้ป่วยห้องคลอด LR" . "\n"
+        $message = "🛏️ งานผู้ป่วย ICU" . "\n"
             . "วันที่ " . DateThai(date('Y-m-d')) . "\n"
             . "เวลา 08.00–16.00 น. 🌅เวรเช้า" . "\n"
             . "ผู้ป่วยในเวร: {$patient_all} ราย" . "\n"
@@ -496,7 +490,7 @@ class ProductlrController extends Controller
 
         // ✅ ส่งข้อความ Telegram
         $token = MainSetting::where('name', 'telegram_token')->value('value');
-        $chat_ids = explode(',', MainSetting::where('name', 'lr_notifytelegram_save')->value('value'));
+        $chat_ids = explode(',', MainSetting::where('name', 'icu_notifytelegram_save')->value('value'));
 
         foreach ($chat_ids as $chat_id) {
             Http::asForm()->post("https://api.telegram.org/bot{$token}/sendMessage", [
@@ -511,9 +505,9 @@ class ProductlrController extends Controller
 
     //แจ้งเตือนสถานะการณ์สรุปเวรบ่าย รัน 00.01 น.---------------------------------------------------------------------------------------------
     //แจ้งเตือนสถานะการณ์สรุปเวรบ่าย รัน 00.01 น.---------------------------------------------------------------------------------------------
-    public function lr_afternoon_notify()
+    public function icu_afternoon_notify()
     {
-        $lr_ward = MainSetting::where('name', 'lr_ward')->value('value') ?? '01';
+        $icu_ward = MainSetting::where('name', 'icu_ward')->value('value') ?? '08';
 
         $notify = DB::connection('hosxp')->select("
             SELECT
@@ -533,7 +527,7 @@ class ProductlrController extends Controller
                     WHERE note_date = date(DATE_ADD(now(), INTERVAL -1 DAY )) AND note_time BETWEEN '16:00:00' AND '23:59:59'
                     GROUP BY an, note_date
                 ) x ON x.an = n.an AND x.note_date = n.note_date AND x.last_time = n.note_time
-                WHERE i.ward IN ($lr_ward)
+                WHERE i.ward IN ($icu_ward)
             ) t
         ");
 
@@ -543,7 +537,7 @@ class ProductlrController extends Controller
         $Semi_critical    = 0;
         $Critical         = 0;
         $severe_type_null = 0;
-        $report_url       = url('product/lr_afternoon');
+        $report_url       = url('product/icu_afternoon');
 
         foreach ($notify as $row) {
             $patient_all      = $row->patient_all;
@@ -555,7 +549,7 @@ class ProductlrController extends Controller
         }
 
         //แจ้งเตือน Telegram
-        $message = "🛏️ งานผู้ป่วยห้องคลอด LR" . "\n"
+        $message = "🛏️ งานผู้ป่วย ICU" . "\n"
             . "วันที่ " . DateThai(date("Y-m-d", strtotime("-1 day"))) . "\n"
             . "เวลา 16.00-24.00 น. 🌇เวรบ่าย" . "\n"
             . "ผู้ป่วยในเวร " . $patient_all . " ราย" . "\n"
@@ -569,7 +563,7 @@ class ProductlrController extends Controller
 
         // ✅ ส่งข้อความ Telegram
         $token    = MainSetting::where('name', 'telegram_token')->value('value');
-        $chat_ids = explode(',', MainSetting::where('name', 'lr_notifytelegram')->value('value'));
+        $chat_ids = explode(',', MainSetting::where('name', 'icu_notifytelegram')->value('value'));
 
         foreach ($chat_ids as $chat_id) {
             Http::asForm()->post("https://api.telegram.org/bot{$token}/sendMessage", [
@@ -582,10 +576,10 @@ class ProductlrController extends Controller
         return response()->json(['success' => 'success'], 200);
     }
 
-    //lr_afternoon------------------------------------------------------------------------------------------------------------
-    public function lr_afternoon()
+    //icu_afternoon------------------------------------------------------------------------------------------------------------
+    public function icu_afternoon()
     {
-        $lr_ward = MainSetting::where('name', 'lr_ward')->value('value') ?? '01';
+        $icu_ward = MainSetting::where('name', 'icu_ward')->value('value') ?? '08';
 
         $shift = DB::connection('hosxp')->select("
             SELECT
@@ -605,16 +599,16 @@ class ProductlrController extends Controller
                     WHERE note_date = date(DATE_ADD(now(), INTERVAL -1 DAY )) AND note_time BETWEEN '16:00:00' AND '23:59:59'
                     GROUP BY an, note_date
                 ) x ON x.an = n.an AND x.note_date = n.note_date AND x.last_time = n.note_time
-                WHERE i.ward IN ($lr_ward)
+                WHERE i.ward IN ($icu_ward)
             ) t
         ");
 
-        return view('hnplus.product.lr_afternoon', compact('shift'));
+        return view('hnplus.product.icu_afternoon', compact('shift'));
     }
 
-    //lr_afternoon_save---------------------------------------------------------------------------------------------------------------
-    //lr_afternoon_save---------------------------------------------------------------------------------------------------------------
-    public function lr_afternoon_save(Request $request)
+    //icu_afternoon_save---------------------------------------------------------------------------------------------------------------
+    //icu_afternoon_save---------------------------------------------------------------------------------------------------------------
+    public function icu_afternoon_save(Request $request)
     {
         // ✅ ตรวจสอบข้อมูลที่จำเป็น
         $request->validate([
@@ -625,11 +619,11 @@ class ProductlrController extends Controller
         ]);
 
         // ✅ Get Constants from MainSetting
-        $lr_working_hours = MainSetting::where('name', 'lr_working_hours')->value('value') ?? 7;
-        $type1_c = MainSetting::where('name', 'lr_patient_type1')->value('value') ?? 1.5;
-        $type2_c = MainSetting::where('name', 'lr_patient_type2')->value('value') ?? 3.5;
-        $type3_c = MainSetting::where('name', 'lr_patient_type3')->value('value') ?? 5.5;
-        $type4_c = MainSetting::where('name', 'lr_patient_type4')->value('value') ?? 7.5;
+        $icu_working_hours = MainSetting::where('name', 'icu_working_hours')->value('value') ?? 7;
+        $type1_c = MainSetting::where('name', 'icu_patient_type1')->value('value') ?? 1.5;
+        $type2_c = MainSetting::where('name', 'icu_patient_type2')->value('value') ?? 3.5;
+        $type3_c = MainSetting::where('name', 'icu_patient_type3')->value('value') ?? 5.5;
+        $type4_c = MainSetting::where('name', 'icu_patient_type4')->value('value') ?? 7.5;
 
         // ✅ เตรียมค่าที่ใช้ซ้ำ
         $convalescent = $request->convalescent;
@@ -639,7 +633,7 @@ class ProductlrController extends Controller
         $patient_all = max(1, $request->patient_all); // ป้องกันหาร 0
         $nurse_total = $request->nurse_oncall + $request->nurse_partime + $request->nurse_fulltime;
         // $nurse_total_hr = max(1, $nurse_total * 7); // ป้องกันหาร 0
-        $nurse_total_hr = max(1, $nurse_total * $lr_working_hours);
+        $nurse_total_hr = max(1, $nurse_total * $icu_working_hours);
 
         // ✅ คำนวณค่าทางสถิติ
         // $patient_hr = ($convalescent * 0.45)
@@ -651,13 +645,13 @@ class ProductlrController extends Controller
             + ($Semi_critical * $type3_c)
             + ($Critical * $type4_c);
 
-        $nurse_hr = $nurse_total * $lr_working_hours;
+        $nurse_hr = $nurse_total * $icu_working_hours;
         $productivity = ($patient_hr * 100) / $nurse_total_hr;
         $nhppd = $patient_hr / $patient_all;
-        $nurse_shift_time = $patient_all * $nhppd * (1.4 / $lr_working_hours);
+        $nurse_shift_time = $patient_all * $nhppd * (1.4 / $icu_working_hours);
 
         // ✅ บันทึกข้อมูลลงฐานข้อมูล
-        Productivity_lr::updateOrCreate(
+        Productivity_icu::updateOrCreate(
             // 🔎 เงื่อนไขตรวจสอบข้อมูลซ้ำ
             [
                 'report_date' => $request->report_date,
@@ -687,15 +681,14 @@ class ProductlrController extends Controller
         );
 
         // ✅ เตรียมข้อความแจ้ง Telegram
-        $message = "🛏️ งานผู้ป่วยห้องคลอด LR" . "\n"
+        $message = "🛏️ งานผู้ป่วย ICU" . "\n"
             . "วันที่ " . DateThai(date("Y-m-d", strtotime("-1 day"))) . "\n"
             . "เวลา 16.00–24.00 น. 🌇เวรบ่าย" . "\n"
             . "ผู้ป่วยในเวร: {$patient_all} ราย" . "\n"
             . " - Convalescent: {$convalescent} ราย" . "\n"
             . " - Moderate: {$Moderate} ราย" . "\n"
             . " - Semi critical: {$Semi_critical} ราย" . "\n"
-            . " - Critical: {$Critical} ราย" . "\n"
-            . " - ไม่ระบุความรุนแรง: {$request->severe_type_null} ราย" . "\n"
+            . " - Critical: {$Critical} ราย" . "\n" . " - ไม่ระบุความรุนแรง: {$request->severe_type_null} ราย" . "\n"
             . "👩‍⚕️ Oncall: {$request->nurse_oncall}" . "\n"
             . "👩‍⚕️ เสริม: {$request->nurse_partime}" . "\n"
             . "👩‍⚕️ ปกติ: {$request->nurse_fulltime}" . "\n"
@@ -707,7 +700,7 @@ class ProductlrController extends Controller
 
         // ✅ ส่งข้อความ Telegram
         $token = MainSetting::where('name', 'telegram_token')->value('value');
-        $chat_ids = explode(',', MainSetting::where('name', 'lr_notifytelegram_save')->value('value'));
+        $chat_ids = explode(',', MainSetting::where('name', 'icu_notifytelegram_save')->value('value'));
 
         foreach ($chat_ids as $chat_id) {
             Http::asForm()->post("https://api.telegram.org/bot{$token}/sendMessage", [

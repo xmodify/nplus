@@ -83,7 +83,7 @@ class ProductHDController extends Controller
 
         $message = "🧑‍⚕️งานฟอกเลือดด้วยเครื่องไตเทียม HD" . "\n"
             . "วันที่ " . DateThai(date('Y-m-d')) . "\n"
-            . "เวลา 08.00-16.00 น. 🌅เวรเช้า" . "\n"
+            . "🌅เวรเช้า" . "\n"
             . "ผู้ป่วยในเวร " . $patient_all . " ราย" . "\n"
             . "บันทึก Productivity " . "\n"
             . $url . "\n";
@@ -165,7 +165,7 @@ class ProductHDController extends Controller
 
         $message = "🏥 งานฟอกเลือดด้วยเครื่องไตเทียม HD\n" .
             "วันที่ " . DateThai(date("Y-m-d")) . "\n" .
-            "เวลา 08.00–16.00 น. 🌅 เวรเช้า\n" .
+            "🌅 เวรเช้า\n" .
             "👨‍⚕️ ผู้ป่วยในเวร: {$patient_all} ราย\n" .
             "👩‍⚕️ อัตรากำลัง\n" .
             " - Oncall: {$nurse_oncall}\n" .

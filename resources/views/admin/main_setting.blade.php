@@ -50,6 +50,10 @@
                                 type="button" role="tab" aria-controls="vip" aria-selected="false">VIP</button>
                         </li>
                         <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="icu-tab" data-bs-toggle="tab" data-bs-target="#icu"
+                                type="button" role="tab" aria-controls="icu" aria-selected="false">ICU</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
                             <button class="nav-link" id="lr-tab" data-bs-toggle="tab" data-bs-target="#lr" type="button"
                                 role="tab" aria-controls="lr" aria-selected="false">LR</button>
                         </li>
@@ -423,6 +427,44 @@
                             </div>
                         </div>
 
+                        <!-- ICU Tab -->
+                        <div class="tab-pane fade" id="icu" role="tabpanel" aria-labelledby="icu-tab">
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th style="width: 50%">Name (TH)</th>
+                                            <th style="width: 50%">Value</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($icu_settings as $setting)
+                                            <tr>
+                                                <td>{{ $setting->name_th }}</td>
+                                                <td>
+                                                    @if (str_ends_with($setting->name, '_active'))
+                                                        <select class="form-select border-primary"
+                                                            name="{{ $setting->name }}">
+                                                            <option value="Y"
+                                                                {{ $setting->value == 'Y' ? 'selected' : '' }}>เปิดใช้งาน
+                                                                (Y)
+                                                            </option>
+                                                            <option value="N"
+                                                                {{ $setting->value == 'N' ? 'selected' : '' }}>ปิดใช้งาน
+                                                                (N)</option>
+                                                        </select>
+                                                    @else
+                                                        <input type="text" class="form-control"
+                                                            name="{{ $setting->name }}" value="{{ $setting->value }}">
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
                         <!-- LR Tab -->
                         <div class="tab-pane fade" id="lr" role="tabpanel" aria-labelledby="lr-tab">
                             <div class="table-responsive">
@@ -696,6 +738,15 @@
                                     </div>
                                 </div>
                                 <div class="mt-3">
+                                    <label class="form-label small text-muted mb-1">ICU (งานผู้ป่วย ICU)</label>
+                                    <div class="input-group input-group-sm shadow-sm">
+                                        <input type="text" class="form-control bg-light border-end-0"
+                                            value="{{ url('product/icu_night_notify') }}" readonly>
+                                        <button class="btn btn-outline-secondary border-start-0" type="button"
+                                            onclick="copyToClipboard(this)"><i class="bi bi-clipboard"></i></button>
+                                    </div>
+                                </div>
+                                <div class="mt-3">
                                     <label class="form-label small text-muted mb-1">LR (ห้องคลอด)</label>
                                     <div class="input-group input-group-sm shadow-sm">
                                         <input type="text" class="form-control bg-light border-end-0"
@@ -789,6 +840,15 @@
                                     </div>
                                 </div>
                                 <div class="mt-3">
+                                    <label class="form-label small text-muted mb-1">ICU (งานผู้ป่วย ICU)</label>
+                                    <div class="input-group input-group-sm shadow-sm">
+                                        <input type="text" class="form-control bg-light border-end-0"
+                                            value="{{ url('product/icu_morning_notify') }}" readonly>
+                                        <button class="btn btn-outline-secondary border-start-0" type="button"
+                                            onclick="copyToClipboard(this)"><i class="bi bi-clipboard"></i></button>
+                                    </div>
+                                </div>
+                                <div class="mt-3">
                                     <label class="form-label small text-muted mb-1">LR (ห้องคลอด)</label>
                                     <div class="input-group input-group-sm shadow-sm">
                                         <input type="text" class="form-control bg-light border-end-0"
@@ -846,6 +906,15 @@
                                     </div>
                                 </div>
                                 <div class="mt-3">
+                                    <label class="form-label small text-muted mb-1">ICU (งานผู้ป่วย ICU)</label>
+                                    <div class="input-group input-group-sm shadow-sm">
+                                        <input type="text" class="form-control bg-light border-end-0"
+                                            value="{{ url('product/icu_afternoon_notify') }}" readonly>
+                                        <button class="btn btn-outline-secondary border-start-0" type="button"
+                                            onclick="copyToClipboard(this)"><i class="bi bi-clipboard"></i></button>
+                                    </div>
+                                </div>
+                                <div class="mt-3">
                                     <label class="form-label small text-muted mb-1">LR (ห้องคลอด)</label>
                                     <div class="input-group input-group-sm shadow-sm">
                                         <input type="text" class="form-control bg-light border-end-0"
@@ -879,6 +948,223 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- ================= POWERSHELL DOWNLOADS ================= -->
+        <div class="card border-0 mb-5 h-auto shadow-sm">
+            <div class="card-header">
+                <strong><i class="bi bi-terminal-fill me-2"></i>ดาวน์โหลด PowerShell Script (.ps1) สำหรับสรุปผลตามเวร</strong>
+            </div>
+            <div class="card-body bg-light py-4">
+                <div class="alert alert-info py-2 small mb-4">
+                    <i class="bi bi-info-circle-fill me-2"></i>
+                    ดาวน์โหลดไฟล์ <strong>.ps1</strong> แต่ละเวร แล้วตั้งเป็น <strong>Windows Scheduled Task</strong>
+                    เพื่อรันสรุปผลอัตโนมัติตามเวลาที่กำหนด
+                </div>
+                <div class="row g-3 mb-4">
+                    <!-- เวรดึก -->
+                    <div class="col-md-6 col-xl-3">
+                        <div class="bg-white p-4 rounded shadow-sm border-top border-4 h-100 d-flex flex-column"
+                            style="border-top-color: #6f42c1 !important;">
+                            <h6 class="fw-bold d-flex align-items-center mb-1" style="color: #6f42c1;">
+                                <i class="bi bi-moon-stars-fill me-2"></i>เวรดึก
+                            </h6>
+                            <p class="small text-muted mb-3">รันเวลา 08:00 น. (หลังเวรดึก)</p>
+                            <div class="mt-auto">
+                                <p class="small text-muted mb-2 font-monospace">Run_Tasks_Product_SummaryNight.ps1</p>
+                                <a href="{{ route('admin.download_ps1', 'Run_Tasks_Product_SummaryNight') }}"
+                                    class="btn btn-outline-secondary btn-sm w-100 shadow-sm">
+                                    <i class="bi bi-download me-2"></i>ดาวน์โหลด .ps1
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- เวรเช้า -->
+                    <div class="col-md-6 col-xl-3">
+                        <div class="bg-white p-4 rounded shadow-sm border-top border-4 h-100 d-flex flex-column"
+                            style="border-top-color: #28a745 !important;">
+                            <h6 class="fw-bold d-flex align-items-center mb-1" style="color: #28a745;">
+                                <i class="bi bi-sun-fill me-2"></i>เวรเช้า
+                            </h6>
+                            <p class="small text-muted mb-3">รันเวลา 16:00 น. (หลังเวรเช้า)</p>
+                            <div class="mt-auto">
+                                <p class="small text-muted mb-2 font-monospace">Run_Tasks_Product_SummaryMorning.ps1</p>
+                                <a href="{{ route('admin.download_ps1', 'Run_Tasks_Product_SummaryMorning') }}"
+                                    class="btn btn-outline-secondary btn-sm w-100 shadow-sm">
+                                    <i class="bi bi-download me-2"></i>ดาวน์โหลด .ps1
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- เวรบ่าย -->
+                    <div class="col-md-6 col-xl-3">
+                        <div class="bg-white p-4 rounded shadow-sm border-top border-4 h-100 d-flex flex-column"
+                            style="border-top-color: #fd7e14 !important;">
+                            <h6 class="fw-bold d-flex align-items-center mb-1" style="color: #fd7e14;">
+                                <i class="bi bi-sunset-fill me-2"></i>เวรบ่าย
+                            </h6>
+                            <p class="small text-muted mb-3">รันเวลา 00:01 น. (หลังเวรบ่าย)</p>
+                            <div class="mt-auto">
+                                <p class="small text-muted mb-2 font-monospace">Run_Tasks_Product_SummaryAfternoon.ps1</p>
+                                <a href="{{ route('admin.download_ps1', 'Run_Tasks_Product_SummaryAfternoon') }}"
+                                    class="btn btn-outline-secondary btn-sm w-100 shadow-sm">
+                                    <i class="bi bi-download me-2"></i>ดาวน์โหลด .ps1
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- เวร BD -->
+                    <div class="col-md-6 col-xl-3">
+                        <div class="bg-white p-4 rounded shadow-sm border-top border-4 h-100 d-flex flex-column"
+                            style="border-top-color: #17a2b8 !important;">
+                            <h6 class="fw-bold d-flex align-items-center mb-1" style="color: #17a2b8;">
+                                <i class="bi bi-clock-fill me-2"></i>เวร BD
+                            </h6>
+                            <p class="small text-muted mb-3">รันเวลา 20:00 น. (หลังเวร BD)</p>
+                            <div class="mt-auto">
+                                <p class="small text-muted mb-2 font-monospace">Run_Tasks_Product_SummaryBd.ps1</p>
+                                <a href="{{ route('admin.download_ps1', 'Run_Tasks_Product_SummaryBd') }}"
+                                    class="btn btn-outline-secondary btn-sm w-100 shadow-sm">
+                                    <i class="bi bi-download me-2"></i>ดาวน์โหลด .ps1
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ตัวอย่างการตั้งค่า Task Scheduler -->
+                <div class="accordion" id="taskSchedulerAccordion">
+                    <div class="accordion-item border-0 shadow-sm">
+                        <h2 class="accordion-header" id="taskSchedulerHeading">
+                            <button class="accordion-button collapsed fw-bold" type="button"
+                                data-bs-toggle="collapse" data-bs-target="#taskSchedulerCollapse"
+                                aria-expanded="false" aria-controls="taskSchedulerCollapse">
+                                <i class="bi bi-gear-wide-connected me-2 text-primary"></i>
+                                ตัวอย่างการตั้งค่าใน Windows Task Scheduler
+                            </button>
+                        </h2>
+                        <div id="taskSchedulerCollapse" class="accordion-collapse collapse"
+                            aria-labelledby="taskSchedulerHeading">
+                            <div class="accordion-body bg-white">
+                                <div class="row g-3">
+                                    <div class="col-12">
+                                        <div class="alert alert-warning py-2 small mb-3">
+                                            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                                            วางไฟล์ <strong>.ps1</strong> ไว้ในโฟลเดอร์ที่ต้องการ เช่น
+                                            <code>C:\Tasks\</code> แล้วระบุ path ด้านล่างให้ตรงกับที่วางไว้
+                                        </div>
+                                    </div>
+
+                                    <!-- Step 1 -->
+                                    <div class="col-md-6">
+                                        <div class="border rounded p-3 h-100">
+                                            <h6 class="fw-bold text-primary mb-3">
+                                                <span class="badge bg-primary me-2">1</span>Program/script
+                                            </h6>
+                                            <label class="form-label small text-muted mb-1">ค่าที่ต้องกรอก:</label>
+                                            <div class="input-group input-group-sm shadow-sm">
+                                                <input type="text" class="form-control bg-light font-monospace border-end-0"
+                                                    value="powershell.exe" readonly id="ps1Program">
+                                                <button class="btn btn-outline-secondary border-start-0" type="button"
+                                                    onclick="copyToClipboard(this)">
+                                                    <i class="bi bi-clipboard"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Step 2 -->
+                                    <div class="col-md-6">
+                                        <div class="border rounded p-3 h-100">
+                                            <h6 class="fw-bold text-warning mb-3">
+                                                <span class="badge bg-warning text-dark me-2">2</span>Add arguments (เวรดึก ตัวอย่าง)
+                                            </h6>
+                                            <label class="form-label small text-muted mb-1">ค่าที่ต้องกรอก <span class="text-danger">(แก้ path ให้ตรง)</span>:</label>
+                                            <div class="input-group input-group-sm shadow-sm">
+                                                <input type="text" class="form-control bg-light font-monospace border-end-0"
+                                                    value="-ExecutionPolicy Bypass -WindowStyle Hidden -File &quot;C:\Tasks\Run_Tasks_Product_SummaryNight.ps1&quot;"
+                                                    readonly id="ps1Args">
+                                                <button class="btn btn-outline-secondary border-start-0" type="button"
+                                                    onclick="copyToClipboard(this)">
+                                                    <i class="bi bi-clipboard"></i>
+                                                </button>
+                                            </div>
+                                            <p class="small text-muted mt-2 mb-0">
+                                                <i class="bi bi-arrow-right-short"></i> เปลี่ยน <code>SummaryNight</code> ตามเวรที่ต้องการ
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <!-- ตารางสรุปแต่ละเวร -->
+                                    <div class="col-12">
+                                        <div class="border rounded p-3">
+                                            <h6 class="fw-bold mb-3"><i class="bi bi-table me-2 text-success"></i>สรุป Arguments แต่ละเวร</h6>
+                                            <div class="table-responsive">
+                                                <table class="table table-sm table-bordered table-striped mb-0">
+                                                    <thead class="table-dark">
+                                                        <tr>
+                                                            <th style="width:12%">เวร</th>
+                                                            <th style="width:15%">เวลารัน</th>
+                                                            <th>Add arguments (แก้ <code class="text-warning">C:\Tasks\</code> ให้ตรงกับ path ของคุณ)</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td><span class="badge" style="background:#6f42c1"><i class="bi bi-moon-stars-fill me-1"></i>ดึก</span></td>
+                                                            <td class="text-center fw-bold">08:00 น.</td>
+                                                            <td>
+                                                                <div class="input-group input-group-sm">
+                                                                    <input type="text" class="form-control font-monospace bg-light border-end-0" style="font-size:0.75rem;"
+                                                                        value="-ExecutionPolicy Bypass -WindowStyle Hidden -File &quot;C:\Tasks\Run_Tasks_Product_SummaryNight.ps1&quot;" readonly>
+                                                                    <button class="btn btn-outline-secondary border-start-0 btn-sm" type="button" onclick="copyToClipboard(this)"><i class="bi bi-clipboard"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><span class="badge bg-success"><i class="bi bi-sun-fill me-1"></i>เช้า</span></td>
+                                                            <td class="text-center fw-bold">16:00 น.</td>
+                                                            <td>
+                                                                <div class="input-group input-group-sm">
+                                                                    <input type="text" class="form-control font-monospace bg-light border-end-0" style="font-size:0.75rem;"
+                                                                        value="-ExecutionPolicy Bypass -WindowStyle Hidden -File &quot;C:\Tasks\Run_Tasks_Product_SummaryMorning.ps1&quot;" readonly>
+                                                                    <button class="btn btn-outline-secondary border-start-0 btn-sm" type="button" onclick="copyToClipboard(this)"><i class="bi bi-clipboard"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><span class="badge" style="background:#fd7e14"><i class="bi bi-sunset-fill me-1"></i>บ่าย</span></td>
+                                                            <td class="text-center fw-bold">00:01 น.</td>
+                                                            <td>
+                                                                <div class="input-group input-group-sm">
+                                                                    <input type="text" class="form-control font-monospace bg-light border-end-0" style="font-size:0.75rem;"
+                                                                        value="-ExecutionPolicy Bypass -WindowStyle Hidden -File &quot;C:\Tasks\Run_Tasks_Product_SummaryAfternoon.ps1&quot;" readonly>
+                                                                    <button class="btn btn-outline-secondary border-start-0 btn-sm" type="button" onclick="copyToClipboard(this)"><i class="bi bi-clipboard"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><span class="badge bg-info"><i class="bi bi-clock-fill me-1"></i>BD</span></td>
+                                                            <td class="text-center fw-bold">20:00 น.</td>
+                                                            <td>
+                                                                <div class="input-group input-group-sm">
+                                                                    <input type="text" class="form-control font-monospace bg-light border-end-0" style="font-size:0.75rem;"
+                                                                        value="-ExecutionPolicy Bypass -WindowStyle Hidden -File &quot;C:\Tasks\Run_Tasks_Product_SummaryBd.ps1&quot;" readonly>
+                                                                    <button class="btn btn-outline-secondary border-start-0 btn-sm" type="button" onclick="copyToClipboard(this)"><i class="bi bi-clipboard"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>

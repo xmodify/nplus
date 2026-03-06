@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use App\Models\Productivity_opd;
 use App\Models\MainSetting;
-use Illuminate\Routing\Middleware\Middleware;
+use Illuminate\Routing\Controllers\Middleware;
 
 #[Middleware('auth', only: ['opd_report', 'opd_product_delete'])]
 
@@ -257,38 +257,30 @@ class ProductOPDController extends Controller
             FROM ovst WHERE vstdate = DATE(NOW()) AND (main_dep IN ($opd_dep))
             AND vsttime BETWEEN '16:00:00' AND '20:00:00' ");
 
+        $patient_all = 0;
+        $report_url  = url('product/opd_bd');
+
         foreach ($notify as $row) {
             $patient_all = $row->patient_all;
-            $url = url('product/opd_bd');
         }
 
         //แจ้งเตือน Telegram
-
         $message = "🧑‍⚕️งานผู้ป่วยนอก OPD" . "\n"
             . "วันที่ " . DateThai(date('Y-m-d')) . "\n"
-            . "เวลา 16.00-20.00 น. 🌇เวร BD" . "\n"
+            . "🌇เวร BD" . "\n"
             . "ผู้ป่วยในเวร " . $patient_all . " ราย" . "\n"
             . "บันทึก Productivity " . "\n"
-            . $url . "\n";
+            . $report_url . "\n";
 
         // ✅ ส่งข้อความ Telegram
-        $token = MainSetting::where('name', 'telegram_token')->value('value');
+        $token    = MainSetting::where('name', 'telegram_token')->value('value');
         $chat_ids = explode(',', MainSetting::where('name', 'opd_notifytelegram')->value('value'));
 
         foreach ($chat_ids as $chat_id) {
-            $url = "https://api.telegram.org/bot$token/sendMessage";
-
-            $data = [
-                'chat_id' => $chat_id,
-                'text' => $message
-            ];
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_exec($ch);
-            curl_close($ch);
+            Http::asForm()->post("https://api.telegram.org/bot{$token}/sendMessage", [
+                'chat_id' => trim($chat_id),
+                'text'    => $message,
+            ]);
             sleep(1);
         }
 
@@ -386,7 +378,7 @@ class ProductOPDController extends Controller
         $message =
             "🏥 งานผู้ป่วยนอก OPD\n" .
             "วันที่ " . DateThai(date('Y-m-d')) . "\n" .
-            "เวลา 16.00–20.00 น. 🌇เวร BD\n" .
+            "🌇เวร BD\n" .
             "👨‍⚕️ ผู้ป่วยในเวร: {$patient_all} ราย\n" .
 
             "👩‍⚕️ อัตรากำลัง\n" .
@@ -415,5 +407,4 @@ class ProductOPDController extends Controller
 
         return redirect()->back()->with('success', '✅ ส่งข้อมูลเวร BD เรียบร้อยแล้ว');
     }
-
 }
