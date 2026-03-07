@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use App\Models\Productivity_vip;
 use App\Models\MainSetting;
-use Illuminate\Routing\Middleware\Middleware;
+use Illuminate\Routing\Controllers\Middleware;
 
 #[Middleware('auth', only: ['vip_report', 'vip_product_delete'])]
 
@@ -247,7 +247,7 @@ class ProductVIPController extends Controller
                 'patient_moderate' => $Moderate,
                 'patient_semi_critical' => $Semi_critical,
                 'patient_critical' => $Critical,
-'patient_severe_type_null' => $request->severe_type_null,
+                'patient_severe_type_null' => $request->severe_type_null,
 
                 'nursing_hours' => $patient_hr,
                 'working_hours' => $nurse_hr,
@@ -265,7 +265,7 @@ class ProductVIPController extends Controller
             . " - Convalescent: {$convalescent} ราย" . "\n"
             . " - Moderate: {$Moderate} ราย" . "\n"
             . " - Semi critical: {$Semi_critical} ราย" . "\n"
-            . " - Critical: {$Critical} ราย" . "\n" 
+            . " - Critical: {$Critical} ราย" . "\n"
             . " - ไม่ระบุความรุนแรง: {$request->severe_type_null} ราย" . "\n"
             . "👩‍⚕️ Oncall: {$request->nurse_oncall}" . "\n"
             . "👩‍⚕️ เสริม: {$request->nurse_partime}" . "\n"
@@ -459,7 +459,7 @@ class ProductVIPController extends Controller
                 'patient_moderate' => $Moderate,
                 'patient_semi_critical' => $Semi_critical,
                 'patient_critical' => $Critical,
-'patient_severe_type_null' => $request->severe_type_null,
+                'patient_severe_type_null' => $request->severe_type_null,
 
                 'nursing_hours' => $patient_hr,
                 'working_hours' => $nurse_hr,
@@ -477,7 +477,7 @@ class ProductVIPController extends Controller
             . " - Convalescent: {$convalescent} ราย" . "\n"
             . " - Moderate: {$Moderate} ราย" . "\n"
             . " - Semi critical: {$Semi_critical} ราย" . "\n"
-            . " - Critical: {$Critical} ราย" . "\n" 
+            . " - Critical: {$Critical} ราย" . "\n"
             . " - ไม่ระบุความรุนแรง: {$request->severe_type_null} ราย" . "\n"
             . "👩‍⚕️ Oncall: {$request->nurse_oncall}" . "\n"
             . "👩‍⚕️ เสริม: {$request->nurse_partime}" . "\n"
@@ -672,7 +672,7 @@ class ProductVIPController extends Controller
                 'patient_moderate' => $Moderate,
                 'patient_semi_critical' => $Semi_critical,
                 'patient_critical' => $Critical,
-'patient_severe_type_null' => $request->severe_type_null,
+                'patient_severe_type_null' => $request->severe_type_null,
 
                 'nursing_hours' => $patient_hr,
                 'working_hours' => $nurse_hr,
@@ -714,5 +714,4 @@ class ProductVIPController extends Controller
 
         return redirect()->back()->with('success', '✅ ส่งข้อมูลเวรบ่ายเรียบร้อยแล้ว');
     }
-
 }

@@ -20,12 +20,11 @@ class Productivity_opd extends Model
         'recorder',
         'note',
         'patient_all',
-        'opd',
-        'ari',
         'nursing_hours',
         'working_hours',
         'nhppd',
         'nurse_shift_time',
         'productivity',
+        'is_holiday',
     ];
 }

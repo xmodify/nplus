@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use App\Models\Productivity_opd;
 use App\Models\MainSetting;
-use Illuminate\Routing\Middleware\Middleware;
+use Illuminate\Routing\Controllers\Middleware;
 
 #[Middleware('auth', only: ['ari_report', 'ari_product_delete'])]
 

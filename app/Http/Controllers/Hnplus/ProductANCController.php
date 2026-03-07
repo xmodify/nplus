@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use App\Models\Productivity_anc;
 use App\Models\MainSetting;
-use Illuminate\Routing\Middleware\Middleware;
+use Illuminate\Routing\Controllers\Middleware;
 
 #[Middleware('auth', only: ['anc_report', 'anc_product_delete'])]
 
@@ -72,7 +72,7 @@ class ProductANCController extends Controller
     public function anc_morning_notify()
     {
         $anc_dep = MainSetting::where('name', 'anc_department')->value('value');
-        $anc_dep = $anc_dep ?: "'048'"; 
+        $anc_dep = $anc_dep ?: "'048'";
 
         $notify = DB::connection('hosxp')->select("
             SELECT COUNT(DISTINCT vn) as patient_all
@@ -182,7 +182,7 @@ class ProductANCController extends Controller
             "🧮 NHPPD: " . number_format($nhppd, 2) . "\n" .
             "ผู้บันทึก: {$request->recorder}";
 
-        $token = MainSetting::where('name','telegram_token')->value('value');
+        $token = MainSetting::where('name', 'telegram_token')->value('value');
         $chat_ids = explode(',', MainSetting::where('name', 'anc_notifytelegram_save')->value('value'));
 
         foreach ($chat_ids as $chat_id) {

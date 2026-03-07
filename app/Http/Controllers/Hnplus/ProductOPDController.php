@@ -21,9 +21,8 @@ class ProductOPDController extends Controller
         $start_date = $request->start_date ? DateThaiToEn($request->start_date) : date('Y-m-d', strtotime("first day of this month"));
         $end_date = $request->end_date ? DateThaiToEn($request->end_date) : date('Y-m-d');
 
-        // $product=Nurse_productivity_opd::whereBetween('report_date',[$start_date, $end_date])
-        //     ->orderBy('report_date', 'desc')->get(); 
         $product = Productivity_opd::whereBetween('report_date', [$start_date, $end_date])
+            ->where('is_holiday', 'N')
             ->orderBy('report_date', 'desc')->get();
 
         $opd_working_hours = MainSetting::where('name', 'opd_working_hours')->value('value') ?? 7;
@@ -35,11 +34,11 @@ class ProductOPDController extends Controller
             ((SUM(nursing_hours)*100)/SUM(working_hours)) AS productivity,(SUM(nursing_hours)/SUM(patient_all)) AS nhppd,
             (SUM(patient_all)*(SUM(nursing_hours)/SUM(patient_all))*(1.4/?))/COUNT(shift_time) AS nurse_shift_time
             FROM productivity_opd
-            WHERE report_date BETWEEN ? AND ?
+            WHERE report_date BETWEEN ? AND ? AND is_holiday = \'N\'
             GROUP BY shift_time ORDER BY shift_time DESC', [$opd_working_hours, $start_date, $end_date]);
 
-        // เตรียมข้อมูลสำหรับกราฟ
         $product_asc = Productivity_opd::whereBetween('report_date', [$start_date, $end_date])
+            ->where('is_holiday', 'N')
             ->orderBy('report_date', 'asc')->get();
         $grouped = $product_asc->groupBy('report_date');
         $report_date = [];
@@ -47,15 +46,62 @@ class ProductOPDController extends Controller
         $bd = [];
         foreach ($grouped as $date => $rows) {
             $report_date[] = DateThai($date);
-            // ค้นหาค่า productivity ของแต่ละเวร
             $morning[] = optional($rows->firstWhere('shift_time', 'เวรเช้า'))->productivity ?? 0;
             $bd[] = optional($rows->firstWhere('shift_time', 'เวร BD'))->productivity ?? 0;
         }
 
-        // ลบ Product ------------------
         $del_product = Auth::check() && Auth::user()->del_product === 'Y';
 
         return view('hnplus.product.opd_report', compact(
+            'product_summary',
+            'product',
+            'start_date',
+            'end_date',
+            'del_product',
+            'report_date',
+            'morning',
+            'bd'
+        ));
+    }
+
+    //opd_holiday_report--------------------------------------------------------------------------------------------------------------------------
+    public function opd_holiday_report(Request $request)
+    {
+        $start_date = $request->start_date ? DateThaiToEn($request->start_date) : date('Y-m-d', strtotime("first day of this month"));
+        $end_date = $request->end_date ? DateThaiToEn($request->end_date) : date('Y-m-d');
+
+        $product = Productivity_opd::whereBetween('report_date', [$start_date, $end_date])
+            ->where('is_holiday', 'Y')
+            ->orderBy('report_date', 'desc')->get();
+
+        $opd_working_hours = MainSetting::where('name', 'opd_working_hours')->value('value') ?? 7;
+
+        $product_summary = DB::select('
+            SELECT shift_time,COUNT(shift_time) AS shift_time_sum,SUM(patient_all) AS patient_all,
+            SUM(nursing_hours) AS patient_hr,SUM(nurse_oncall) AS nurse_oncall,
+            SUM(nurse_partime) AS nurse_partime,SUM(nurse_fulltime) AS nurse_fulltime, SUM(working_hours) AS nurse_hr,
+            ((SUM(nursing_hours)*100)/SUM(working_hours)) AS productivity,(SUM(nursing_hours)/SUM(patient_all)) AS nhppd,
+            (SUM(patient_all)*(SUM(nursing_hours)/SUM(patient_all))*(1.4/?))/COUNT(shift_time) AS nurse_shift_time
+            FROM productivity_opd
+            WHERE report_date BETWEEN ? AND ? AND is_holiday = \'Y\'
+            GROUP BY shift_time ORDER BY shift_time DESC', [$opd_working_hours, $start_date, $end_date]);
+
+        $product_asc = Productivity_opd::whereBetween('report_date', [$start_date, $end_date])
+            ->where('is_holiday', 'Y')
+            ->orderBy('report_date', 'asc')->get();
+        $grouped = $product_asc->groupBy('report_date');
+        $report_date = [];
+        $morning = [];
+        $bd = [];
+        foreach ($grouped as $date => $rows) {
+            $report_date[] = DateThai($date);
+            $morning[] = optional($rows->firstWhere('shift_time', 'เวรเช้า'))->productivity ?? 0;
+            $bd[] = optional($rows->firstWhere('shift_time', 'เวร BD'))->productivity ?? 0;
+        }
+
+        $del_product = Auth::check() && Auth::user()->del_product === 'Y';
+
+        return view('hnplus.product.opd_holiday_report', compact(
             'product_summary',
             'product',
             'start_date',
@@ -180,6 +226,13 @@ class ProductOPDController extends Controller
         $nurse_shift_time = $patient_all * $nhppd * (1.4 / $opd_working_hours);
 
         // ==============================
+        //   เช็ควันหยุด
+        // ==============================
+        $is_holiday = DB::table('holiday')
+            ->where('holiday_date', $request->report_date)
+            ->exists() ? 'Y' : 'N';
+
+        // ==============================
         //   บันทึกข้อมูลลงฐานข้อมูล
         // ==============================
 
@@ -196,10 +249,9 @@ class ProductOPDController extends Controller
                 'nurse_oncall' => $nurse_oncall,
                 'recorder' => $request->recorder,
                 'note' => $request->note,
+                'is_holiday' => $is_holiday,
 
                 'patient_all' => $patient_all,
-
-
 
                 'nursing_hours' => $patient_hr,
                 'working_hours' => $nurse_hr,
@@ -343,6 +395,13 @@ class ProductOPDController extends Controller
         $nurse_shift_time = $patient_all * $nhppd * (1.4 / $opd_working_hours);
 
         // ==============================
+        //   เช็ควันหยุด
+        // ==============================
+        $is_holiday = DB::table('holiday')
+            ->where('holiday_date', $request->report_date)
+            ->exists() ? 'Y' : 'N';
+
+        // ==============================
         //   บันทึกข้อมูลลงฐานข้อมูล
         // ==============================
 
@@ -359,10 +418,9 @@ class ProductOPDController extends Controller
                 'nurse_oncall' => $nurse_oncall,
                 'recorder' => $request->recorder,
                 'note' => $request->note,
+                'is_holiday' => $is_holiday,
 
                 'patient_all' => $patient_all,
-
-
 
                 'nursing_hours' => $patient_hr,
                 'working_hours' => $nurse_hr,

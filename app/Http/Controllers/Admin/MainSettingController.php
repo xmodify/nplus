@@ -257,35 +257,9 @@ class MainSettingController extends Controller
             }
         }
 
-        //After Table-----------------------------------------------------------------------------------------------------------
-        $productivity_tables = [
-            'productivity_ari',
-            'productivity_ckd',
-            'productivity_er',
-            'productivity_hd',
-            'productivity_ipd',
-            'productivity_lr',
-            'productivity_ncd',
-            'productivity_opd',
-            'productivity_vip',
-            'productivity_icu',
-            'productivity_anc'
-        ];
-
-        foreach ($productivity_tables as $ptable) {
-            if (Schema::hasTable($ptable)) {
-                if (!Schema::hasColumn($ptable, 'active')) {
-                    Schema::table($ptable, function (Blueprint $table) {
-                        $table->string('active', 1)->default('Y')->after('id');
-                    });
-                }
-            }
-        }
-
         $tables = [
             'productivity_opd' => [
-                ['name' => 'opd', 'type' => 'INT(11)', 'after' => 'patient_all'],
-                ['name' => 'ari', 'type' => 'INT(11)', 'after' => 'opd'],
+                ['name' => 'is_holiday', 'type' => "CHAR(1) NOT NULL DEFAULT 'N'", 'after' => 'note'],
             ],
             'productivity_ipd' => [
                 ['name' => 'patient_convalescent', 'type' => 'INT(11)', 'after' => 'patient_all'],
@@ -488,27 +462,50 @@ class MainSettingController extends Controller
                 }
             }
 
-            // CREATE TABLE fdh_claim_status ----------------------------------------------------------------------------------------
-            // if (!Schema::hasTable('fdh_claim_status')) {
-            //     DB::statement("
-            //         CREATE TABLE `fdh_claim_status` (
-            //             `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
-            //             `hn` VARCHAR(50) NOT NULL,
-            //             `seq` VARCHAR(50) DEFAULT NULL,
-            //             `an` VARCHAR(50) DEFAULT NULL,
-            //             `hcode` VARCHAR(10) NOT NULL,
-            //             `status` VARCHAR(50) NOT NULL,
-            //             `process_status` VARCHAR(10) DEFAULT NULL,
-            //             `status_message_th` VARCHAR(255) DEFAULT NULL,
-            //             `stm_period` VARCHAR(50) DEFAULT NULL,
-            //             `created_at` TIMESTAMP NULL DEFAULT NULL,
-            //             `updated_at` TIMESTAMP NULL DEFAULT NULL,
-            //             PRIMARY KEY (`id`),
-            //             KEY `idx_hn` (`hn`),
-            //             KEY `idx_an` (`an`)
-            //         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-            //     ");
-            // }
+            // DROP unused columns in productivity_opd -----------------------------------------------------------------------
+            $opd_drop_columns = ['department_id', 'opd', 'ari', 'active'];
+            foreach ($opd_drop_columns as $col) {
+                if (Schema::hasColumn('productivity_opd', $col)) {
+                    Schema::table('productivity_opd', function (Blueprint $table) use ($col) {
+                        $table->dropColumn($col);
+                    });
+                }
+            }
+
+            // DROP 'active' column from all other productivity tables ---------------------------------------------------------
+            $tables_drop_active = [
+                'productivity_anc',
+                'productivity_ari',
+                'productivity_ckd',
+                'productivity_er',
+                'productivity_hd',
+                'productivity_ipd',
+                'productivity_icu',
+                'productivity_lr',
+                'productivity_ncd',
+                'productivity_vip',
+            ];
+            foreach ($tables_drop_active as $tbl) {
+                if (Schema::hasTable($tbl) && Schema::hasColumn($tbl, 'active')) {
+                    Schema::table($tbl, function (Blueprint $table) {
+                        $table->dropColumn('active');
+                    });
+                }
+            }
+
+            // DROP 'patient_severe_type_null' from productivity_er (not used in ER controller) --------------------------------
+            if (Schema::hasTable('productivity_er') && Schema::hasColumn('productivity_er', 'patient_severe_type_null')) {
+                Schema::table('productivity_er', function (Blueprint $table) {
+                    $table->dropColumn('patient_severe_type_null');
+                });
+            }
+
+            // DROP 'department_id' from productivity_ipd (not used) ----------------------------------------------------------
+            if (Schema::hasTable('productivity_ipd') && Schema::hasColumn('productivity_ipd', 'department_id')) {
+                Schema::table('productivity_ipd', function (Blueprint $table) {
+                    $table->dropColumn('department_id');
+                });
+            }
 
             // END --------------------------------------------------------------------------------------------------------
             return redirect()->route('admin.main_setting')

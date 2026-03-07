@@ -71,6 +71,7 @@ Route::middleware(['auth', 'hnplus'])->name('hnplus.')->group(function () {
     Route::match(['get', 'post'], 'product/ipd_report', [ProductIPDController::class, 'ipd_report'])->name('product.ipd_report');
     Route::delete('product/ipd_product_delete/{id}', [ProductIPDController::class, 'ipd_product_delete']);
     Route::match(['get', 'post'], 'product/opd_report', [ProductOPDController::class, 'opd_report'])->name('product.opd_report');
+    Route::match(['get', 'post'], 'product/opd_holiday_report', [ProductOPDController::class, 'opd_holiday_report'])->name('product.opd_holiday_report');
     Route::delete('product/opd_product_delete/{id}', [ProductOPDController::class, 'opd_product_delete']);
     Route::match(['get', 'post'], 'product/ncd_report', [ProductNCDController::class, 'ncd_report'])->name('product.ncd_report');
     Route::delete('product/ncd_product_delete/{id}', [ProductNCDController::class, 'ncd_product_delete']);

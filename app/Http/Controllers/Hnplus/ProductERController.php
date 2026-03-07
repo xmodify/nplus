@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use App\Models\Productivity_er; // Changed Model
 use App\Models\MainSetting;     // Added Settings
-use Illuminate\Routing\Middleware\Middleware;
+use Illuminate\Routing\Controllers\Middleware;
 
 #[Middleware('auth', only: ['er_report', 'er_product_delete'])]
 
@@ -664,9 +664,5 @@ class ProductERController extends Controller
 
         return redirect()->back()->with('success', '✅ ส่งข้อมูลเวรบ่ายเรียบร้อยแล้ว');
     }
-
-
-
 }
 // test change
-
