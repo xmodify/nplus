@@ -232,7 +232,7 @@ class ProductOPDController extends Controller
         // ==============================
         //   เช็ควันหยุด
         // ==============================
-        $is_holiday = DB::table('holiday')
+        $is_holiday = DB::connection('hosxp')->table('holiday')
             ->where('holiday_date', $request->report_date)
             ->exists() ? 'Y' : 'N';
 
@@ -401,7 +401,7 @@ class ProductOPDController extends Controller
         // ==============================
         //   เช็ควันหยุด
         // ==============================
-        $is_holiday = DB::table('holiday')
+        $is_holiday = DB::connection('hosxp')->table('holiday')
             ->where('holiday_date', $request->report_date)
             ->exists() ? 'Y' : 'N';
 

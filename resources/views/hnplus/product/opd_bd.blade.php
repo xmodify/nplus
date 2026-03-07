@@ -58,7 +58,7 @@
                 <form id="opdForm" action="{{ url('product/opd_bd_save') }}" method="POST">
                     @csrf
                     <input type="hidden" name="report_date" value="{{ date('Y-m-d') }}">
-                    <input type="hidden" name="shift_time" value="เวรเช้า">
+                    <input type="hidden" name="shift_time" value="เวร BD">
 
                     <!-- ============================
                          แสดงจำนวนผู้ป่วยจาก $visit

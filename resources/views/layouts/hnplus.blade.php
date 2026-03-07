@@ -224,7 +224,7 @@
                     <ul class="navbar-nav ms-auto align-items-center">
                         <li>
                             <div class="badge bg-white text-primary rounded-pill px-3 py-2 shadow-sm fw-bold">
-                                <i class="bi bi-code-slash me-1"></i>V. 69-03-07 19:00
+                                <i class="bi bi-code-slash me-1"></i>V. 69-03-07 20:00
                             </div>
                         </li>
 
