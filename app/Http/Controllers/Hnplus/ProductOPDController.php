@@ -23,6 +23,7 @@ class ProductOPDController extends Controller
 
         $product = Productivity_opd::whereBetween('report_date', [$start_date, $end_date])
             ->where('is_holiday', 'N')
+            ->where('shift_time', 'NOT LIKE', '%ARI%')
             ->orderBy('report_date', 'desc')->get();
 
         $opd_working_hours = MainSetting::where('name', 'opd_working_hours')->value('value') ?? 7;
@@ -34,11 +35,12 @@ class ProductOPDController extends Controller
             ((SUM(nursing_hours)*100)/SUM(working_hours)) AS productivity,(SUM(nursing_hours)/SUM(patient_all)) AS nhppd,
             (SUM(patient_all)*(SUM(nursing_hours)/SUM(patient_all))*(1.4/?))/COUNT(shift_time) AS nurse_shift_time
             FROM productivity_opd
-            WHERE report_date BETWEEN ? AND ? AND is_holiday = \'N\'
+            WHERE report_date BETWEEN ? AND ? AND is_holiday = \'N\' AND shift_time NOT LIKE \'%ARI%\'
             GROUP BY shift_time ORDER BY shift_time DESC', [$opd_working_hours, $start_date, $end_date]);
 
         $product_asc = Productivity_opd::whereBetween('report_date', [$start_date, $end_date])
             ->where('is_holiday', 'N')
+            ->where('shift_time', 'NOT LIKE', '%ARI%')
             ->orderBy('report_date', 'asc')->get();
         $grouped = $product_asc->groupBy('report_date');
         $report_date = [];
@@ -72,6 +74,7 @@ class ProductOPDController extends Controller
 
         $product = Productivity_opd::whereBetween('report_date', [$start_date, $end_date])
             ->where('is_holiday', 'Y')
+            ->where('shift_time', 'NOT LIKE', '%ARI%')
             ->orderBy('report_date', 'desc')->get();
 
         $opd_working_hours = MainSetting::where('name', 'opd_working_hours')->value('value') ?? 7;
@@ -83,11 +86,12 @@ class ProductOPDController extends Controller
             ((SUM(nursing_hours)*100)/SUM(working_hours)) AS productivity,(SUM(nursing_hours)/SUM(patient_all)) AS nhppd,
             (SUM(patient_all)*(SUM(nursing_hours)/SUM(patient_all))*(1.4/?))/COUNT(shift_time) AS nurse_shift_time
             FROM productivity_opd
-            WHERE report_date BETWEEN ? AND ? AND is_holiday = \'Y\'
+            WHERE report_date BETWEEN ? AND ? AND is_holiday = \'Y\' AND shift_time NOT LIKE \'%ARI%\'
             GROUP BY shift_time ORDER BY shift_time DESC', [$opd_working_hours, $start_date, $end_date]);
 
         $product_asc = Productivity_opd::whereBetween('report_date', [$start_date, $end_date])
             ->where('is_holiday', 'Y')
+            ->where('shift_time', 'NOT LIKE', '%ARI%')
             ->orderBy('report_date', 'asc')->get();
         $grouped = $product_asc->groupBy('report_date');
         $report_date = [];
