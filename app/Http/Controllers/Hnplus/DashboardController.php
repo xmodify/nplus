@@ -262,4 +262,115 @@ class DashboardController extends Controller
 
         return view('welcome', compact('er_stats', 'ipd_stats', 'opd_stats', 'ncd_stats', 'ari_stats', 'vip_stats', 'icu_stats', 'lr_stats', 'ckd_stats', 'hd_stats', 'anc_stats', 'today', 'shift_name'));
     }
+
+    public function getPatientDetails(Request $request)
+    {
+        $type = $request->type;
+        $category = $request->category;
+        $now = Carbon::now();
+        $currentTime = $now->format('H:i:s');
+
+        // Determine Shift
+        $start_time = '08:00:00';
+        $end_time = '15:59:59';
+        if ($currentTime >= '00:00:01' && $currentTime <= '07:59:59') {
+            $start_time = '00:00:01';
+            $end_time = '07:59:59';
+        } elseif ($currentTime >= '16:00:00' && $currentTime <= '23:59:59') {
+            $start_time = '16:00:00';
+            $end_time = '23:59:59';
+        }
+
+        $data = [];
+        $title = "";
+
+        // Common IPD Settings
+        $ipd_ward = MainSetting::where('name', 'ipd_ward')->value('value') ?? "'01'";
+
+        if (in_array($type, ['ipd', 'icu', 'vip', 'lr'])) {
+            $ward_setting = $type . '_ward';
+            $ward = MainSetting::where('name', $ward_setting)->value('value') ?? $ipd_ward;
+            
+            $mapping = [
+                'critical' => '4%',
+                'semi_critical' => '3%',
+                'moderate' => '2%',
+                'convalescent' => '1%',
+                'severe_type_null' => 'NULL'
+            ];
+            
+            $cat_code = $mapping[$category] ?? '%';
+            $eval_subquery = "(SELECT n.ipd_nurse_eval_range_code FROM ipd_nurse_note n WHERE n.an = i.an ORDER BY n.note_date DESC, n.note_time DESC LIMIT 1)";
+            
+            $where_cat = $cat_code === 'NULL' 
+                ? "($eval_subquery IS NULL OR $eval_subquery = '')" 
+                : "$eval_subquery LIKE '$cat_code'";
+
+            $query = "
+                SELECT i.an, ia.bedno, DATEDIFF(CURDATE(), i.regdate) as stay_days
+                FROM ipt i
+                LEFT JOIN iptadm ia ON ia.an = i.an
+                WHERE i.ward IN ($ward) AND i.confirm_discharge = 'N'
+                AND ($where_cat)
+            ";
+            $data = DB::connection('hosxp')->select($query);
+            $title = strtoupper($type) . " - " . ucfirst(str_replace('_', ' ', $category));
+        } elseif ($type === 'er') {
+            $mapping = [
+                'resuscitation' => '1',
+                'emergent' => '2',
+                'urgent' => '3',
+                'semi_urgent' => '4',
+                'non_urgent' => '5',
+                'unknown' => 'unknown'
+            ];
+            $cat_code = $mapping[$category] ?? '';
+            $where_cat = $cat_code === 'unknown' 
+                ? "et.export_code NOT IN ('1','2','3','4','5') OR et.export_code IS NULL" 
+                : "et.export_code = '$cat_code'";
+
+            $query = "
+                SELECT e.vn as an, CONCAT(p.pname, p.fname, ' ', p.lname) as patient_name, '-' as bedno, DATE_FORMAT(e.enter_er_time, '%H:%i') as stay_days
+                FROM er_regist e
+                LEFT JOIN ovst o ON o.vn = e.vn
+                LEFT JOIN patient p ON p.hn = o.hn
+                LEFT JOIN er_emergency_type et ON et.er_emergency_type = e.er_emergency_type
+                WHERE DATE(e.enter_er_time) = CURDATE()
+                AND TIME(e.enter_er_time) BETWEEN ? AND ?
+                AND ($where_cat)
+            ";
+            $data = DB::connection('hosxp')->select($query, [$start_time, $end_time]);
+            $title = "ER - " . ucfirst($category);
+        } else {
+            // OPD, NCD, ARI, etc.
+            $dep_setting = $type . '_department';
+            $dep = MainSetting::where('name', $dep_setting)->value('value') ?? "''";
+            
+            // Adjust time range for OPD/NCD
+            if ($type === 'opd' && $currentTime >= '16:00:00') {
+               $start_time = '16:00:00';
+               $end_time = '20:00:00';
+            } else {
+                $start_time = '00:00:01';
+                $end_time = '15:59:59';
+            }
+
+            $query = "
+                SELECT o2.vn as an, CONCAT(p.pname, p.fname, ' ', p.lname) as patient_name, '-' as bedno, DATE_FORMAT(o2.vsttime, '%H:%i') as stay_days
+                FROM opd_dep_queue o1
+                JOIN ovst o2 ON o2.vn = o1.vn
+                LEFT JOIN patient p ON p.hn = o2.hn
+                WHERE o1.depcode IN ($dep) AND o2.vstdate = CURDATE()
+                AND o2.vsttime BETWEEN ? AND ?
+            ";
+            $data = DB::connection('hosxp')->select($query, [$start_time, $end_time]);
+            $title = strtoupper($type) . " - All Patients";
+        }
+
+        return response()->json([
+            'title' => $title,
+            'data' => $data,
+            'type' => in_array($type, ['ipd', 'icu', 'vip', 'lr']) ? 'ipd' : 'opd'
+        ]);
+    }
 }

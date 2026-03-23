@@ -103,6 +103,17 @@
             background-color: #f0f9ff !important;
             color: #0284c7 !important;
         }
+
+        .stat-item.clickable {
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .stat-item.clickable:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            z-index: 10;
+        }
     </style>
 
     <div class="container-fluid px-4 py-3">
@@ -158,8 +169,7 @@
                             <div class="row g-3">
                                 <!-- Row 1: Top 3 Severities -->
                                 <div class="col-4">
-                                    <div
-                                        class="stat-item p-3 rounded-4 bg-soft-danger text-center h-100 border border-danger border-opacity-10">
+                                    <div class="stat-item p-3 rounded-4 bg-soft-danger text-center h-100 border border-danger border-opacity-10">
                                         <div class="display-6 fw-bold text-danger mb-1">{{ $er_stats['resuscitation'] }}
                                         </div>
                                         <div class="small fw-semibold text-danger text-opacity-75 text-truncate">
@@ -169,7 +179,7 @@
                                 </div>
                                 <div class="col-4">
                                     <div class="stat-item p-3 rounded-4 text-center h-100 border border-warning border-opacity-25"
-                                        style="background-color: rgba(253, 126, 20, 0.1);">
+                                        style="background-color: rgba(253, 126, 20, 0.1)">
                                         <div class="display-6 fw-bold mb-1" style="color: #fd7e14;">
                                             {{ $er_stats['emergent'] }}
                                         </div>
@@ -177,8 +187,7 @@
                                     </div>
                                 </div>
                                 <div class="col-4">
-                                    <div
-                                        class="stat-item p-3 rounded-4 bg-soft-warning text-center h-100 border border-warning border-opacity-25">
+                                    <div class="stat-item p-3 rounded-4 bg-soft-warning text-center h-100 border border-warning border-opacity-25">
                                         <div class="display-6 fw-bold text-warning mb-1">{{ $er_stats['urgent'] }}</div>
                                         <div class="small fw-semibold text-warning text-opacity-75 text-truncate">Urgent
                                         </div>
@@ -187,8 +196,7 @@
 
                                 <!-- Row 2: Bottom 2 Severities -->
                                 <div class="col-4">
-                                    <div
-                                        class="stat-item p-3 rounded-4 bg-soft-success text-center h-100 border border-success border-opacity-10">
+                                    <div class="stat-item p-3 rounded-4 bg-soft-success text-center h-100 border border-success border-opacity-10">
                                         <div class="display-6 fw-bold text-success mb-1">{{ $er_stats['semi_urgent'] }}
                                         </div>
                                         <div class="small fw-semibold text-success text-opacity-75">Semi Urgent</div>
@@ -235,16 +243,16 @@
 
                             <div class="row g-3">
                                 <div class="col-4">
-                                    <div
-                                        class="stat-item p-2 py-3 rounded-4 bg-soft-danger text-center h-100 border border-danger border-opacity-10">
+                                    <div class="stat-item clickable p-2 py-3 rounded-4 bg-soft-danger text-center h-100 border border-danger border-opacity-10"
+                                        onclick="showPatientDetails(event, 'icu', 'critical')">
                                         <div class="h3 fw-bold text-danger mb-1">{{ $icu_stats['critical'] }}</div>
                                         <div class="small fw-bold text-danger text-opacity-75" style="font-size: 0.7rem;">
                                             Critical</div>
                                     </div>
                                 </div>
                                 <div class="col-4">
-                                    <div
-                                        class="stat-item p-2 py-3 rounded-4 bg-soft-warning text-center h-100 border border-warning border-opacity-25">
+                                    <div class="stat-item clickable p-2 py-3 rounded-4 bg-soft-warning text-center h-100 border border-warning border-opacity-25"
+                                        onclick="showPatientDetails(event, 'icu', 'semi_critical')">
                                         <div class="h3 fw-bold text-warning mb-1">{{ $icu_stats['semi_critical'] }}</div>
                                         <div class="small fw-bold text-warning text-opacity-75"
                                             style="font-size: 0.7rem;">
@@ -252,8 +260,8 @@
                                     </div>
                                 </div>
                                 <div class="col-4">
-                                    <div
-                                        class="stat-item p-2 py-3 rounded-4 bg-soft-info text-center h-100 border border-info border-opacity-25">
+                                    <div class="stat-item clickable p-2 py-3 rounded-4 bg-soft-info text-center h-100 border border-info border-opacity-25"
+                                        onclick="showPatientDetails(event, 'icu', 'moderate')">
                                         <div class="h3 fw-bold text-info mb-1">{{ $icu_stats['moderate'] }}</div>
                                         <div class="small fw-bold text-info text-opacity-75" style="font-size: 0.7rem;">
                                             Moderate
@@ -261,8 +269,8 @@
                                     </div>
                                 </div>
                                 <div class="col-4">
-                                    <div
-                                        class="stat-item p-2 py-3 rounded-4 bg-soft-success text-center h-100 border border-success border-opacity-10">
+                                    <div class="stat-item clickable p-2 py-3 rounded-4 bg-soft-success text-center h-100 border border-success border-opacity-10"
+                                        onclick="showPatientDetails(event, 'icu', 'convalescent')">
                                         <div class="h3 fw-bold text-success mb-1">{{ $icu_stats['convalescent'] }}</div>
                                         <div class="small fw-bold text-success text-opacity-75"
                                             style="font-size: 0.7rem;">
@@ -271,7 +279,8 @@
                                     </div>
                                 </div>
                                 <div class="col-4">
-                                    <div class="stat-item p-2 py-3 rounded-4 bg-light text-center h-100 border text-muted">
+                                    <div class="stat-item clickable p-2 py-3 rounded-4 bg-light text-center h-100 border text-muted"
+                                        onclick="showPatientDetails(event, 'icu', 'severe_type_null')">
                                         <div class="h3 fw-bold text-dark mb-1">{{ $icu_stats['severe_type_null'] }}</div>
                                         <div class="small fw-bold text-muted" style="font-size: 0.65rem;">
                                             ไม่บันทึกความรุนแรง
@@ -307,24 +316,24 @@
 
                             <div class="row g-3">
                                 <div class="col-4">
-                                    <div
-                                        class="stat-item p-2 py-3 rounded-4 bg-soft-danger text-center h-100 border border-danger border-opacity-10">
+                                    <div class="stat-item clickable p-2 py-3 rounded-4 bg-soft-danger text-center h-100 border border-danger border-opacity-10"
+                                        onclick="showPatientDetails(event, 'ipd', 'critical')">
                                         <div class="h3 fw-bold text-danger mb-1">{{ $ipd_stats['critical'] }}</div>
                                         <div class="small fw-bold text-danger text-opacity-75" style="font-size: 0.7rem;">
                                             Critical</div>
                                     </div>
                                 </div>
                                 <div class="col-4">
-                                    <div
-                                        class="stat-item p-2 py-3 rounded-4 bg-soft-warning text-center h-100 border border-warning border-opacity-25">
+                                    <div class="stat-item clickable p-2 py-3 rounded-4 bg-soft-warning text-center h-100 border border-warning border-opacity-25"
+                                        onclick="showPatientDetails(event, 'ipd', 'semi_critical')">
                                         <div class="h3 fw-bold text-warning mb-1">{{ $ipd_stats['semi_critical'] }}</div>
                                         <div class="small fw-bold text-warning text-opacity-75" style="font-size: 0.7rem;">
                                             Semi-Cri</div>
                                     </div>
                                 </div>
                                 <div class="col-4">
-                                    <div
-                                        class="stat-item p-2 py-3 rounded-4 bg-soft-info text-center h-100 border border-info border-opacity-25">
+                                    <div class="stat-item clickable p-2 py-3 rounded-4 bg-soft-info text-center h-100 border border-info border-opacity-25"
+                                        onclick="showPatientDetails(event, 'ipd', 'moderate')">
                                         <div class="h3 fw-bold text-info mb-1">{{ $ipd_stats['moderate'] }}</div>
                                         <div class="small fw-bold text-info text-opacity-75" style="font-size: 0.7rem;">
                                             Moderate
@@ -332,8 +341,8 @@
                                     </div>
                                 </div>
                                 <div class="col-4">
-                                    <div
-                                        class="stat-item p-2 py-3 rounded-4 bg-soft-success text-center h-100 border border-success border-opacity-10">
+                                    <div class="stat-item clickable p-2 py-3 rounded-4 bg-soft-success text-center h-100 border border-success border-opacity-10"
+                                        onclick="showPatientDetails(event, 'ipd', 'convalescent')">
                                         <div class="h3 fw-bold text-success mb-1">{{ $ipd_stats['convalescent'] }}</div>
                                         <div class="small fw-bold text-success text-opacity-75" style="font-size: 0.7rem;">
                                             Conv.
@@ -341,7 +350,8 @@
                                     </div>
                                 </div>
                                 <div class="col-4">
-                                    <div class="stat-item p-2 py-3 rounded-4 bg-light text-center h-100 border text-muted">
+                                    <div class="stat-item clickable p-2 py-3 rounded-4 bg-light text-center h-100 border text-muted"
+                                        onclick="showPatientDetails(event, 'ipd', 'severe_type_null')">
                                         <div class="h3 fw-bold text-dark mb-1">{{ $ipd_stats['severe_type_null'] }}</div>
                                         <div class="small fw-bold text-muted" style="font-size: 0.65rem;">
                                             ไม่บันทึกความรุนแรง
@@ -377,16 +387,16 @@
 
                             <div class="row g-3">
                                 <div class="col-4">
-                                    <div
-                                        class="stat-item p-2 py-3 rounded-4 bg-soft-danger text-center h-100 border border-danger border-opacity-10">
+                                    <div class="stat-item clickable p-2 py-3 rounded-4 bg-soft-danger text-center h-100 border border-danger border-opacity-10"
+                                        onclick="showPatientDetails(event, 'vip', 'critical')">
                                         <div class="h3 fw-bold text-danger mb-1">{{ $vip_stats['critical'] }}</div>
                                         <div class="small fw-bold text-danger text-opacity-75" style="font-size: 0.7rem;">
                                             Critical</div>
                                     </div>
                                 </div>
                                 <div class="col-4">
-                                    <div
-                                        class="stat-item p-2 py-3 rounded-4 bg-soft-warning text-center h-100 border border-warning border-opacity-25">
+                                    <div class="stat-item clickable p-2 py-3 rounded-4 bg-soft-warning text-center h-100 border border-warning border-opacity-25"
+                                        onclick="showPatientDetails(event, 'vip', 'semi_critical')">
                                         <div class="h3 fw-bold text-warning mb-1">{{ $vip_stats['semi_critical'] }}</div>
                                         <div class="small fw-bold text-warning text-opacity-75"
                                             style="font-size: 0.7rem;">
@@ -394,8 +404,8 @@
                                     </div>
                                 </div>
                                 <div class="col-4">
-                                    <div
-                                        class="stat-item p-2 py-3 rounded-4 bg-soft-info text-center h-100 border border-info border-opacity-25">
+                                    <div class="stat-item clickable p-2 py-3 rounded-4 bg-soft-info text-center h-100 border border-info border-opacity-25"
+                                        onclick="showPatientDetails(event, 'vip', 'moderate')">
                                         <div class="h3 fw-bold text-info mb-1">{{ $vip_stats['moderate'] }}</div>
                                         <div class="small fw-bold text-info text-opacity-75" style="font-size: 0.7rem;">
                                             Moderate
@@ -403,8 +413,8 @@
                                     </div>
                                 </div>
                                 <div class="col-4">
-                                    <div
-                                        class="stat-item p-2 py-3 rounded-4 bg-soft-success text-center h-100 border border-success border-opacity-10">
+                                    <div class="stat-item clickable p-2 py-3 rounded-4 bg-soft-success text-center h-100 border border-success border-opacity-10"
+                                        onclick="showPatientDetails(event, 'vip', 'convalescent')">
                                         <div class="h3 fw-bold text-success mb-1">{{ $vip_stats['convalescent'] }}</div>
                                         <div class="small fw-bold text-success text-opacity-75"
                                             style="font-size: 0.7rem;">
@@ -413,7 +423,8 @@
                                     </div>
                                 </div>
                                 <div class="col-4">
-                                    <div class="stat-item p-2 py-3 rounded-4 bg-light text-center h-100 border text-muted">
+                                    <div class="stat-item clickable p-2 py-3 rounded-4 bg-light text-center h-100 border text-muted"
+                                        onclick="showPatientDetails(event, 'vip', 'severe_type_null')">
                                         <div class="h3 fw-bold text-dark mb-1">{{ $vip_stats['severe_type_null'] }}</div>
                                         <div class="small fw-bold text-muted" style="font-size: 0.65rem;">
                                             ไม่บันทึกความรุนแรง
@@ -449,16 +460,16 @@
 
                             <div class="row g-3">
                                 <div class="col-4">
-                                    <div
-                                        class="stat-item p-2 py-3 rounded-4 bg-soft-danger text-center h-100 border border-danger border-opacity-10">
+                                    <div class="stat-item clickable p-2 py-3 rounded-4 bg-soft-danger text-center h-100 border border-danger border-opacity-10"
+                                        onclick="showPatientDetails(event, 'lr', 'critical')">
                                         <div class="h3 fw-bold text-danger mb-1">{{ $lr_stats['critical'] }}</div>
                                         <div class="small fw-bold text-danger text-opacity-75" style="font-size: 0.7rem;">
                                             Critical</div>
                                     </div>
                                 </div>
                                 <div class="col-4">
-                                    <div
-                                        class="stat-item p-2 py-3 rounded-4 bg-soft-warning text-center h-100 border border-warning border-opacity-25">
+                                    <div class="stat-item clickable p-2 py-3 rounded-4 bg-soft-warning text-center h-100 border border-warning border-opacity-25"
+                                        onclick="showPatientDetails(event, 'lr', 'semi_critical')">
                                         <div class="h3 fw-bold text-warning mb-1">{{ $lr_stats['semi_critical'] }}</div>
                                         <div class="small fw-bold text-warning text-opacity-75"
                                             style="font-size: 0.7rem;">
@@ -466,8 +477,8 @@
                                     </div>
                                 </div>
                                 <div class="col-4">
-                                    <div
-                                        class="stat-item p-2 py-3 rounded-4 bg-soft-info text-center h-100 border border-info border-opacity-25">
+                                    <div class="stat-item clickable p-2 py-3 rounded-4 bg-soft-info text-center h-100 border border-info border-opacity-25"
+                                        onclick="showPatientDetails(event, 'lr', 'moderate')">
                                         <div class="h3 fw-bold text-info mb-1">{{ $lr_stats['moderate'] }}</div>
                                         <div class="small fw-bold text-info text-opacity-75" style="font-size: 0.7rem;">
                                             Moderate
@@ -475,8 +486,8 @@
                                     </div>
                                 </div>
                                 <div class="col-4">
-                                    <div
-                                        class="stat-item p-2 py-3 rounded-4 bg-soft-success text-center h-100 border border-success border-opacity-10">
+                                    <div class="stat-item clickable p-2 py-3 rounded-4 bg-soft-success text-center h-100 border border-success border-opacity-10"
+                                        onclick="showPatientDetails(event, 'lr', 'convalescent')">
                                         <div class="h3 fw-bold text-success mb-1">{{ $lr_stats['convalescent'] }}</div>
                                         <div class="small fw-bold text-success text-opacity-75"
                                             style="font-size: 0.7rem;">
@@ -485,7 +496,8 @@
                                     </div>
                                 </div>
                                 <div class="col-4">
-                                    <div class="stat-item p-2 py-3 rounded-4 bg-light text-center h-100 border text-muted">
+                                    <div class="stat-item clickable p-2 py-3 rounded-4 bg-light text-center h-100 border text-muted"
+                                        onclick="showPatientDetails(event, 'lr', 'severe_type_null')">
                                         <div class="h3 fw-bold text-dark mb-1">{{ $lr_stats['severe_type_null'] }}</div>
                                         <div class="small fw-bold text-muted" style="font-size: 0.65rem;">
                                             ไม่บันทึกความรุนแรง
@@ -521,8 +533,7 @@
                                 <span class="badge bg-success rounded-pill px-3 py-2">OPD</span>
                             </div>
 
-                            <div
-                                class="d-flex align-items-center justify-content-between bg-light rounded-4 p-3 p-sm-4 border">
+                            <div class="d-flex align-items-center justify-content-between bg-light rounded-4 p-3 p-sm-4 border">
                                 <div class="d-flex align-items-center gap-2 gap-sm-3">
                                     <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center flex-shrink-0"
                                         style="width: 40px; height: 40px; @media (min-width: 576px) { width: 48px; height: 48px; }">
@@ -559,8 +570,7 @@
                                 <span class="badge bg-warning text-dark rounded-pill px-3 py-2">NCD</span>
                             </div>
 
-                            <div
-                                class="d-flex align-items-center justify-content-between bg-light rounded-4 p-3 p-sm-4 border">
+                            <div class="d-flex align-items-center justify-content-between bg-light rounded-4 p-3 p-sm-4 border">
                                 <div class="d-flex align-items-center gap-2 gap-sm-3">
                                     <div class="rounded-circle bg-warning text-dark d-flex align-items-center justify-content-center flex-shrink-0"
                                         style="width: 40px; height: 40px; @media (min-width: 576px) { width: 48px; height: 48px; }">
@@ -597,8 +607,7 @@
                                 <span class="badge bg-secondary rounded-pill px-3 py-2">ARI</span>
                             </div>
 
-                            <div
-                                class="d-flex align-items-center justify-content-between bg-light rounded-4 p-3 p-sm-4 border">
+                            <div class="d-flex align-items-center justify-content-between bg-light rounded-4 p-3 p-sm-4 border">
                                 <div class="d-flex align-items-center gap-2 gap-sm-3">
                                     <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center flex-shrink-0"
                                         style="width: 40px; height: 40px; @media (min-width: 576px) { width: 48px; height: 48px; }">
@@ -635,8 +644,7 @@
                                 <span class="badge bg-info rounded-pill px-3 py-2">CKD</span>
                             </div>
 
-                            <div
-                                class="d-flex align-items-center justify-content-between bg-light rounded-4 p-3 p-sm-4 border">
+                            <div class="d-flex align-items-center justify-content-between bg-light rounded-4 p-3 p-sm-4 border">
                                 <div class="d-flex align-items-center gap-2 gap-sm-3">
                                     <div class="rounded-circle bg-info text-white d-flex align-items-center justify-content-center flex-shrink-0"
                                         style="width: 40px; height: 40px;">
@@ -709,8 +717,7 @@
                                 <span class="badge bg-success rounded-pill px-3 py-2">ANC</span>
                             </div>
 
-                            <div
-                                class="d-flex align-items-center justify-content-between bg-light rounded-4 p-3 p-sm-4 border">
+                            <div class="d-flex align-items-center justify-content-between bg-light rounded-4 p-3 p-sm-4 border">
                                 <div class="d-flex align-items-center gap-2 gap-sm-3">
                                     <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center flex-shrink-0"
                                         style="width: 40px; height: 40px;">
@@ -724,6 +731,35 @@
                     </a>
                 </div>
             @endif
+        </div>
+    </div>
+
+    <!-- Patient Details Modal -->
+    <div class="modal fade" id="patientDetailsModal" tabindex="-1" aria-labelledby="patientDetailsModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 20px;">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title fw-bold" id="patientDetailsModalLabel">รายละเอียดผู้ป่วย</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle" id="patientDetailsTable">
+                            <thead class="table-light">
+                                <tr>
+                                    <th id="th-an">AN/VN</th>
+                                    <th>เตียง</th>
+                                    <th id="th-days">จำนวนวันนอน/เวลา</th>
+                                </tr>
+                            </thead>
+                            <tbody id="patientDetailsBody">
+                                <!-- Data will be loaded via AJAX -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     @push('scripts')
@@ -748,8 +784,68 @@
 
             // Reload page every 1 minute (60000 ms)
             setInterval(function() {
-                window.location.reload();
+                // window.location.reload();
             }, 60000);
+
+            function showPatientDetails(event, type, category) {
+                event.preventDefault();
+                event.stopPropagation();
+
+                const modal = new bootstrap.Modal(document.getElementById('patientDetailsModal'));
+                const tableBody = document.getElementById('patientDetailsBody');
+                const modalLabel = document.getElementById('patientDetailsModalLabel');
+                const thAn = document.getElementById('th-an');
+                const thDays = document.getElementById('th-days');
+
+                tableBody.innerHTML =
+                    '<tr><td colspan="3" class="text-center py-4"><div class="spinner-border text-primary" role="status"></div></td></tr>';
+                modal.show();
+
+                fetch('{{ route('hnplus.dashboard_details') }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify({
+                            type: type,
+                            category: category
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(res => {
+                        modalLabel.textContent = res.title;
+                        tableBody.innerHTML = '';
+
+                        if (res.type === 'ipd') {
+                            thAn.textContent = 'AN';
+                            thDays.textContent = 'จำนวนวันนอน';
+                        } else {
+                            thAn.textContent = 'VN';
+                            thDays.textContent = 'เวลา';
+                        }
+
+                        if (res.data.length === 0) {
+                            tableBody.innerHTML = '<tr><td colspan="3" class="text-center py-4 text-muted">ไม่พบข้อมูล</td></tr>';
+                            return;
+                        }
+
+                        res.data.forEach(item => {
+                            const row = `
+                                <tr>
+                                    <td class="fw-bold text-primary">${item.an}</td>
+                                    <td><span class="badge bg-light text-dark border">${item.bedno}</span></td>
+                                    <td>${res.type === 'ipd' ? item.stay_days + ' วัน' : item.stay_days}</td>
+                                </tr>
+                            `;
+                            tableBody.insertAdjacentHTML('beforeend', row);
+                        });
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        tableBody.innerHTML = '<tr><td colspan="3" class="text-center py-4 text-danger">เกิดข้อผิดพลาดในการดึงข้อมูล</td></tr>';
+                    });
+            }
         </script>
     @endpush
 @endsection

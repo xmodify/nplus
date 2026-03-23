@@ -20,6 +20,7 @@ use App\Http\Controllers\Admin\BudgetYearController;
 use App\Http\Controllers\Hnplus\DashboardController;
 
 Route::get('/', [DashboardController::class, 'index'])->name('home');
+Route::post('product/dashboard_details', [DashboardController::class, 'getPatientDetails'])->name('hnplus.dashboard_details');
 
 // Login / Logout
 Route::post('/login', [LoginController::class, 'login'])->name('login');
