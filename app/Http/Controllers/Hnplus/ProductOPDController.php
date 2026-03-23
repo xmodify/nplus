@@ -372,7 +372,7 @@ class ProductOPDController extends Controller
         // ==============================
         //   Get Constants from MainSetting
         // ==============================
-        $opd_working_hours = MainSetting::where('name', 'opd_working_hours')->value('value') ?? 7;
+        $opd_working_hours = MainSetting::where('name', 'opd_working_hours_bd')->value('value') ?? 7;
         $opd_c = MainSetting::where('name', 'opd_patient_type_opd')->value('value') ?? 0.37;
 
 

@@ -23,7 +23,7 @@ class MainSettingController extends Controller
                 $weight = 10;
             elseif (str_ends_with($name, '_department') || str_ends_with($name, '_ward'))
                 $weight = 20;
-            elseif (str_ends_with($name, '_working_hours'))
+            elseif (str_contains($name, '_working_hours'))
                 $weight = 30;
             elseif (str_contains($name, '_patient_type'))
                 $weight = 40;
@@ -176,7 +176,8 @@ class MainSettingController extends Controller
             ['name_th' => 'IPD NotifyTelegram บันทึก', 'name' => 'ipd_notifytelegram_save', 'value' => ''],
             ['name_th' => 'IPD สถานะ', 'name' => 'ipd_active', 'value' => 'Y'],
             ['name_th' => 'OPD รหัสห้องตรวจ (HOSxP)', 'name' => 'opd_department', 'value' => ''],
-            ['name_th' => 'OPD ชม.การทำงานพยาบาล', 'name' => 'opd_working_hours', 'value' => '7'],
+            ['name_th' => 'OPD ชม.การทำงานพยาบาล (เวร เช้า)', 'name' => 'opd_working_hours', 'value' => '7'],
+            ['name_th' => 'OPD ชม.การทำงานพยาบาล (เวร BD)', 'name' => 'opd_working_hours_bd', 'value' => '7'],
             ['name_th' => 'OPD ชม.ผู้ป่วยทั่วไป', 'name' => 'opd_patient_type', 'value' => '0.24'],
             ['name_th' => 'OPD NotifyTelegram แจ้งเตือน', 'name' => 'opd_notifytelegram', 'value' => ''],
             ['name_th' => 'OPD NotifyTelegram บันทึก', 'name' => 'opd_notifytelegram_save', 'value' => ''],
