@@ -53,7 +53,7 @@ class ProductVIPController extends Controller
         $afternoon = [];
         foreach ($grouped as $date => $rows) {
             $report_date[] = DateThai($date);
-            $night[] = optional($rows->firstWhere('shift_time', '🌙เวรดึก'))->productivity ?? 0;
+            $night[] = optional($rows->firstWhere('shift_time', 'เวรดึก'))->productivity ?? 0;
             $morning[] = optional($rows->firstWhere('shift_time', 'เวรเช้า'))->productivity ?? 0;
             $afternoon[] = optional($rows->firstWhere('shift_time', 'เวรบ่าย'))->productivity ?? 0;
         }

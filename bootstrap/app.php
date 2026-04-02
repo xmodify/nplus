@@ -5,6 +5,7 @@ use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use App\Http\Middleware\Hnplus;
 use App\Http\Middleware\IsAdmin;
+use App\Http\Middleware\SecurityHeaders;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -13,6 +14,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        // ✅ register global middleware
+        $middleware->append(SecurityHeaders::class);
+
         // ✅ register alias middleware ตรงนี้
         $middleware->alias([
             'hnplus' => Hnplus::class,

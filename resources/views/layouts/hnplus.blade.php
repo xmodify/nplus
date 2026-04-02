@@ -11,13 +11,17 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 
     <!-- Bootstrap Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet"
+        integrity="sha384-tViUnnbplgXzC6JwBRKMEbLbmXPRfuAdDoTlMnLO9vUpqZeO3KkAuQzjvKe3nByh" crossorigin="anonymous">
 
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer">
 
     <!-- App CSS -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
@@ -26,7 +30,9 @@
 
     <!-- Bootstrap Datepicker CSS -->
     <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"
+        integrity="sha512-mSYUmp1HYZDFaVKK//63EcZq4iFWFjxSL+Z3T/iJ9+ekCK6q1CUnFab8B0FvMvFdcJ8qakqWu0GkEMGPDUNZA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer">
 
     <style>
         .datepicker-thai {
@@ -224,7 +230,7 @@
                     <ul class="navbar-nav ms-auto align-items-center">
                         <li>
                             <div class="badge bg-white text-primary rounded-pill px-3 py-2 shadow-sm fw-bold">
-                                <i class="bi bi-code-slash me-1"></i>V. 69-03-23 15:00
+                                <i class="bi bi-code-slash me-1"></i>V. 69-04-02 15:00
                             </div>
                         </li>
 
@@ -236,48 +242,48 @@
                                 </button>
                             </li>
                         @else
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle text-white nav-link-premium" href="#"
-                                    data-bs-toggle="dropdown">
-                                    <i class="bi bi-person-circle me-1"></i>{{ Auth::user()->name }}
-                                </a>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle text-white nav-link-premium" href="#"
+                                        data-bs-toggle="dropdown">
+                                        <i class="bi bi-person-circle me-1"></i>{{ Auth::user()->name }}
+                                    </a>
 
-                                <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0">
-                                    @if (Auth::user()->role == 'admin')
+                                    <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0">
+                                        @if (Auth::user()->role == 'admin')
+                                            <li>
+                                                <a class="dropdown-item py-2" href="{{ route('admin.main_setting') }}">
+                                                    <i class="bi bi-gear me-2"></i>ตั้งค่า MainSetting
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item py-2" href="{{ route('admin.users.index') }}">
+                                                    <i class="bi bi-people me-2"></i>ตั้งค่าผู้ใช้งาน
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item py-2" href="{{ route('admin.budget_year.index') }}">
+                                                    <i class="bi bi-calendar-event me-2"></i>ตั้งค่าปีงบประมาณ
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <hr class="dropdown-divider">
+                                            </li>
+                                        @endif
                                         <li>
-                                            <a class="dropdown-item py-2" href="{{ route('admin.main_setting') }}">
-                                                <i class="bi bi-gear me-2"></i>ตั้งค่า MainSetting
+                                            <a class="dropdown-item text-danger py-2 fw-bold" href="{{ route('logout') }}"
+                                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                                <i class="bi bi-box-arrow-right me-2"></i>Logout
                                             </a>
                                         </li>
-                                        <li>
-                                            <a class="dropdown-item py-2" href="{{ route('admin.users.index') }}">
-                                                <i class="bi bi-people me-2"></i>ตั้งค่าผู้ใช้งาน
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item py-2" href="{{ route('admin.budget_year.index') }}">
-                                                <i class="bi bi-calendar-event me-2"></i>ตั้งค่าปีงบประมาณ
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <hr class="dropdown-divider">
-                                        </li>
-                                    @endif
-                                    <li>
-                                        <a class="dropdown-item text-danger py-2 fw-bold" href="{{ route('logout') }}"
-                                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                            <i class="bi bi-box-arrow-right me-2"></i>Logout
-                                        </a>
-                                    </li>
-                                </ul>
+                                    </ul>
+                                </li>
+                            </ul>
                             </li>
-                        </ul>
-                        </li>
 
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                            @csrf
-                        </form>
-                    @endguest
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                @csrf
+                            </form>
+                        @endguest
 
                     </ul>
 
@@ -317,8 +323,7 @@
 
                         <div class="mb-3">
                             <label>Email</label>
-                            <input type="email" name="email" value="{{ old('email') }}" class="form-control"
-                                required>
+                            <input type="email" name="email" value="{{ old('email') }}" class="form-control" required>
                         </div>
 
                         <div class="mb-3">
@@ -344,25 +349,32 @@
     <!-- ================= JS ================= -->
 
     <!-- Bootstrap Bundle (สำคัญมาก) -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
 
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- jQuery (Needed for Datepicker) -->
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
     <!-- Bootstrap Datepicker JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.th.min.js">
-    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"
+        integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroiZeB5JP4cdEeRSOMcDaKs1jGe2hMijUAXN0HS13BSjfpRMfBiJJzr4YA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.th.min.js"
+        integrity="sha512-FYAQUwBbZSmwMILITXr/6CYe/Yx4K3M1ZiBiSgfVrQoEMNBXiXBTVrGGgdR+nDtXw6C5H7fNQ7rkj8duyBSww=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             if (typeof $.fn.datepicker !== 'undefined') {
                 var dp = $('.datepicker-thai').datepicker({
                     format: {
-                        toDisplay: function(date, format, language) {
+                        toDisplay: function (date, format, language) {
                             var d = new Date(date);
                             var day = d.getDate();
                             var month = d.getMonth();
@@ -372,7 +384,7 @@
                             ];
                             return day + ' ' + thaiMonths[month] + ' ' + year;
                         },
-                        toValue: function(date, format, language) {
+                        toValue: function (date, format, language) {
                             var parts = date.split(' ');
                             if (parts.length === 3) {
                                 var day = parseInt(parts[0]);
@@ -403,11 +415,11 @@
                 });
 
                 // Manual Thai BE Year patch for header
-                dp.on('show', function() {
+                dp.on('show', function () {
                     var $this = $(this);
-                    setTimeout(function() {
+                    setTimeout(function () {
                         $('.datepicker-days .datepicker-switch, .datepicker-months .datepicker-switch, .datepicker-years .datepicker-switch')
-                            .each(function() {
+                            .each(function () {
                                 var text = $(this).text();
                                 var match = text.match(/\d{4}/);
                                 if (match && parseInt(match[0]) < 2400) {
@@ -419,7 +431,7 @@
                 });
 
                 // Icon click trigger
-                $('.input-group-text').on('click', function(e) {
+                $('.input-group-text').on('click', function (e) {
                     var input = $(this).closest('.input-group').find('.datepicker-thai');
                     if (input.length) {
                         input.datepicker('show');
@@ -434,7 +446,7 @@
 
     @if ($errors->any())
         <script>
-            document.addEventListener('DOMContentLoaded', function() {
+            document.addEventListener('DOMContentLoaded', function () {
                 if (typeof bootstrap !== 'undefined') {
                     const modalEl = document.getElementById('loginModal');
                     if (modalEl) {

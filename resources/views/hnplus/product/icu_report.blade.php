@@ -21,7 +21,7 @@
                         <i class="fa-solid fa-couch fs-4 text-primary"></i>
                     </div>
                     <div>
-                        <h5 class="fw-bold text-dark mb-0">รายงานผลิตภาพทางการพยาบาลแผนกผู้ป่วยใน VIP</h5>
+                        <h5 class="fw-bold text-dark mb-0">รายงานผลิตภาพทางการพยาบาลแผนกผู้ป่วยหนัก ICU</h5>
                         <small class="text-muted">ข้อมูลสรุปช่วงเวลา {{ DateThai($start_date) }} -
                             {{ DateThai($end_date) }}</small>
                     </div>
@@ -54,7 +54,7 @@
             <div
                 class="header-gradient text-white p-2 p-md-3 d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
                 <h6 class="mb-0 fw-bold">
-                    <i class="bi bi-graph-up-arrow me-2"></i>รายงานสรุปผลิตภาพทางการพยาบาล VIP
+                    <i class="bi bi-graph-up-arrow me-2"></i>รายงานสรุปผลิตภาพทางการพยาบาล ICU
                     <small class="opacity-75 ms-2 d-none d-lg-inline-block">({{ DateThai($start_date) }} -
                         {{ DateThai($end_date) }})</small>
                 </h6>
@@ -98,7 +98,7 @@
                                 <td align="right">{{ number_format($row->nhppd, 2) }}</td>
                                 <td align="right">{{ number_format($row->nurse_shift_time, 2) }}</td>
                             </tr>
-                            <?php $count++; ?>
+                            <?php    $count++; ?>
                         @endforeach
                     </table>
                 </div>
@@ -172,8 +172,7 @@
                                 <td align="left">{{ $row->note }}</td>
                                 @if ($del_product)
                                     <td class="text-center">
-                                        <form action="{{ url('product/icu_product_delete/' . $row->id) }}"
-                                            method="POST"
+                                        <form action="{{ url('product/icu_product_delete/' . $row->id) }}" method="POST"
                                             onsubmit="return confirm('ต้องการลบข้อมูล {{ DateThai($row->report_date) }} {{ $row->shift_time }} Product {{ number_format($row->productivity, 2) }}?')">
                                             @csrf
                                             @method('DELETE')
@@ -182,7 +181,7 @@
                                     </td>
                                 @endif
                             </tr>
-                            <?php $count++; ?>
+                            <?php    $count++; ?>
                         @endforeach
                     </table>
                 </div>
@@ -195,7 +194,7 @@
         <div class="card-premium shadow-lg">
             <div class="header-gradient text-white p-3">
                 <h6 class="mb-0 fw-bold">
-                    <i class="bi bi-bar-chart-fill me-2"></i>กราฟ Productivity แยกตามเวร (VIP)
+                    <i class="bi bi-bar-chart-fill me-2"></i>กราฟ Productivity แยกตามเวร (ICU)
                 </h6>
             </div>
             <div class="card-body p-4">
@@ -218,7 +217,7 @@
     <script src="https://cdn.datatables.net/buttons/2.3.3/js/buttons.html5.min.js"></script>
 
     <script type="text/javascript" class="init">
-        $(document).ready(function() {
+        $(document).ready(function () {
             var table = $('#productivity_day').DataTable({
                 dom: "<'row mb-3'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'fB>>" +
                     "<'row'<'col-sm-12'tr>>" +
@@ -227,7 +226,7 @@
                     extend: 'excelHtml5',
                     text: '<i class="bi bi-file-earmark-excel me-1"></i> Excel',
                     className: 'btn btn-success btn-sm ms-2 shadow-sm fw-bold',
-                    title: 'รายงานผลิตภาพทางการพยาบาล_VIP_{{ $start_date }}_{{ $end_date }}'
+                    title: 'รายงานผลิตภาพทางการพยาบาล_ICU_{{ $start_date }}_{{ $end_date }}'
                 }],
                 language: {
                     search: "ค้นหา: ",
@@ -255,29 +254,29 @@
                     data: {
                         labels: <?php echo json_encode($report_date); ?>,
                         datasets: [{
-                                label: 'เวรเช้า',
-                                data: <?php echo json_encode($morning); ?>,
-                                backgroundColor: 'rgba(35, 167, 167, 0.7)',
-                                borderColor: 'rgb(35, 167, 167)',
-                                borderRadius: 6,
-                                borderWidth: 1
-                            },
-                            {
-                                label: 'เวรบ่าย',
-                                data: <?php echo json_encode($afternoon); ?>,
-                                backgroundColor: 'rgba(255, 159, 64, 0.7)',
-                                borderColor: 'rgb(255, 159, 64)',
-                                borderRadius: 6,
-                                borderWidth: 1
-                            },
-                            {
-                                label: 'เวรดึก',
-                                data: <?php echo json_encode($night); ?>,
-                                backgroundColor: 'rgba(99, 102, 241, 0.7)',
-                                borderColor: 'rgb(99, 102, 241)',
-                                borderRadius: 6,
-                                borderWidth: 1
-                            }
+                            label: 'เวรเช้า',
+                            data: <?php echo json_encode($morning); ?>,
+                            backgroundColor: 'rgba(35, 167, 167, 0.7)',
+                            borderColor: 'rgb(35, 167, 167)',
+                            borderRadius: 6,
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'เวรบ่าย',
+                            data: <?php echo json_encode($afternoon); ?>,
+                            backgroundColor: 'rgba(255, 159, 64, 0.7)',
+                            borderColor: 'rgb(255, 159, 64)',
+                            borderRadius: 6,
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'เวรดึก',
+                            data: <?php echo json_encode($night); ?>,
+                            backgroundColor: 'rgba(99, 102, 241, 0.7)',
+                            borderColor: 'rgb(99, 102, 241)',
+                            borderRadius: 6,
+                            borderWidth: 1
+                        }
                         ]
                     },
                     options: {
@@ -298,7 +297,7 @@
                             },
                             title: {
                                 display: true,
-                                text: 'กราฟ Productivity แยกตามเวร (VIP)'
+                                text: 'กราฟ Productivity แยกตามเวร (ICU)'
                             }
                         },
                         scales: {
@@ -313,4 +312,3 @@
         });
     </script>
 @endpush
-
