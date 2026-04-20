@@ -39,12 +39,87 @@
             cursor: pointer !important;
             background-color: #fff !important;
             transition: all 0.2s ease;
-            font-size: 0.875rem !important;
+            font-size: 0.9rem !important;
+            position: relative !important;
+            z-index: 5 !important;
+            pointer-events: auto !important;
         }
 
         .datepicker-thai:focus {
-            z-index: 0 !important;
             box-shadow: none !important;
+            border-color: #23a7a7 !important;
+        }
+
+        /* HARDENED DATEPICKER UI */
+        .datepicker {
+            z-index: 2100 !important;
+            padding: 10px !important;
+            border-radius: 12px !important;
+            border: none !important;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15) !important;
+            font-family: 'Prompt', sans-serif !important;
+        }
+
+        .datepicker table {
+            width: 100% !important;
+            border-collapse: separate !important;
+            border-spacing: 2px !important;
+        }
+
+        .datepicker table tr td, 
+        .datepicker table tr th {
+            width: 38px !important;
+            height: 38px !important;
+            text-align: center !important;
+            vertical-align: middle !important;
+            border-radius: 8px !important;
+            border: none !important;
+            font-size: 0.85rem !important;
+        }
+
+        .datepicker table tr td.day:hover {
+            background: #ebf5ff !important;
+            color: #23a7a7 !important;
+        }
+
+        .datepicker table tr td.active, 
+        .datepicker table tr td.active:hover {
+            background: var(--primary-gradient) !important;
+            color: white !important;
+            font-weight: bold !important;
+        }
+
+        .datepicker .datepicker-switch {
+            font-weight: bold !important;
+            color: #1e293b !important;
+            font-size: 0.95rem !important;
+        }
+
+        .datepicker .prev, .datepicker .next,
+        .datepicker .datepicker-switch,
+        .datepicker .today {
+            cursor: pointer !important;
+            color: #23a7a7 !important;
+        }
+
+        .datepicker .prev:hover, .datepicker .next:hover,
+        .datepicker .today:hover {
+            background: #ebf5ff !important;
+            color: #1a7e7e !important;
+        }
+
+        .datepicker .today {
+            font-weight: 700 !important;
+            text-align: center !important;
+            padding: 8px 0 !important;
+            color: var(--primary-color) !important;
+        }
+
+        .datepicker .dow {
+            color: #64748b !important;
+            font-weight: 600 !important;
+            font-size: 0.75rem !important;
+            text-transform: uppercase;
         }
 
         .input-group-date-custom {
@@ -230,7 +305,7 @@
                     <ul class="navbar-nav ms-auto align-items-center">
                         <li>
                             <div class="badge bg-white text-primary rounded-pill px-3 py-2 shadow-sm fw-bold">
-                                <i class="bi bi-code-slash me-1"></i>V. 69-04-02 15:00
+                                <i class="bi bi-code-slash me-1"></i>V. 69-04-20 16:00
                             </div>
                         </li>
 
@@ -361,82 +436,113 @@
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
     <!-- Bootstrap Datepicker JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"
-        integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroiZeB5JP4cdEeRSOMcDaKs1jGe2hMijUAXN0HS13BSjfpRMfBiJJzr4YA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script
-        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.th.min.js"
-        integrity="sha512-FYAQUwBbZSmwMILITXr/6CYe/Yx4K3M1ZiBiSgfVrQoEMNBXiXBTVrGGgdR+nDtXw6C5H7fNQ7rkj8duyBSww=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.th.min.js"></script>
 
     <script>
-        $(document).ready(function () {
-            if (typeof $.fn.datepicker !== 'undefined') {
-                var dp = $('.datepicker-thai').datepicker({
+        jQuery(document).ready(function ($) {
+            // Function to initialize datepicker with consistent settings
+            function initDatePicker(element) {
+                var $el = $(element);
+                // Already initialized check (but we'll re-init if requested)
+                if ($el.data('datepicker-initialized')) return;
+
+                $el.datepicker({
                     format: {
                         toDisplay: function (date, format, language) {
+                            if (!date) return "";
                             var d = new Date(date);
+                            if (isNaN(d.getTime())) return "";
                             var day = d.getDate();
                             var month = d.getMonth();
                             var year = d.getFullYear() + 543;
-                            var thaiMonths = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.",
-                                "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."
-                            ];
+                            var thaiMonths = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
                             return day + ' ' + thaiMonths[month] + ' ' + year;
                         },
                         toValue: function (date, format, language) {
-                            var parts = date.split(' ');
+                            if (!date) return new Date();
+                            if (date instanceof Date) return date;
+                            
+                            var dateStr = String(date).trim().replace(/\s+/g, ' ');
+                            var parts = dateStr.split(' ');
+                            
                             if (parts.length === 3) {
                                 var day = parseInt(parts[0]);
-                                var thaiMonths = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.",
-                                    "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."
-                                ];
+                                var thaiMonths = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
                                 var month = thaiMonths.indexOf(parts[1]);
                                 if (month === -1) {
-                                    // Fallback full month
-                                    var thaiMonthsFull = ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน",
-                                        "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน",
-                                        "ตุลาคม", "พฤศจิกายน", "ธันวาคม"
-                                    ];
+                                    var thaiMonthsFull = ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"];
                                     month = thaiMonthsFull.indexOf(parts[1]);
                                 }
                                 var year = parseInt(parts[2]);
-                                if (year > 2400) year -= 543;
-                                return new Date(year, month !== -1 ? month : 0, day);
+                                // Logic: If it looks like Thai BE (e.g. 2569), convert to Gregorian (2026)
+                                if (year > 2400) {
+                                    year -= 543;
+                                } else if (year < 100) {
+                                    // Handle cases like '69' -> 2026
+                                    year += (year > 40 ? 1900 : 2000);
+                                }
+                                
+                                var d = new Date(year, month !== -1 ? month : 0, day);
+                                return isNaN(d.getTime()) ? new Date() : d;
                             }
-                            return new Date();
+                            return new Date(date); // Fallback to native parsing
                         }
                     },
                     language: 'th',
                     autoclose: true,
                     todayHighlight: true,
                     todayBtn: 'linked',
-                    orientation: 'bottom auto'
-                });
-
-                // Manual Thai BE Year patch for header
-                dp.on('show', function () {
-                    var $this = $(this);
-                    setTimeout(function () {
-                        $('.datepicker-days .datepicker-switch, .datepicker-months .datepicker-switch, .datepicker-years .datepicker-switch')
-                            .each(function () {
-                                var text = $(this).text();
-                                var match = text.match(/\d{4}/);
-                                if (match && parseInt(match[0]) < 2400) {
-                                    $(this).text(text.replace(match[0], parseInt(match[0]) +
-                                        543));
+                    orientation: 'bottom auto',
+                    container: 'body',
+                    templates: {
+                        leftArrow: '«',
+                        rightArrow: '»'
+                    }
+                }).on('show changeMonth changeYear changeDecade changeCentury', function () {
+                    var patchHeader = function() {
+                        $('.datepicker-switch').each(function () {
+                            var text = $(this).text();
+                            var match = text.match(/(\d{4})/);
+                            if (match) {
+                                var year = parseInt(match[1]);
+                                if (year < 2400) {
+                                    $(this).text(text.replace(match[1], year + 543));
                                 }
-                            });
-                    }, 5);
+                            }
+                        });
+                    };
+                    setTimeout(patchHeader, 1);
+                    setTimeout(patchHeader, 50);
+                    setTimeout(patchHeader, 200);
+                });
+                
+                $el.data('datepicker-initialized', true);
+            }
+
+            // Initialize all current and future datepickers
+            if (typeof $.fn.datepicker !== 'undefined') {
+                // Aggressive initialization on multiple events
+                $(document).on('focus mousedown touchstart', '.datepicker-thai', function() {
+                    initDatePicker(this);
                 });
 
-                // Icon click trigger
-                $('.input-group-text').on('click', function (e) {
+                // Initial pass
+                $('.datepicker-thai').each(function() {
+                    initDatePicker(this);
+                });
+
+                // Icon click trigger - explicitly show it
+                $(document).on('click', '.input-group-text', function (e) {
                     var input = $(this).closest('.input-group').find('.datepicker-thai');
                     if (input.length) {
+                        initDatePicker(input[0]);
                         input.datepicker('show');
+                        input.focus();
                     }
                 });
+            } else {
+                console.error("Bootstrap Datepicker library NOT found on jQuery object.");
             }
         });
     </script>
