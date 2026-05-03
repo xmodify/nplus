@@ -29,6 +29,7 @@ class DashboardController extends Controller
         $ckd_dep = MainSetting::where('name', 'ckd_department')->value('value') ?? "''";
         $hd_dep = MainSetting::where('name', 'hd_department')->value('value') ?? "''";
         $anc_dep = MainSetting::where('name', 'anc_department')->value('value') ?? "''";
+        $psy_dep = MainSetting::where('name', 'psy_department')->value('value') ?? "''";
 
         // Determine Current Shift for ER & IPD
         // - เวรดึก 00:00:01 - 07:59:59
@@ -256,11 +257,22 @@ class DashboardController extends Controller
             ];
         }
 
-        if (\Illuminate\Support\Facades\Auth::check()) {
-            return view('hnplus.dashboard', compact('er_stats', 'ipd_stats', 'opd_stats', 'ncd_stats', 'ari_stats', 'vip_stats', 'icu_stats', 'lr_stats', 'ckd_stats', 'hd_stats', 'anc_stats', 'today', 'shift_name'));
+        // 9. PSY Data
+        $psy_stats = ['shift' => 'เวรเช้า', 'patient_all' => 0];
+        if ($psy_dep != "''" && $psy_dep != "") {
+            $psy_query = str_replace($ncd_dep, $psy_dep, $ncd_query);
+            $psy_result = DB::connection('hosxp')->selectOne($psy_query, [$morning_st, $morning_et]);
+            $psy_stats = [
+                'shift' => 'เวรเช้า',
+                'patient_all' => $psy_result->patient_all ?? 0,
+            ];
         }
 
-        return view('welcome', compact('er_stats', 'ipd_stats', 'opd_stats', 'ncd_stats', 'ari_stats', 'vip_stats', 'icu_stats', 'lr_stats', 'ckd_stats', 'hd_stats', 'anc_stats', 'today', 'shift_name'));
+        if (\Illuminate\Support\Facades\Auth::check()) {
+            return view('hnplus.dashboard', compact('er_stats', 'ipd_stats', 'opd_stats', 'ncd_stats', 'ari_stats', 'vip_stats', 'icu_stats', 'lr_stats', 'ckd_stats', 'hd_stats', 'anc_stats', 'psy_stats', 'today', 'shift_name'));
+        }
+
+        return view('welcome', compact('er_stats', 'ipd_stats', 'opd_stats', 'ncd_stats', 'ari_stats', 'vip_stats', 'icu_stats', 'lr_stats', 'ckd_stats', 'hd_stats', 'anc_stats', 'psy_stats', 'today', 'shift_name'));
     }
 
     public function getPatientDetails(Request $request)

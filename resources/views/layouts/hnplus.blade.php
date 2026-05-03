@@ -205,14 +205,14 @@
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle text-white nav-link-premium" href="#"
                                     data-bs-toggle="dropdown">
-                                    <i class="bi bi-file-earmark-bar-graph me-1"></i>ผลิตภาพทางการพยาบาล
+                                    <i class="fa-solid fa-chart-line me-1"></i>ผลิตภาพทางการพยาบาล
                                 </a>
 
                                 <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0">
                                     @if (isset($app_settings['er_active']) && $app_settings['er_active'] == 'Y')
                                         <li>
                                             <a class="dropdown-item py-2" href="{{ url('product/er_report') }}">
-                                                <i class="bi bi-hospital text-danger me-2"></i>งานอุบัติเหตุ-ฉุกเฉิน ER
+                                                <i class="fa-solid fa-truck-medical text-danger me-2 ms-1"></i>งานอุบัติเหตุ-ฉุกเฉิน ER
                                             </a>
                                         </li>
                                     @endif
@@ -250,40 +250,40 @@
                                     @if (isset($app_settings['opd_active']) && $app_settings['opd_active'] == 'Y')
                                         <li>
                                             <a class="dropdown-item py-2" href="{{ url('product/opd_report') }}">
-                                                <i class="bi bi-person-lines-fill text-primary me-2"></i>งานผู้ป่วยนอก OPD
+                                                <i class="fa-solid fa-hospital-user text-primary me-2 ms-1"></i>งานผู้ป่วยนอก OPD
                                             </a>
                                         </li>
                                         <li>
                                             <a class="dropdown-item py-2" href="{{ url('product/opd_holiday_report') }}">
-                                                <i class="bi bi-calendar-heart text-warning me-2"></i>งานผู้ป่วยนอก OPD วันหยุด
+                                                <i class="fa-solid fa-calendar-day text-warning me-2 ms-1"></i>งานผู้ป่วยนอก OPD วันหยุด
                                             </a>
                                         </li>
                                     @endif
                                     @if (isset($app_settings['ncd_active']) && $app_settings['ncd_active'] == 'Y')
                                         <li>
                                             <a class="dropdown-item py-2" href="{{ url('product/ncd_report') }}">
-                                                <i class="bi bi-heart-pulse text-info me-2"></i>งานผู้ป่วย NCD
+                                                <i class="fa-solid fa-stethoscope text-info me-2 ms-1"></i>งานผู้ป่วย NCD
                                             </a>
                                         </li>
                                     @endif
                                     @if (isset($app_settings['ari_active']) && $app_settings['ari_active'] == 'Y')
                                         <li>
                                             <a class="dropdown-item py-2" href="{{ url('product/ari_report') }}">
-                                                <i class="bi bi-thermometer-half text-warning me-2"></i>งานผู้ป่วย ARI
+                                                <i class="fa-solid fa-thermometer text-warning me-2 ms-1"></i>งานผู้ป่วย ARI
                                             </a>
                                         </li>
                                     @endif
                                     @if (isset($app_settings['ckd_active']) && $app_settings['ckd_active'] == 'Y')
                                         <li>
                                             <a class="dropdown-item py-2" href="{{ url('product/ckd_report') }}">
-                                                <i class="bi bi-heart-pulse text-dark me-2"></i>งานผู้ป่วย CKD
+                                                <i class="fa-solid fa-file-medical text-dark me-2 ms-1"></i>งานผู้ป่วย CKD
                                             </a>
                                         </li>
                                     @endif
                                     @if (isset($app_settings['hd_active']) && $app_settings['hd_active'] == 'Y')
                                         <li>
                                             <a class="dropdown-item py-2" href="{{ url('product/hd_report') }}">
-                                                <i class="bi bi-droplet-fill text-primary me-2"></i>งานฟอกเลือดไตเทียม HD
+                                                <i class="fa-solid fa-droplet text-primary me-2 ms-1"></i>งานฟอกเลือดไตเทียม HD
                                             </a>
                                         </li>
                                     @endif
@@ -296,6 +296,14 @@
                                             </a>
                                         </li>
                                     @endif
+                                    @if (isset($app_settings['psy_active']) && $app_settings['psy_active'] == 'Y')
+                                        <li>
+                                            <a class="dropdown-item py-2" href="{{ url('product/psy_report') }}">
+                                                <i
+                                                    class="fa-solid fa-brain text-info me-2 ms-1"></i>งานสุขภาพจิตและยาเสพติด
+                                            </a>
+                                        </li>
+                                    @endif
                                 </ul>
                             </li>
                         @endauth
@@ -305,7 +313,7 @@
                     <ul class="navbar-nav ms-auto align-items-center">
                         <li>
                             <div class="badge bg-white text-primary rounded-pill px-3 py-2 shadow-sm fw-bold">
-                                <i class="bi bi-code-slash me-1"></i>V. 69-04-20 16:00
+                                <i class="fa-solid fa-code me-1"></i>V. 69-05-03 14:00
                             </div>
                         </li>
 

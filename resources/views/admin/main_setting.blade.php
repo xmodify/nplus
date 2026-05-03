@@ -6,7 +6,7 @@
         <!-- ================= ACTION BUTTONS ================= -->
         <div class="mb-4 d-flex gap-2">
             <button class="btn btn-danger px-4 shadow-sm" id="gitPullBtn">
-                <i class="bi bi-git me-2"></i>Git Pull
+                <i class="fa-brands fa-git-alt me-2"></i>Git Pull
             </button>
 
             <form id="structureForm" method="POST" action="{{ route('admin.up_structure') }}" style="display:inline;">
@@ -14,7 +14,7 @@
                 <button type="button" class="btn btn-primary px-4 shadow-sm text-white"
                     style="background-color: #0d6efd !important; border-color: #0d6efd !important;"
                     onclick="confirmUpgrade()">
-                    <i class="bi bi-arrow-repeat me-2"></i>Upgrade Structure
+                    <i class="fa-solid fa-arrows-rotate me-2"></i>Upgrade Structure
                 </button>
             </form>
         </div>
@@ -25,7 +25,7 @@
         <!-- ================= SETTINGS TABS ================= -->
         <div class="card border-0 mb-4 h-auto shadow-sm">
             <div class="card-header">
-                <strong><i class="bi bi-gear-fill me-2"></i>ตั้งค่าระบบ (Main Setting)</strong>
+                <strong><i class="fa-solid fa-gear me-2"></i>ตั้งค่าระบบ (Main Setting)</strong>
             </div>
             <div class="card-body p-4">
 
@@ -80,6 +80,10 @@
                         <li class="nav-item" role="presentation">
                             <button class="nav-link" id="anc-tab" data-bs-toggle="tab" data-bs-target="#anc"
                                 type="button" role="tab" aria-controls="anc" aria-selected="false">ANC</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="psy-tab" data-bs-toggle="tab" data-bs-target="#psy"
+                                type="button" role="tab" aria-controls="psy" aria-selected="false">PSY</button>
                         </li>
                     </ul>
 
@@ -543,6 +547,44 @@
                                 </table>
                             </div>
                         </div>
+
+                        <!-- PSY Tab -->
+                        <div class="tab-pane fade" id="psy" role="tabpanel" aria-labelledby="psy-tab">
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th style="width: 50%">Name (TH)</th>
+                                            <th style="width: 50%">Value</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($psy_settings as $setting)
+                                            <tr>
+                                                <td>{{ $setting->name_th }}</td>
+                                                <td>
+                                                    @if (str_ends_with($setting->name, '_active'))
+                                                        <select class="form-select border-primary"
+                                                            name="{{ $setting->name }}">
+                                                            <option value="Y"
+                                                                {{ $setting->value == 'Y' ? 'selected' : '' }}>เปิดใช้งาน
+                                                                (Y)
+                                                            </option>
+                                                            <option value="N"
+                                                                {{ $setting->value == 'N' ? 'selected' : '' }}>ปิดใช้งาน
+                                                                (N)</option>
+                                                        </select>
+                                                    @else
+                                                        <input type="text" class="form-control"
+                                                            name="{{ $setting->name }}" value="{{ $setting->value }}">
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="mt-4 text-end">
@@ -862,6 +904,15 @@
                                     <div class="input-group input-group-sm shadow-sm">
                                         <input type="text" class="form-control bg-light border-end-0"
                                             value="{{ url('product/anc_morning_notify') }}" readonly>
+                                        <button class="btn btn-outline-secondary border-start-0" type="button"
+                                            onclick="copyToClipboard(this)"><i class="bi bi-clipboard"></i></button>
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <label class="form-label small text-muted mb-1">PSY (งานสุขภาพจิตและยาเสพติด)</label>
+                                    <div class="input-group input-group-sm shadow-sm">
+                                        <input type="text" class="form-control bg-light border-end-0"
+                                            value="{{ url('product/psy_morning_notify') }}" readonly>
                                         <button class="btn btn-outline-secondary border-start-0" type="button"
                                             onclick="copyToClipboard(this)"><i class="bi bi-clipboard"></i></button>
                                     </div>
