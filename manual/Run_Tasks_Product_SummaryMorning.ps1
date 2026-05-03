@@ -14,7 +14,8 @@ $paths = @(
     "/product/vip_morning_notify",
     "/product/icu_morning_notify",
     "/product/lr_morning_notify",
-    "/product/anc_morning_notify"
+    "/product/anc_morning_notify",
+    "/product/psy_morning_notify"
 )
 
 $urls = $paths | ForEach-Object { "$baseUrl$_" }
