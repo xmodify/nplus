@@ -140,7 +140,7 @@
                         <div class="d-flex justify-content-between align-items-start mb-4">
                             <div class="d-flex align-items-center gap-3">
                                 <div class="icon-circle bg-danger bg-opacity-10 text-danger">
-                                    <i class="bi bi-heart-pulse-fill"></i>
+                                    <i class="fa-solid fa-truck-medical"></i>
                                 </div>
                                 <div>
                                     <h5 class="fw-bold text-dark mb-1">งานอุบัติเหตุ-ฉุกเฉิน</h5>
@@ -347,7 +347,7 @@
                         <div class="d-flex justify-content-between align-items-start mb-4">
                             <div class="d-flex align-items-center gap-3">
                                 <div class="icon-circle bg-warning bg-opacity-10 text-warning">
-                                    <i class="fa-solid fa-couch"></i>
+                                    <i class="fa-solid fa-crown"></i>
                                 </div>
                                 <div>
                                     <h5 class="fw-bold text-dark mb-1">งานผู้ป่วยห้องพิเศษ VIP</h5>
@@ -416,7 +416,7 @@
                         <div class="d-flex justify-content-between align-items-start mb-4">
                             <div class="d-flex align-items-center gap-3">
                                 <div class="icon-circle bg-danger bg-opacity-10 text-danger">
-                                    <i class="fa-solid fa-person-breastfeeding"></i>
+                                    <i class="fa-solid fa-baby"></i>
                                 </div>
                                 <div>
                                     <h5 class="fw-bold text-dark mb-1">งานห้องคลอด LR</h5>
@@ -487,7 +487,7 @@
                         <div class="d-flex justify-content-between align-items-center mb-4">
                             <div class="d-flex align-items-center gap-3">
                                 <div class="icon-circle bg-success bg-opacity-10 text-success">
-                                    <i class="bi bi-people-fill"></i>
+                                    <i class="fa-solid fa-house-medical"></i>
                                 </div>
                                 <div>
                                     <h5 class="fw-bold text-dark mb-1">ผู้ป่วยนอก</h5>
@@ -521,7 +521,7 @@
                         <div class="d-flex justify-content-between align-items-center mb-4">
                             <div class="d-flex align-items-center gap-3">
                                 <div class="icon-circle bg-warning bg-opacity-10 text-warning">
-                                    <i class="bi bi-heart-pulse-fill"></i>
+                                    <i class="fa-solid fa-file-medical"></i>
                                 </div>
                                 <div>
                                     <h5 class="fw-bold text-dark mb-1">คลินิก NCD</h5>
@@ -537,7 +537,7 @@
                             <div class="d-flex align-items-center gap-3">
                                 <div class="rounded-circle bg-warning text-dark d-flex align-items-center justify-content-center"
                                     style="width: 48px; height: 48px;">
-                                    <i class="bi bi-clipboard2-pulse fs-4"></i>
+                                    <i class="fa-solid fa-notes-medical fs-4"></i>
                                 </div>
                                 <span class="text-muted fw-medium">ผู้ป่วยทั้งหมดในเวร</span>
                             </div>
@@ -555,7 +555,7 @@
                         <div class="d-flex justify-content-between align-items-center mb-4">
                             <div class="d-flex align-items-center gap-3">
                                 <div class="icon-circle bg-secondary bg-opacity-10 text-secondary">
-                                    <i class="bi bi-mask"></i>
+                                    <i class="fa-solid fa-mask-face"></i>
                                 </div>
                                 <div>
                                     <h5 class="fw-bold text-dark mb-1">คลินิก ARI</h5>
@@ -571,11 +571,116 @@
                             <div class="d-flex align-items-center gap-3">
                                 <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center"
                                     style="width: 48px; height: 48px;">
-                                    <i class="bi bi-person-bounding-box fs-4"></i>
+                                    <i class="fa-solid fa-head-side-mask fs-4"></i>
                                 </div>
                                 <span class="text-muted fw-medium">ผู้ป่วยทั้งหมดในเวร</span>
                             </div>
                             <div class="display-4 fw-bold text-secondary">{{ $ari_stats['patient_all'] }}</div>
+                        </div>
+                    </div>
+                </div>
+            @endif
+
+            @if (isset($app_settings['hd_active']) && $app_settings['hd_active'] == 'Y')
+                <!-- HD Report -->
+                <div class="col-12 col-md-6 col-xl-4">
+                    <div class="stat-card h-100 position-relative overflow-hidden">
+                        <div class="card-status-bar bg-primary"></div>
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="icon-circle bg-primary bg-opacity-10 text-primary">
+                                    <i class="fa-solid fa-droplet"></i>
+                                </div>
+                                <div>
+                                    <h5 class="fw-bold text-dark mb-1">งานไตเทียม HD</h5>
+                                    <div class="d-flex align-items-center text-muted small">
+                                        <i class="bi bi-clock-history me-1"></i> {{ $hd_stats['shift'] }}
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="badge bg-primary rounded-pill px-3 py-2">HD</span>
+                        </div>
+
+                        <div class="d-flex align-items-center justify-content-between bg-light rounded-4 p-4 border">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center"
+                                    style="width: 48px; height: 48px;">
+                                    <i class="fa-solid fa-syringe fs-4"></i>
+                                </div>
+                                <span class="text-muted fw-medium">ผู้ป่วยทั้งหมดในเวร</span>
+                            </div>
+                            <div class="display-4 fw-bold text-primary">{{ $hd_stats['patient_all'] }}</div>
+                        </div>
+                    </div>
+                </div>
+            @endif
+
+            @if (isset($app_settings['psy_active']) && $app_settings['psy_active'] == 'Y')
+                <!-- PSY Report -->
+                <div class="col-12 col-md-6 col-xl-4">
+                    <div class="stat-card h-100 position-relative overflow-hidden">
+                        <div class="card-status-bar bg-info"></div>
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="icon-circle bg-info bg-opacity-10 text-info">
+                                    <i class="fa-solid fa-brain"></i>
+                                </div>
+                                <div>
+                                    <h5 class="fw-bold text-dark mb-1">งานสุขภาพจิต PSY</h5>
+                                    <div class="d-flex align-items-center text-muted small">
+                                        <i class="bi bi-clock-history me-1"></i> {{ $psy_stats['shift'] }}
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="badge bg-info rounded-pill px-3 py-2">PSY</span>
+                        </div>
+
+                        <div class="d-flex align-items-center justify-content-between bg-light rounded-4 p-4 border">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="rounded-circle bg-info text-white d-flex align-items-center justify-content-center"
+                                    style="width: 48px; height: 48px;">
+                                    <i class="fa-solid fa-head-side-virus fs-4"></i>
+                                </div>
+                                <span class="text-muted fw-medium">ผู้ป่วยทั้งหมดในเวร</span>
+                            </div>
+                            <div class="display-4 fw-bold text-info">{{ $psy_stats['patient_all'] }}</div>
+                        </div>
+                    </div>
+                </div>
+            @endif
+
+            @if (isset($app_settings['anc_active']) && $app_settings['anc_active'] == 'Y')
+                <!-- ANC Report -->
+                <div class="col-12 col-md-6 col-xl-4">
+                    <div class="stat-card h-100 position-relative overflow-hidden">
+                        <div class="card-status-bar bg-pink" style="background-color: #ff69b4 !important;"></div>
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="icon-circle bg-pink bg-opacity-10 text-pink"
+                                    style="background-color: rgba(255, 105, 180, 0.1) !important; color: #ff69b4 !important;">
+                                    <i class="fa-solid fa-person-pregnant"></i>
+                                </div>
+                                <div>
+                                    <h5 class="fw-bold text-dark mb-1">งานฝากครรภ์ ANC</h5>
+                                    <div class="d-flex align-items-center text-muted small">
+                                        <i class="bi bi-clock-history me-1"></i> {{ $anc_stats['shift'] }}
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="badge rounded-pill px-3 py-2"
+                                style="background-color: #ff69b4 !important; color: white;">ANC</span>
+                        </div>
+
+                        <div class="d-flex align-items-center justify-content-between bg-light rounded-4 p-4 border">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="rounded-circle text-white d-flex align-items-center justify-content-center"
+                                    style="width: 48px; height: 48px; background-color: #ff69b4 !important;">
+                                    <i class="fa-solid fa-person-breastfeeding fs-4"></i>
+                                </div>
+                                <span class="text-muted fw-medium">ผู้ป่วยทั้งหมดในเวร</span>
+                            </div>
+                            <div class="display-4 fw-bold" style="color: #ff69b4 !important;">
+                                {{ $anc_stats['patient_all'] }}</div>
                         </div>
                     </div>
                 </div>
@@ -610,74 +715,6 @@
                                 <span class="text-muted fw-medium">ผู้ป่วยทั้งหมดในเวร</span>
                             </div>
                             <div class="display-4 fw-bold text-info">{{ $ckd_stats['patient_all'] }}</div>
-                        </div>
-                    </div>
-                </div>
-            @endif
-
-            @if (isset($app_settings['hd_active']) && $app_settings['hd_active'] == 'Y')
-                <!-- HD Report -->
-                <div class="col-12 col-md-6 col-xl-4">
-                    <div class="stat-card h-100 position-relative overflow-hidden">
-                        <div class="card-status-bar bg-secondary"></div>
-                        <div class="d-flex justify-content-between align-items-center mb-4">
-                            <div class="d-flex align-items-center gap-3">
-                                <div class="icon-circle bg-secondary bg-opacity-10 text-secondary">
-                                    <i class="fa-solid fa-hospital-user"></i>
-                                </div>
-                                <div>
-                                    <h5 class="fw-bold text-dark mb-1">หน่วยไตเทียม HD</h5>
-                                    <div class="d-flex align-items-center text-muted small">
-                                        <i class="bi bi-clock-history me-1"></i> {{ $hd_stats['shift'] }}
-                                    </div>
-                                </div>
-                            </div>
-                            <span class="badge bg-secondary rounded-pill px-3 py-2">HD</span>
-                        </div>
-
-                        <div class="d-flex align-items-center justify-content-between bg-light rounded-4 p-4 border">
-                            <div class="d-flex align-items-center gap-3">
-                                <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center"
-                                    style="width: 48px; height: 48px;">
-                                    <i class="bi bi-people fs-4"></i>
-                                </div>
-                                <span class="text-muted fw-medium">ผู้ป่วยทั้งหมดในเวร</span>
-                            </div>
-                            <div class="display-4 fw-bold text-secondary">{{ $hd_stats['patient_all'] }}</div>
-                        </div>
-                    </div>
-                </div>
-            @endif
-
-            @if (isset($app_settings['anc_active']) && $app_settings['anc_active'] == 'Y')
-                <!-- ANC Report -->
-                <div class="col-12 col-md-6 col-xl-4">
-                    <div class="stat-card h-100 position-relative overflow-hidden">
-                        <div class="card-status-bar bg-success"></div>
-                        <div class="d-flex justify-content-between align-items-center mb-4">
-                            <div class="d-flex align-items-center gap-3">
-                                <div class="icon-circle bg-success bg-opacity-10 text-success">
-                                    <i class="fa-solid fa-person-breastfeeding"></i>
-                                </div>
-                                <div>
-                                    <h5 class="fw-bold text-dark mb-1">งานฝากครรภ์ ANC</h5>
-                                    <div class="d-flex align-items-center text-muted small">
-                                        <i class="bi bi-clock-history me-1"></i> {{ $anc_stats['shift'] }}
-                                    </div>
-                                </div>
-                            </div>
-                            <span class="badge bg-success rounded-pill px-3 py-2">ANC</span>
-                        </div>
-
-                        <div class="d-flex align-items-center justify-content-between bg-light rounded-4 p-4 border">
-                            <div class="d-flex align-items-center gap-3">
-                                <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center"
-                                    style="width: 48px; height: 48px;">
-                                    <i class="bi bi-people fs-4"></i>
-                                </div>
-                                <span class="text-muted fw-medium">ผู้ป่วยทั้งหมดในเวร</span>
-                            </div>
-                            <div class="display-4 fw-bold text-success">{{ $anc_stats['patient_all'] }}</div>
                         </div>
                     </div>
                 </div>

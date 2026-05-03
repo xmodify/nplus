@@ -664,20 +664,20 @@
                 <div class="col-12 col-md-6 col-xl-4">
                     <a href="{{ url('product/hd_report') }}" class="text-decoration-none">
                         <div class="stat-card h-100 position-relative overflow-hidden">
-                            <div class="card-status-bar bg-secondary"></div>
+                            <div class="card-status-bar bg-primary"></div>
                             <div class="d-flex justify-content-between align-items-center mb-4">
                                 <div class="d-flex align-items-center gap-3">
-                                    <div class="icon-circle bg-secondary bg-opacity-10 text-secondary">
-                                        <i class="fa-solid fa-hospital-user"></i>
+                                    <div class="icon-circle bg-primary bg-opacity-10 text-primary">
+                                        <i class="fa-solid fa-droplet"></i>
                                     </div>
                                     <div>
-                                        <h5 class="fw-bold text-dark mb-1">หน่วยไตเทียม HD</h5>
+                                        <h5 class="fw-bold text-dark mb-1">งานไตเทียม HD</h5>
                                         <div class="d-flex align-items-center text-muted small flex-wrap">
                                             <i class="fa-solid fa-clock-rotate-left me-1"></i> {{ $hd_stats['shift'] }}
                                         </div>
                                     </div>
                                 </div>
-                                <span class="badge bg-secondary rounded-pill px-3 py-2">HD</span>
+                                <span class="badge bg-primary rounded-pill px-3 py-2">HD</span>
                             </div>
 
                             <div
@@ -701,11 +701,12 @@
                 <div class="col-12 col-md-6 col-xl-4">
                     <a href="{{ url('product/anc_report') }}" class="text-decoration-none">
                         <div class="stat-card h-100 position-relative overflow-hidden">
-                            <div class="card-status-bar bg-success"></div>
+                            <div class="card-status-bar bg-pink" style="background-color: #ff69b4 !important;"></div>
                             <div class="d-flex justify-content-between align-items-center mb-4">
                                 <div class="d-flex align-items-center gap-3">
-                                    <div class="icon-circle bg-success bg-opacity-10 text-success">
-                                        <i class="fa-solid fa-person-breastfeeding"></i>
+                                    <div class="icon-circle bg-pink bg-opacity-10 text-pink"
+                                        style="background-color: rgba(255, 105, 180, 0.1) !important; color: #ff69b4 !important;">
+                                        <i class="fa-solid fa-person-pregnant"></i>
                                     </div>
                                     <div>
                                         <h5 class="fw-bold text-dark mb-1">งานฝากครรภ์ ANC</h5>
@@ -714,19 +715,21 @@
                                         </div>
                                     </div>
                                 </div>
-                                <span class="badge bg-success rounded-pill px-3 py-2">ANC</span>
+                                <span class="badge rounded-pill px-3 py-2"
+                                    style="background-color: #ff69b4 !important; color: white;">ANC</span>
                             </div>
 
-                            <div class="d-flex align-items-center justify-content-between bg-light rounded-4 p-3 p-sm-4 border">
-                                <div class="d-flex align-items-center gap-2 gap-sm-3">
-                                    <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center flex-shrink-0"
-                                        style="width: 40px; height: 40px;">
-                                        <i class="fa-solid fa-user-group fs-5"></i>
+                                <div class="d-flex align-items-center justify-content-between bg-light rounded-4 p-3 p-sm-4 border">
+                                    <div class="d-flex align-items-center gap-2 gap-sm-3">
+                                        <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 text-white"
+                                            style="width: 40px; height: 40px; background-color: #ff69b4 !important;">
+                                            <i class="fa-solid fa-baby-carriage fs-5"></i>
+                                        </div>
+                                        <span class="text-muted fw-medium small">ผู้ป่วยทั้งหมดในเวร</span>
                                     </div>
-                                    <span class="text-muted fw-medium small">ผู้ป่วยทั้งหมดในเวร</span>
+                                    <div class="display-6 fw-bold" style="color: #ff69b4 !important;">
+                                        {{ $anc_stats['patient_all'] }}</div>
                                 </div>
-                                <div class="display-6 fw-bold text-success">{{ $anc_stats['patient_all'] }}</div>
-                            </div>
                         </div>
                     </a>
                 </div>
