@@ -46,7 +46,7 @@ class ProductARIController extends Controller
 
         foreach ($grouped as $date => $rows) {
             $report_date[] = DateThai($date);
-            $morning[] = optional($rows->firstWhere('shift_time', 'เวรเช้า ARI'))->productivity ?? 0;
+            $morning[] = round(optional($rows->firstWhere('shift_time', 'เวรเช้า ARI'))->productivity ?? 0, 2);
         }
 
         $del_product = Auth::check() && Auth::user()->del_product === 'Y';

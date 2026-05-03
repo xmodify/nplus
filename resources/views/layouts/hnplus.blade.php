@@ -313,7 +313,7 @@
                     <ul class="navbar-nav ms-auto align-items-center">
                         <li>
                             <div class="badge bg-white text-primary rounded-pill px-3 py-2 shadow-sm fw-bold">
-                                <i class="fa-solid fa-code me-1"></i>V. 69-05-03 14:00
+                                <i class="fa-solid fa-code me-1"></i>V. 69-05-03 15:00
                             </div>
                         </li>
 

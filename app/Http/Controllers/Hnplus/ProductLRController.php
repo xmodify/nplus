@@ -57,9 +57,9 @@ class ProductlrController extends Controller
         foreach ($grouped as $date => $rows) {
             $report_date[] = DateThai($date);
             // ค้นหาค่า productivity ของแต่ละเวร
-            $night[] = optional($rows->firstWhere('shift_time', 'เวรดึก'))->productivity ?? 0;
-            $morning[] = optional($rows->firstWhere('shift_time', 'เวรเช้า'))->productivity ?? 0;
-            $afternoon[] = optional($rows->firstWhere('shift_time', 'เวรบ่าย'))->productivity ?? 0;
+            $night[] = round(optional($rows->firstWhere('shift_time', 'เวรดึก'))->productivity ?? 0, 2);
+            $morning[] = round(optional($rows->firstWhere('shift_time', 'เวรเช้า'))->productivity ?? 0, 2);
+            $afternoon[] = round(optional($rows->firstWhere('shift_time', 'เวรบ่าย'))->productivity ?? 0, 2);
         }
 
         // ลบ Product ------------------

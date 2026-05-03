@@ -47,7 +47,7 @@ class ProductNCDController extends Controller
         foreach ($grouped as $date => $rows) {
             $report_date[] = DateThai($date);
             // ค้นหาค่า productivity ของแต่ละเวร
-            $morning[] = optional($rows->firstWhere('shift_time', 'เวรเช้า'))->productivity ?? 0;
+            $morning[] = round(optional($rows->firstWhere('shift_time', 'เวรเช้า'))->productivity ?? 0, 2);
         }
 
         // ลบ Product ------------------
@@ -151,6 +151,7 @@ class ProductNCDController extends Controller
         //   Get Constants from MainSetting
         // ==============================
         $ncd_working_hours = MainSetting::where('name', 'ncd_working_hours')->value('value') ?? 8;
+        $ncd_patient_type = MainSetting::where('name', 'ncd_patient_type')->value('value') ?? 0.5;
 
         // ==============================
         //   กำหนดค่า default = 0
@@ -164,7 +165,7 @@ class ProductNCDController extends Controller
         // ==============================
         //   คำนวณสูตร Productivity NCD
         // ==============================
-        $patient_hr = $patient_all * 0.5;
+        $patient_hr = $patient_all * $ncd_patient_type;
         $nurse_total = $nurse_oncall + $nurse_partime + $nurse_fulltime;
         // $nurse_hr    = $nurse_total * 8;  // NCD ใช้ 9 ชั่วโมง ? ใช้ค่าจาก Setting ดีกว่า
         $nurse_hr = $nurse_total * $ncd_working_hours;

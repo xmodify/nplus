@@ -44,7 +44,7 @@ class ProductPSYController extends Controller
         $morning = [];
         foreach ($grouped as $date => $rows) {
             $report_date[] = DateThai($date);
-            $morning[] = optional($rows->firstWhere('shift_time', 'เวรเช้า'))->productivity ?? 0;
+            $morning[] = round(optional($rows->firstWhere('shift_time', 'เวรเช้า'))->productivity ?? 0, 2);
         }
 
         // ลบ Product ------------------
@@ -144,13 +144,15 @@ class ProductPSYController extends Controller
         ]);
 
         $psy_working_hours = MainSetting::where('name', 'psy_working_hours')->value('value') ?? 8;
+        $psy_c = MainSetting::where('name', 'psy_patient_type')->value('value') ?? 0.24;
+
         $patient_all = $request->patient_all ?? 0;
         $nurse_oncall = $request->nurse_oncall ?? 0;
         $nurse_partime = $request->nurse_partime ?? 0;
         $nurse_fulltime = $request->nurse_fulltime ?? 0;
 
         // คำนวณสูตร Productivity
-        $patient_hr = $patient_all * 0.24; // ใช้ 0.24 ตาม NCD/OPD
+        $patient_hr = $patient_all * $psy_c;
         $nurse_total = $nurse_oncall + $nurse_partime + $nurse_fulltime;
         $nurse_hr = $nurse_total * $psy_working_hours;
 

@@ -48,8 +48,8 @@ class ProductOPDController extends Controller
         $bd = [];
         foreach ($grouped as $date => $rows) {
             $report_date[] = DateThai($date);
-            $morning[] = optional($rows->firstWhere('shift_time', 'เวรเช้า'))->productivity ?? 0;
-            $bd[] = optional($rows->firstWhere('shift_time', 'เวร BD'))->productivity ?? 0;
+            $morning[] = round(optional($rows->firstWhere('shift_time', 'เวรเช้า'))->productivity ?? 0, 2);
+            $bd[] = round(optional($rows->firstWhere('shift_time', 'เวร BD'))->productivity ?? 0, 2);
         }
 
         $del_product = Auth::check() && Auth::user()->del_product === 'Y';
@@ -99,8 +99,8 @@ class ProductOPDController extends Controller
         $bd = [];
         foreach ($grouped as $date => $rows) {
             $report_date[] = DateThai($date);
-            $morning[] = optional($rows->firstWhere('shift_time', 'เวรเช้า'))->productivity ?? 0;
-            $bd[] = optional($rows->firstWhere('shift_time', 'เวร BD'))->productivity ?? 0;
+            $morning[] = round(optional($rows->firstWhere('shift_time', 'เวรเช้า'))->productivity ?? 0, 2);
+            $bd[] = round(optional($rows->firstWhere('shift_time', 'เวร BD'))->productivity ?? 0, 2);
         }
 
         $del_product = Auth::check() && Auth::user()->del_product === 'Y';
@@ -204,7 +204,7 @@ class ProductOPDController extends Controller
         //   Get Constants from MainSetting
         // ==============================
         $opd_working_hours = MainSetting::where('name', 'opd_working_hours')->value('value') ?? 7;
-        $opd_c = MainSetting::where('name', 'opd_patient_type_opd')->value('value') ?? 0.37;
+        $opd_c = MainSetting::where('name', 'opd_patient_type')->value('value') ?? 0.37;
 
 
         // ==============================
@@ -373,7 +373,7 @@ class ProductOPDController extends Controller
         //   Get Constants from MainSetting
         // ==============================
         $opd_working_hours = MainSetting::where('name', 'opd_working_hours_bd')->value('value') ?? 7;
-        $opd_c = MainSetting::where('name', 'opd_patient_type_opd')->value('value') ?? 0.37;
+        $opd_c = MainSetting::where('name', 'opd_patient_type')->value('value') ?? 0.37;
 
 
         // ==============================

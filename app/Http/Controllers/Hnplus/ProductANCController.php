@@ -44,7 +44,7 @@ class ProductANCController extends Controller
         $morning = [];
         foreach ($grouped as $date => $rows) {
             $report_date[] = DateThai($date);
-            $morning[] = optional($rows->firstWhere('shift_time', 'เวรเช้า'))->productivity ?? 0;
+            $morning[] = round(optional($rows->firstWhere('shift_time', 'เวรเช้า'))->productivity ?? 0, 2);
         }
 
         // ลบ Product ------------------

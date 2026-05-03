@@ -53,9 +53,9 @@ class ProductVIPController extends Controller
         $afternoon = [];
         foreach ($grouped as $date => $rows) {
             $report_date[] = DateThai($date);
-            $night[] = optional($rows->firstWhere('shift_time', 'เวรดึก'))->productivity ?? 0;
-            $morning[] = optional($rows->firstWhere('shift_time', 'เวรเช้า'))->productivity ?? 0;
-            $afternoon[] = optional($rows->firstWhere('shift_time', 'เวรบ่าย'))->productivity ?? 0;
+            $night[] = round(optional($rows->firstWhere('shift_time', 'เวรดึก'))->productivity ?? 0, 2);
+            $morning[] = round(optional($rows->firstWhere('shift_time', 'เวรเช้า'))->productivity ?? 0, 2);
+            $afternoon[] = round(optional($rows->firstWhere('shift_time', 'เวรบ่าย'))->productivity ?? 0, 2);
         }
 
         $del_product = Auth::check() && Auth::user()->del_product === 'Y';
