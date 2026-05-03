@@ -446,6 +446,35 @@ class MainSettingController extends Controller
                 });
             }
 
+            // Create Productivity ARI Table if not exists
+            if (!Schema::hasTable('productivity_ari')) {
+                Schema::create('productivity_ari', function (Blueprint $table) {
+                    $table->id();
+                    $table->date('report_date');
+                    $table->string('shift_time', 20);
+                    $table->integer('nurse_fulltime')->nullable();
+                    $table->integer('nurse_partime')->nullable();
+                    $table->integer('nurse_oncall')->nullable();
+                    $table->string('recorder')->nullable();
+                    $table->string('note')->nullable();
+                    $table->integer('patient_all')->nullable();
+                    $table->double('nursing_hours', 5, 2)->nullable();
+                    $table->double('working_hours', 5, 2)->nullable();
+                    $table->double('nhppd', 5, 2)->nullable();
+                    $table->double('nurse_shift_time', 5, 2)->nullable();
+                    $table->double('productivity', 5, 2)->nullable();
+                    $table->string('is_holiday', 1)->default('N');
+                    $table->timestamps();
+                });
+            } else {
+                // Ensure is_holiday exists
+                if (!Schema::hasColumn('productivity_ari', 'is_holiday')) {
+                    Schema::table('productivity_ari', function (Blueprint $table) {
+                        $table->string('is_holiday', 1)->default('N')->after('productivity');
+                    });
+                }
+            }
+
             // Create Productivity PSY Table if not exists
             if (!Schema::hasTable('productivity_psy')) {
                 Schema::create('productivity_psy', function (Blueprint $table) {

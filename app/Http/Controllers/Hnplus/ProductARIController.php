@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
-use App\Models\Productivity_opd;
+use App\Models\Productivity_ari;
 use App\Models\MainSetting;
 use Illuminate\Routing\Controllers\Middleware;
 
@@ -20,7 +20,7 @@ class ProductARIController extends Controller
         $start_date = $request->start_date ? DateThaiToEn($request->start_date) : date('Y-m-d', strtotime("first day of this month"));
         $end_date = $request->end_date ? DateThaiToEn($request->end_date) : date('Y-m-d');
 
-        $product = Productivity_opd::whereBetween('report_date', [$start_date, $end_date])
+        $product = Productivity_ari::whereBetween('report_date', [$start_date, $end_date])
             ->where('shift_time', 'LIKE', '%ARI%')
             ->orderBy('report_date', 'desc')->get();
 
@@ -32,11 +32,11 @@ class ProductARIController extends Controller
             SUM(nurse_partime) AS nurse_partime, SUM(nurse_fulltime) AS nurse_fulltime, SUM(working_hours) AS nurse_hr,
             ((SUM(nursing_hours)*100)/SUM(working_hours)) AS productivity, (SUM(nursing_hours)/SUM(patient_all)) AS nhppd,
             (SUM(patient_all)*(SUM(nursing_hours)/SUM(patient_all))*(1.4/?))/COUNT(shift_time) AS nurse_shift_time
-            FROM productivity_opd
+            FROM productivity_ari
             WHERE report_date BETWEEN ? AND ? AND shift_time LIKE "%ARI%"
             GROUP BY shift_time ORDER BY shift_time DESC', [$ari_working_hours, $start_date, $end_date]);
 
-        $product_asc = Productivity_opd::whereBetween('report_date', [$start_date, $end_date])
+        $product_asc = Productivity_ari::whereBetween('report_date', [$start_date, $end_date])
             ->where('shift_time', 'LIKE', '%ARI%')
             ->orderBy('report_date', 'asc')->get();
 
@@ -141,7 +141,12 @@ class ProductARIController extends Controller
 
         $nurse_shift_time = $patient_all * $nhppd * (1.4 / $ari_working_hours);
 
-        Productivity_opd::updateOrCreate(
+        // เช็ควันหยุด
+        $is_holiday = DB::connection('hosxp')->table('holiday')
+            ->where('holiday_date', $request->report_date)
+            ->exists() ? 'Y' : 'N';
+
+        Productivity_ari::updateOrCreate(
             [
                 'report_date' => $request->report_date,
                 'shift_time' => $request->shift_time,
@@ -153,13 +158,12 @@ class ProductARIController extends Controller
                 'recorder' => $request->recorder,
                 'note' => $request->note,
                 'patient_all' => $patient_all,
-                'opd' => 0,
-                'ari' => $patient_all,
                 'nursing_hours' => $patient_hr,
                 'working_hours' => $nurse_hr,
                 'nurse_shift_time' => $nurse_shift_time,
                 'nhppd' => $nhppd,
                 'productivity' => $productivity,
+                'is_holiday' => $is_holiday,
             ]
         );
 
@@ -194,7 +198,7 @@ class ProductARIController extends Controller
 
     public function ari_product_delete($id)
     {
-        Productivity_opd::find($id)->delete();
+        Productivity_ari::find($id)->delete();
         return redirect()->route('hnplus.product.ari_report')->with('danger', 'ลบข้อมูลเรียบร้อยแล้ว');
     }
 }

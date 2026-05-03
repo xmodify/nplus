@@ -1,0 +1,11 @@
+INSERT INTO productivity_ari (
+    report_date, shift_time, nurse_fulltime, nurse_partime, nurse_oncall, 
+    recorder, note, patient_all, nursing_hours, working_hours, 
+    nhppd, nurse_shift_time, productivity, is_holiday, created_at, updated_at
+)
+SELECT 
+    report_date, shift_time, nurse_fulltime, nurse_partime, nurse_oncall, 
+    recorder, note, patient_all, nursing_hours, working_hours, 
+    nhppd, nurse_shift_time, productivity, is_holiday, created_at, updated_at
+FROM productivity_opd
+WHERE shift_time LIKE '%ARI%';

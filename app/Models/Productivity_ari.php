@@ -25,5 +25,6 @@ class Productivity_ari extends Model
         'nhppd',
         'nurse_shift_time',
         'productivity',
+        'is_holiday',
     ];
 }
