@@ -210,12 +210,12 @@
 
 @push('scripts')
     <script type="text/javascript" language="javascript"
-        src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+        src="{{ asset('vendor/datatables/jquery.dataTables.min.js') }}"></script>
     <script type="text/javascript" language="javascript"
-        src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.3.3/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.3.3/js/buttons.html5.min.js"></script>
+        src="{{ asset('vendor/datatables/dataTables.bootstrap5.min.js') }}"></script>
+    <script src="{{ asset('vendor/datatables/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ asset('vendor/jszip/jszip.min.js') }}"></script>
+    <script src="{{ asset('vendor/datatables/buttons.html5.min.js') }}"></script>
 
     <script type="text/javascript" class="init">
         $(document).ready(function() {
@@ -244,8 +244,8 @@
         });
     </script>
     <!-- กราฟแท่งแยกตามเวร -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+    <script src="{{ asset('vendor/chartjs/chart.js') }}"></script>
+    <script src="{{ asset('vendor/chartjs/chartjs-plugin-datalabels.min.js') }}"></script>
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const ctx = document.querySelector('#productivity');

@@ -152,11 +152,11 @@
 @endsection
 
 @push('scripts')
-    <script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script type="text/javascript" language="javascript" src="{{ asset('vendor/jquery/jquery-3.5.1.js') }}"></script>
     <script type="text/javascript" language="javascript"
-        src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+        src="{{ asset('vendor/datatables/jquery.dataTables.min.js') }}"></script>
     <script type="text/javascript" language="javascript"
-        src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
+        src="{{ asset('vendor/datatables/dataTables.bootstrap5.min.js') }}"></script>
     <script>
         $(document).ready(function() {
             $('#data').DataTable({

@@ -35,24 +35,15 @@ class SecurityHeaders
             // Fallback สำหรับทุก resource type
             "default-src 'self'",
 
-            // JavaScript: self + CDN ที่ใช้ทั้งหมด + inline scripts ใน Blade
-            "script-src 'self' 'unsafe-inline' 'unsafe-eval' " .
-                "cdn.jsdelivr.net " .
-                "cdnjs.cloudflare.com " .
-                "code.jquery.com " .
-                "cdn.datatables.net",
+            // JavaScript: self + inline scripts ใน Blade
+            "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
 
-            // CSS: self + CDN ที่ใช้ + inline styles
+            // CSS: self + Google Fonts + inline styles
             "style-src 'self' 'unsafe-inline' " .
-                "cdn.jsdelivr.net " .
-                "cdnjs.cloudflare.com " .
-                "fonts.googleapis.com " .
-                "cdn.datatables.net",
+                "fonts.googleapis.com",
 
-            // Fonts: self + Google Fonts + Bootstrap Icons + Font Awesome
+            // Fonts: self + Google Fonts
             "font-src 'self' " .
-                "cdn.jsdelivr.net " .
-                "cdnjs.cloudflare.com " .
                 "fonts.gstatic.com",
 
             // Images: self + data: URI (ที่ Bootstrap ใช้)
