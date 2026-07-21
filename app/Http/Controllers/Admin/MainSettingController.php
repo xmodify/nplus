@@ -152,6 +152,14 @@ class MainSettingController extends Controller
 
     public function manual_run($shift)
     {
+        MainSetting::updateOrCreate(
+            ['name' => 'laravel_scheduler_last_run'],
+            [
+                'name_th' => 'เวลาที่ Scheduler รันล่าสุด',
+                'value' => now()->toDateTimeString()
+            ]
+        );
+
         $jobs = [];
         if ($shift === 'night') {
             $jobs = [
