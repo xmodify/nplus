@@ -37,7 +37,8 @@ class MainSettingController extends Controller
         });
 
         $general_settings = $settings->filter(function ($item) {
-            return !str_starts_with($item->name, 'er_') &&
+            return $item->name !== 'laravel_scheduler_last_run' &&
+                !str_starts_with($item->name, 'er_') &&
                 !str_starts_with($item->name, 'ipd_') &&
                 !str_starts_with($item->name, 'opd_') &&
                 !str_starts_with($item->name, 'ncd_') &&

@@ -23,6 +23,16 @@ use App\Http\Controllers\Hnplus\DashboardController;
 Route::get('/', [DashboardController::class, 'index'])->name('home');
 Route::post('product/dashboard_details', [DashboardController::class, 'getPatientDetails'])->name('hnplus.dashboard_details');
 
+Route::get('/view_log', function () {
+    $path = storage_path('logs/laravel.log');
+    if (!file_exists($path)) {
+        return 'Log file does not exist';
+    }
+    $lines = file($path);
+    $last_lines = array_slice($lines, -150);
+    return response(implode('', $last_lines), 200, ['Content-Type' => 'text/plain; charset=UTF-8']);
+});
+
 // Login / Logout
 Route::post('/login', [LoginController::class, 'login'])->name('login');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
