@@ -151,52 +151,55 @@ class MainSettingController extends Controller
 
     public function manual_run($shift)
     {
-        $routes = [];
+        $jobs = [];
         if ($shift === 'night') {
-            $routes = [
-                'product/er_night_notify',
-                'product/ipd_night_notify',
-                'product/vip_night_notify',
-                'product/icu_night_notify',
-                'product/lr_night_notify',
+            $jobs = [
+                [\App\Http\Controllers\Hnplus\ProductERController::class, 'er_night_notify'],
+                [\App\Http\Controllers\Hnplus\ProductIPDController::class, 'ipd_night_notify'],
+                [\App\Http\Controllers\Hnplus\ProductVIPController::class, 'vip_night_notify'],
+                [\App\Http\Controllers\Hnplus\ProductICUController::class, 'icu_night_notify'],
+                [\App\Http\Controllers\Hnplus\ProductLRController::class, 'lr_night_notify'],
             ];
         } elseif ($shift === 'morning') {
-            $routes = [
-                'product/er_morning_notify',
-                'product/ipd_morning_notify',
-                'product/opd_morning_notify',
-                'product/ncd_morning_notify',
-                'product/ari_morning_notify',
-                'product/ckd_morning_notify',
-                'product/vip_morning_notify',
-                'product/icu_morning_notify',
-                'product/lr_morning_notify',
-                'product/anc_morning_notify',
-                'product/psy_morning_notify',
+            $jobs = [
+                [\App\Http\Controllers\Hnplus\ProductERController::class, 'er_morning_notify'],
+                [\App\Http\Controllers\Hnplus\ProductIPDController::class, 'ipd_morning_notify'],
+                [\App\Http\Controllers\Hnplus\ProductOPDController::class, 'opd_morning_notify'],
+                [\App\Http\Controllers\Hnplus\ProductNCDController::class, 'ncd_morning_notify'],
+                [\App\Http\Controllers\Hnplus\ProductARIController::class, 'ari_morning_notify'],
+                [\App\Http\Controllers\Hnplus\ProductCKDController::class, 'ckd_morning_notify'],
+                [\App\Http\Controllers\Hnplus\ProductVIPController::class, 'vip_morning_notify'],
+                [\App\Http\Controllers\Hnplus\ProductICUController::class, 'icu_morning_notify'],
+                [\App\Http\Controllers\Hnplus\ProductLRController::class, 'lr_morning_notify'],
+                [\App\Http\Controllers\Hnplus\ProductANCController::class, 'anc_morning_notify'],
+                [\App\Http\Controllers\Hnplus\ProductPSYController::class, 'psy_morning_notify'],
             ];
         } elseif ($shift === 'afternoon') {
-            $routes = [
-                'product/er_afternoon_notify',
-                'product/ipd_afternoon_notify',
-                'product/vip_afternoon_notify',
-                'product/icu_afternoon_notify',
-                'product/lr_afternoon_notify',
+            $jobs = [
+                [\App\Http\Controllers\Hnplus\ProductERController::class, 'er_afternoon_notify'],
+                [\App\Http\Controllers\Hnplus\ProductIPDController::class, 'ipd_afternoon_notify'],
+                [\App\Http\Controllers\Hnplus\ProductVIPController::class, 'vip_afternoon_notify'],
+                [\App\Http\Controllers\Hnplus\ProductICUController::class, 'icu_afternoon_notify'],
+                [\App\Http\Controllers\Hnplus\ProductLRController::class, 'lr_afternoon_notify'],
             ];
         } elseif ($shift === 'bd') {
-            $routes = [
-                'product/hd_morning_notify',
-                'product/opd_bd_notify',
+            $jobs = [
+                [\App\Http\Controllers\Hnplus\ProductHDController::class, 'hd_morning_notify'],
+                [\App\Http\Controllers\Hnplus\ProductOPDController::class, 'opd_bd_notify'],
             ];
         }
 
         $results = [];
-        foreach ($routes as $route) {
+        foreach ($jobs as $job) {
+            $class = $job[0];
+            $method = $job[1];
+            $name = basename(str_replace('\\', '/', $class)) . '@' . $method;
             try {
-                $req = \Illuminate\Http\Request::create($route, 'GET');
-                $response = app()->handle($req);
-                $results[$route] = $response->getStatusCode() === 200 ? 'success' : 'failed';
+                $controller = app($class);
+                app()->call([$controller, $method]);
+                $results[$name] = 'success';
             } catch (\Exception $e) {
-                $results[$route] = 'error: ' . $e->getMessage();
+                $results[$name] = 'error: ' . $e->getMessage();
             }
         }
 
