@@ -34,7 +34,10 @@ Route::get('/view_log', function () {
 });
 
 // Login / Logout
-Route::post('/login', [LoginController::class, 'login'])->name('login');
+Route::get('/login', function () {
+    return redirect('/');
+})->name('login');
+Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 //Admin ################################################################################################################################
