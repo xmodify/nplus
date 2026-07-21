@@ -44,6 +44,7 @@ Route::prefix('admin')->middleware(['auth', 'is_admin'])->name('admin.')->group(
     Route::get('main_setting', [MainSettingController::class, 'index'])->name('main_setting');
     Route::match(['get', 'post'], 'main_setting/up_structure', [MainSettingController::class, 'up_structure'])->name('up_structure');
     Route::post('main_setting/update', [MainSettingController::class, 'update'])->name('main_setting.update');
+    Route::post('main_setting/manual_run/{shift}', [MainSettingController::class, 'manual_run'])->name('main_setting.manual_run');
     Route::resource('budget_year', BudgetYearController::class)->parameters(['LEAVE_YEAR_ID' => 'LEAVE_YEAR_ID']);
     Route::get('main_setting/download_ps1/{filename}', function ($filename) {
         $allowed = [

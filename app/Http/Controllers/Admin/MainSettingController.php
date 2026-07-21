@@ -118,6 +118,8 @@ class MainSettingController extends Controller
                 ORDER BY w.ward ASC
             ");
 
+        $scheduler_last_run = MainSetting::where('name', 'laravel_scheduler_last_run')->value('value');
+
         return view('admin.main_setting', compact(
             'general_settings',
             'er_settings',
@@ -133,7 +135,8 @@ class MainSettingController extends Controller
             'icu_settings',
             'lr_settings',
             'anc_settings',
-            'psy_settings'
+            'psy_settings',
+            'scheduler_last_run'
         ));
     }
 
@@ -144,6 +147,64 @@ class MainSettingController extends Controller
             MainSetting::where('name', $key)->update(['value' => $value]);
         }
         return redirect()->back()->with('success', 'บันทึกข้อมูลเรียบร้อยแล้ว');
+    }
+
+    public function manual_run($shift)
+    {
+        $routes = [];
+        if ($shift === 'night') {
+            $routes = [
+                'product/er_night_notify',
+                'product/ipd_night_notify',
+                'product/vip_night_notify',
+                'product/icu_night_notify',
+                'product/lr_night_notify',
+            ];
+        } elseif ($shift === 'morning') {
+            $routes = [
+                'product/er_morning_notify',
+                'product/ipd_morning_notify',
+                'product/opd_morning_notify',
+                'product/ncd_morning_notify',
+                'product/ari_morning_notify',
+                'product/ckd_morning_notify',
+                'product/vip_morning_notify',
+                'product/icu_morning_notify',
+                'product/lr_morning_notify',
+                'product/anc_morning_notify',
+                'product/psy_morning_notify',
+            ];
+        } elseif ($shift === 'afternoon') {
+            $routes = [
+                'product/er_afternoon_notify',
+                'product/ipd_afternoon_notify',
+                'product/vip_afternoon_notify',
+                'product/icu_afternoon_notify',
+                'product/lr_afternoon_notify',
+            ];
+        } elseif ($shift === 'bd') {
+            $routes = [
+                'product/hd_morning_notify',
+                'product/opd_bd_notify',
+            ];
+        }
+
+        $results = [];
+        foreach ($routes as $route) {
+            try {
+                $req = \Illuminate\Http\Request::create($route, 'GET');
+                $response = app()->handle($req);
+                $results[$route] = $response->getStatusCode() === 200 ? 'success' : 'failed';
+            } catch (\Exception $e) {
+                $results[$route] = 'error: ' . $e->getMessage();
+            }
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'รันสคริปต์ส่งงานเรียบร้อยแล้ว',
+            'details' => $results
+        ]);
     }
 
     #######################################################################################################################################    
