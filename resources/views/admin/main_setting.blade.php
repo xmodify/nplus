@@ -1001,132 +1001,65 @@
                 </div>
             </div>
         </div>
-        <!-- ================= CRONTAB / SCHEDULER MONITOR ================= -->
+        <!-- ================= MANUAL RUN MONITOR ================= -->
         <div class="row g-4 mb-4">
-            <!-- Left Card: Laravel Scheduler Status -->
-            <div class="col-md-6">
-                <div class="card border-0 shadow-sm h-100">
-                    <div class="card-body p-4 d-flex flex-column">
-                        <div class="d-flex align-items-center justify-content-between mb-4">
-                            <div class="icon-circle bg-soft-primary" style="width: 56px; height: 56px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.6rem;">
-                                <i class="fa-solid fa-clock text-primary"></i>
-                            </div>
-                            <div>
-                                @php
-                                    $is_online = false;
-                                    if ($scheduler_last_run) {
-                                        $last_run_time = \Carbon\Carbon::parse($scheduler_last_run);
-                                        $diff_in_minutes = $last_run_time->diffInMinutes(now());
-                                        if ($diff_in_minutes <= 5) {
-                                            $is_online = true;
-                                        }
-                                    }
-                                @endphp
-                                @if($is_online)
-                                    <span class="badge bg-success text-white px-3 py-2 rounded-pill fw-bold">
-                                        <i class="fa-solid fa-circle-check me-1"></i>ปกติ (Online)
-                                    </span>
-                                @else
-                                    <span class="badge bg-danger text-white px-3 py-2 rounded-pill fw-bold">
-                                        <i class="fa-solid fa-circle-exclamation me-1"></i>หยุดทำงาน (Offline)
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <h4 class="fw-bold mb-1 text-dark">Laravel Scheduler (Cron)</h4>
-                        <p class="text-muted small mb-3">ต้องรัน crontab <code>* * * * *</code> เพื่อกระตุ้นทุก 1 นาที</p>
-
-                        <div class="mb-4">
-                            <button class="btn btn-outline-danger btn-sm w-100 fw-bold py-2" type="button" data-bs-toggle="collapse" data-bs-target="#cronFixGuide" aria-expanded="false" aria-controls="cronFixGuide">
-                                <i class="fa-solid fa-screwdriver-wrench me-2"></i>วิธีแก้ไขเมื่อไม่ทำงาน
-                            </button>
-                            
-                            <div class="collapse mt-3" id="cronFixGuide">
-                                <div class="bg-light p-3 rounded border text-start">
-                                    <h6 class="fw-bold text-dark mb-2 small"><i class="fa-brands fa-linux me-1"></i>สำหรับการตั้งค่าบน AlmaLinux / CentOS:</h6>
-                                    <p class="small mb-2">1. ล็อกอินเข้าเซิร์ฟเวอร์แล้วเปิด crontab ของผู้ใช้ <strong>apache</strong> ด้วยคำสั่ง:</p>
-                                    <div class="input-group input-group-sm mb-2">
-                                        <input type="text" class="form-control bg-white font-monospace text-dark" value="sudo crontab -u apache -e" readonly>
-                                        <button class="btn btn-outline-secondary" type="button" onclick="copyToClipboard(this)"><i class="bi bi-clipboard"></i></button>
-                                    </div>
-                                    <p class="small mb-2">2. วางบรรทัดนี้ลงไป (ตรวจสอบ Path โครงการให้ถูกต้อง):</p>
-                                    <div class="input-group input-group-sm">
-                                        <input type="text" class="form-control bg-white font-monospace text-dark" value="* * * * * cd /var/www/html/nplus && /usr/bin/php artisan schedule:run >> /dev/null 2>&1" readonly>
-                                        <button class="btn btn-outline-secondary" type="button" onclick="copyToClipboard(this)"><i class="bi bi-clipboard"></i></button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <hr class="mt-auto mb-3 opacity-50">
-
-                        <div class="d-flex justify-content-between align-items-center small">
-                            <span class="text-muted">รันล่าสุด:</span>
-                            <span class="fw-bold text-dark" style="font-size: 1.15rem;">{{ $scheduler_last_run ? \Carbon\Carbon::parse($scheduler_last_run)->locale('th')->isoFormat('YYYY-MM-DD HH:mm:ss') : 'ยังไม่มีการบันทึก' }}</span>
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center mt-2 small">
-                            <span class="text-muted">สถานะ:</span>
-                            @if($is_online)
-                                <span class="fw-bold text-success"><i class="fa-solid fa-circle me-1" style="font-size: 0.7rem;"></i>ทำงานปกติ</span>
-                            @else
-                                <span class="fw-bold text-danger"><i class="fa-solid fa-circle me-1" style="font-size: 0.7rem;"></i>หยุดทำงาน / ไม่พบการรัน</span>
-                            @endif
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Right Card: Manual Run triggers -->
-            <div class="col-md-6">
+            <div class="col-12">
                 <div class="card border-0 shadow-sm h-100">
                     <div class="card-body p-4 d-flex flex-column">
                         <h5 class="fw-bold text-dark mb-1"><i class="fa-solid fa-gears text-success me-2"></i>ทดสอบรันสคริปต์ส่งงาน (Manual Run)</h5>
                         <p class="text-muted small mb-4">หากระบบอัตโนมัติไม่ทำงาน สามารถกดปุ่มด้านล่างเพื่อรันส่งข้อมูลได้ทันที</p>
 
-                        <div class="d-flex flex-column gap-3">
+                        <div class="row g-3">
                             <!-- เวรดึก -->
-                            <div class="d-flex align-items-center justify-content-between p-3 bg-light rounded border border-light-subtle">
-                                <div>
-                                    <h6 class="fw-bold text-dark mb-1">ส่งสถิติเวรดึก (00.00 - 08.00 น.)</h6>
-                                    <p class="text-muted small mb-0"><i class="bi bi-clock me-1"></i>ทำงานอัตโนมัติเวลา: 08:00 น.</p>
+                            <div class="col-md-6 col-xl-3">
+                                <div class="p-3 bg-light rounded border border-light-subtle h-100 d-flex flex-column justify-content-between">
+                                    <div class="mb-3">
+                                        <h6 class="fw-bold text-dark mb-1">ส่งสถิติเวรดึก (00.00 - 08.00 น.)</h6>
+                                        <p class="text-muted small mb-0"><i class="bi bi-clock me-1"></i>ทำงานอัตโนมัติเวลา: 08:00 น.</p>
+                                    </div>
+                                    <button class="btn btn-success w-100 py-2 fw-bold shadow-sm manual-run-btn" data-shift="night">
+                                        <i class="fa-solid fa-play me-2"></i>รัน
+                                    </button>
                                 </div>
-                                <button class="btn btn-success px-4 py-2 fw-bold shadow-sm manual-run-btn" data-shift="night">
-                                    <i class="fa-solid fa-play me-2"></i>รัน
-                                </button>
                             </div>
 
                             <!-- เวรเช้า -->
-                            <div class="d-flex align-items-center justify-content-between p-3 bg-light rounded border border-light-subtle">
-                                <div>
-                                    <h6 class="fw-bold text-dark mb-1">ส่งสถิติเวรเช้า (08.00 - 16.00 น.)</h6>
-                                    <p class="text-muted small mb-0"><i class="bi bi-clock me-1"></i>ทำงานอัตโนมัติเวลา: 16:00 น.</p>
+                            <div class="col-md-6 col-xl-3">
+                                <div class="p-3 bg-light rounded border border-light-subtle h-100 d-flex flex-column justify-content-between">
+                                    <div class="mb-3">
+                                        <h6 class="fw-bold text-dark mb-1">ส่งสถิติเวรเช้า (08.00 - 16.00 น.)</h6>
+                                        <p class="text-muted small mb-0"><i class="bi bi-clock me-1"></i>ทำงานอัตโนมัติเวลา: 16:00 น.</p>
+                                    </div>
+                                    <button class="btn btn-success w-100 py-2 fw-bold shadow-sm manual-run-btn" data-shift="morning">
+                                        <i class="fa-solid fa-play me-2"></i>รัน
+                                    </button>
                                 </div>
-                                <button class="btn btn-success px-4 py-2 fw-bold shadow-sm manual-run-btn" data-shift="morning">
-                                    <i class="fa-solid fa-play me-2"></i>รัน
-                                </button>
                             </div>
 
                             <!-- เวรบ่าย -->
-                            <div class="d-flex align-items-center justify-content-between p-3 bg-light rounded border border-light-subtle">
-                                <div>
-                                    <h6 class="fw-bold text-dark mb-1">ส่งสถิติเวรบ่าย (16.00 - 24.00 น.)</h6>
-                                    <p class="text-muted small mb-0"><i class="bi bi-clock me-1"></i>ทำงานอัตโนมัติเวลา: 00:01 น.</p>
+                            <div class="col-md-6 col-xl-3">
+                                <div class="p-3 bg-light rounded border border-light-subtle h-100 d-flex flex-column justify-content-between">
+                                    <div class="mb-3">
+                                        <h6 class="fw-bold text-dark mb-1">ส่งสถิติเวรบ่าย (16.00 - 24.00 น.)</h6>
+                                        <p class="text-muted small mb-0"><i class="bi bi-clock me-1"></i>ทำงานอัตโนมัติเวลา: 00:01 น.</p>
+                                    </div>
+                                    <button class="btn btn-success w-100 py-2 fw-bold shadow-sm manual-run-btn" data-shift="afternoon">
+                                        <i class="fa-solid fa-play me-2"></i>รัน
+                                    </button>
                                 </div>
-                                <button class="btn btn-success px-4 py-2 fw-bold shadow-sm manual-run-btn" data-shift="afternoon">
-                                    <i class="fa-solid fa-play me-2"></i>รัน
-                                </button>
                             </div>
 
                             <!-- เวร BD -->
-                            <div class="d-flex align-items-center justify-content-between p-3 bg-light rounded border border-light-subtle">
-                                <div>
-                                    <h6 class="fw-bold text-dark mb-1">ส่งสถิติเวร BD (16.00 - 20.00 น.)</h6>
-                                    <p class="text-muted small mb-0"><i class="bi bi-clock me-1"></i>ทำงานอัตโนมัติเวลา: 20:00 น.</p>
+                            <div class="col-md-6 col-xl-3">
+                                <div class="p-3 bg-light rounded border border-light-subtle h-100 d-flex flex-column justify-content-between">
+                                    <div class="mb-3">
+                                        <h6 class="fw-bold text-dark mb-1">ส่งสถิติเวร BD (16.00 - 20.00 น.)</h6>
+                                        <p class="text-muted small mb-0"><i class="bi bi-clock me-1"></i>ทำงานอัตโนมัติเวลา: 20:00 น.</p>
+                                    </div>
+                                    <button class="btn btn-success w-100 py-2 fw-bold shadow-sm manual-run-btn" data-shift="bd">
+                                        <i class="fa-solid fa-play me-2"></i>รัน
+                                    </button>
                                 </div>
-                                <button class="btn btn-success px-4 py-2 fw-bold shadow-sm manual-run-btn" data-shift="bd">
-                                    <i class="fa-solid fa-play me-2"></i>รัน
-                                </button>
                             </div>
                         </div>
                     </div>

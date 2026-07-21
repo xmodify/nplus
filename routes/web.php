@@ -110,18 +110,7 @@ Route::middleware(['auth', 'hnplus'])->name('hnplus.')->group(function () {
 });
 
 // ✅ กลุ่มที่ไม่ต้องล็อกอิน (public)
-Route::name('hnplus.')->middleware(function ($request, $next) {
-    if (str_contains($request->path(), '_notify')) {
-        \App\Models\MainSetting::updateOrCreate(
-            ['name' => 'laravel_scheduler_last_run'],
-            [
-                'name_th' => 'เวลาที่ Scheduler รันล่าสุด',
-                'value' => now()->toDateTimeString()
-            ]
-        );
-    }
-    return $next($request);
-})->group(function () {
+Route::name('hnplus.')->group(function () {
     //product ER-----------------------------------------------------------------------------------------------------------
     Route::get('product/er_night_notify', [ProductERController::class, 'er_night_notify']);
     Route::get('product/er_night', [ProductERController::class, 'er_night']);
