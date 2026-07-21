@@ -24,6 +24,10 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         $middleware->trustProxies(at: '*');
+        
+        $middleware->redirectTo(
+            guest: '/'
+        );
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
