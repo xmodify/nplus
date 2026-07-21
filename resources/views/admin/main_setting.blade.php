@@ -1045,14 +1045,14 @@
                             <div class="collapse mt-3" id="cronFixGuide">
                                 <div class="bg-light p-3 rounded border text-start">
                                     <h6 class="fw-bold text-dark mb-2 small"><i class="fa-brands fa-linux me-1"></i>สำหรับการตั้งค่าบน AlmaLinux / CentOS:</h6>
-                                    <p class="small mb-2">1. ล็อกอินเข้าเซิร์ฟเวอร์แล้วเปิด crontab ด้วยคำสั่ง:</p>
+                                    <p class="small mb-2">1. ล็อกอินเข้าเซิร์ฟเวอร์แล้วเปิด crontab ของผู้ใช้ <strong>apache</strong> ด้วยคำสั่ง:</p>
                                     <div class="input-group input-group-sm mb-2">
-                                        <input type="text" class="form-control bg-white font-monospace text-dark" value="crontab -e" readonly>
+                                        <input type="text" class="form-control bg-white font-monospace text-dark" value="sudo crontab -u apache -e" readonly>
                                         <button class="btn btn-outline-secondary" type="button" onclick="copyToClipboard(this)"><i class="bi bi-clipboard"></i></button>
                                     </div>
                                     <p class="small mb-2">2. วางบรรทัดนี้ลงไป (ตรวจสอบ Path โครงการให้ถูกต้อง):</p>
                                     <div class="input-group input-group-sm">
-                                        <input type="text" class="form-control bg-white font-monospace text-dark" value="* * * * * cd /var/www/html/nplus && php artisan schedule:run >> /dev/null 2>&1" readonly>
+                                        <input type="text" class="form-control bg-white font-monospace text-dark" value="* * * * * cd /var/www/html/nplus && /usr/bin/php artisan schedule:run >> /dev/null 2>&1" readonly>
                                         <button class="btn btn-outline-secondary" type="button" onclick="copyToClipboard(this)"><i class="bi bi-clipboard"></i></button>
                                     </div>
                                 </div>
